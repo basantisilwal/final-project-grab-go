@@ -1,0 +1,52 @@
+
+  body {
+    background-color: #909EC1; 
+  }
+
+  .contact-img img {
+    border-radius: 10px; /* Optional: for rounded corners */
+    width: 100%; /* Ensure it scales with the container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+  /* Contact Form Background and Text Color */
+  .contact-form {
+    background-color: beige; /* Light grayish blue background */
+    color: #333; /* Text color */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  }
+
+  /* Customize Input Fields */
+  .contact-form input, 
+  .contact-form textarea {
+    background-color: #ffffff; /* White background for inputs */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px;
+    padding: 10px;
+    color: #333; /* Text color */
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  /* Change Placeholder Color */
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder {
+    color: #888; /* Light gray placeholder text */
+  }
+
+  /* Customize Submit Button */
+  .contact-form button {
+    background-color: #007bff; /* Blue background for button */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Hover Effect for Submit Button */
+  .contact-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
