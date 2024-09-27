@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HerHomeHostel</title>
+    <title>GRAB&GO</title>
     <!-- ADD BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- ADD POPPINS FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <!-- ADD BOOTSTRAP ICONS CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
   body {
     background-color: #909EC1; 
@@ -69,7 +70,7 @@
 <!-- NAVIGATION BAR -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-3 py-lg-2 fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand me-6 fq-bold fs-3" href="index.html">Her Home Hostel</a>
+    <a class="navbar-brand me-6 fq-bold fs-3" href="index.html">Grab and Go</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -94,40 +95,37 @@
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg"> <!-- Adjust modal size if needed -->
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="loginModalLabel">Login</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form class="border shadow p-3 rounded">
-          <h1 class="text-center p-3">User Login</h1>
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" required placeholder="Enter correct Username">
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" required placeholder="Enter Correct Password">
-          </div>
-          <div class="mb-0">
-            <label class="form-label">Select User Type</label>
-          </div>
-          <select class="form-select mb-3" aria-label="Default select example">
-            <option selected>Admin</option>
-            <option value="1">Staff</option>
-            <option value="2">Hosteler</option>
-          </select>
-          <div class="d-flex align-items-center jsutify-content-between mb-2"> 
-          <button type="submit" class="btn btn-primary">LOGIN</button>
-          <a href="javascript: void(0)"class="text-secondary text-decoration-none ms-auto">Forgot Password?</a>
-        </form>
-          </div>
+      <div class="modal-body login-container">
+        <div class="left-section">
+          <img src="images/logo.png" alt="Website Logo" class="logo" />
+          <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
+        </div>
+        <div class="right-section">
+          <h1>LOG IN</h1>
+          <p>Welcome!! Login or signup to access our website</p>
+          <form id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required /><br />
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required /><br />
+
+            <button type="submit">LOG IN</button>
+          </form>
+          <p class="signup-text">
+            Not registered? <a href="#">Create an account...!</a>
+          </p>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+
 
   <!-- Register Modal -->
   <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
@@ -200,27 +198,27 @@
 
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="images/hostelroom.jpg" class="d-block w-100" alt="...">
+      <img src="images/index1.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Hostel Picture</h5>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/singleroom.jpg" class="d-block w-100" alt="...">
+      <img src="images/index2.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Single Bed Room</h5>
         <p>Simple single room</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/doublebed.jpg" class="d-block w-100" alt="...">
+      <img src="images/index3.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Double Bed Room</h5>
         <p>Some representative placeholder content for the second slide.</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/triplebed.jpg" class="d-block w-100" alt="...">
+      <img src="images/index4.jpg class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Triple Bed Room</h5>
         <p>Some representative placeholder content for the second slide.</p>
