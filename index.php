@@ -100,6 +100,8 @@
       <div class="modal-header">
       </div>
       <div class="modal-body login-container">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
+
         <div class="left-section">
           <img src="images/logo.png" alt="Website Logo" class="logo" />
           <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
@@ -248,8 +250,7 @@
         <div class="about-text">
         <h1>About Us</h1>
         <p class="about-paragraph" >
-          Welcome to Her Home Hostel, your trusted online platform for hassle-free hostel bookings. We are committed to providing a convenient, secure, and efficient way for students, travelers, and working professionals to find and book hostel room according to their choice. 
-          Our mission is to simplify the process of finding and booking hostels, ensuring a seamless experience for users seeking affordable and comfortable accommodation. Whether you're a student looking for a long-term stay or a traveler needing short-term accommodation, we have a solution for you.</p>
+        Welcome to Grab&Go, your go-to platform for fast, reliable, and delicious food delivery. We partner with your favorite local restaurants to bring a wide variety of cuisines right to your doorstep. Whether you're craving comfort food, healthy meals, or international flavors, we ensure quick service, user-friendly ordering, and real-time tracking. Our mission is to make dining convenient and enjoyable, connecting you with great food in just a few taps! Enjoy exceptional service and meals delivered with care.</p>
         </div>
       </div>
     </div>
