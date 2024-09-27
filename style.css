@@ -6,7 +6,7 @@ body{
   background:violet;
 }
 .section-padding{
-  padding: 100px 0;
+  padding: 30px 0;
 }
 .carousel-item{
   height: 95px;
@@ -51,51 +51,57 @@ body{
 
 /* General Modal Content Styling */
 .modal-body {
-  padding: 100px;
+  padding: 0px;
 }
 
 .login-container {
   display: flex;
-  width: 120%;
-  max-width: 700px; /* Adjust the width of the entire container */
+  max-width: 1500px; /* Decrease the max-width to reduce container size */
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin: 0 auto; /* Center the login container */
 }
+
 .left-section {
   flex: 1;
-  padding: 0px;
+  padding: 0px; /* Reduce padding */
   background-color: #fafafa;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: last baseline;
+  justify-content: last baseline;
 }
- .right-section {
+
+.right-section {
   flex: 1;
-  padding: 80px;
+  padding: -60px; /* Reduce padding */
   background-color: #fff8e1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-} 
+}
+
 h1 {
   margin-bottom: 10px;
   color: #333;
 }
+
 p {
   margin-bottom: 20px;
   color: #666;
 }
+
 form {
   display: flex;
   flex-direction: column;
 }
+
 label {
   margin-bottom: 5px;
   color: #333;
-}  
+}
+
 input {
   padding: 10px;
   margin-bottom: 20px;
@@ -131,23 +137,18 @@ button:hover {
 .signup-text a:hover {
   text-decoration: underline;
 }
+
 .logo {
-  width: 100px; 
+  width: 100px;
   height: auto;
-  position: relative;
-  left: 70px; /* Moves right */
-   top: 220px; 
-  
 }
 
-.sidepicture{
-  width: 180px; 
-  height: auto; 
-  position: relative;
-   left: 20px;
-   top: 60px; 
+.sidepicture {
+  width: 180px;
+  height: auto;
+  position: absolute;
+  top:130px; /* Move up by 20px */
   transform: rotate(30deg);
-
 }
 
 .cross-button {
@@ -155,11 +156,11 @@ button:hover {
   border: none;
   cursor: pointer;
   padding: 0;
-  width: 30px; 
-  height: auto; 
-  position: relative;
-   left: 480px;
-   top: -220px;
+  width: 30px;
+  height: auto;
+  position: absolute;
+  right: 20px;
+  top: 20px;
 }
 
 .cross-button img.cross-icon {
@@ -170,6 +171,7 @@ button:hover {
 .cross-button:hover img.cross-icon {
   opacity: 0.7;
 }
+
 
 
 
