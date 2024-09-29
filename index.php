@@ -147,7 +147,7 @@
     <div class="modal-content">
       <form>
         <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Register Hosteler</h5>
+          <h5 class="modal-title" id="registerModalLabel">Register Customer</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -162,13 +162,9 @@
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control shadow-none">
               </div>
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Phone Number</label>
+              <div class="col-md-6 p-0">
+                <label class="form-label">Phone number</label>
                 <input type="number" class="form-control shadow-none">
-              </div>
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Picture</label>
-                <input type="file" class="form-control shadow-none">
               </div>
               <div class="col-md-12 ps-6 mb-3">
                 <label class="form-label">Address</label>
@@ -177,10 +173,6 @@
               <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Pincode</label>
                 <input type="number" class="form-control shadow-none">
-              </div>
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Date of Birth</label>
-                <input type="date" class="form-control shadow-none">
               </div>
               <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Password</label>
@@ -311,7 +303,7 @@
   </div>
 
 <!-- REACH US -->
-<h2 class=" mt-5 pt-4 mb-4 text-center">Lets connect</h2>
+<h2 class=" mt-5 pt-4 mb-4 text-center">Lets connect with us</h2>
 <div class="container">
 </div>
 <div class="container-fluid bg-white mt-5">
