@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
   body {
-    background-color: #909EC1; 
+    background-color: beige; 
   }
 
   .contact-img img {
@@ -24,7 +24,7 @@
 
   /* Contact Form Background and Text Color */
   .contact-form {
-    background-color: beige; /* Light grayish blue background */
+    background-color: #F6BE00; /* Light grayish blue background */
     color: #333; /* Text color */
     border-radius: 10px; /* Rounded corners */
     padding: 20px;
@@ -311,7 +311,7 @@
   </div>
 
 <!-- REACH US -->
-<h2 class=" mt-5 pt-4 mb-4 text-center">Reach Us</h2>
+<h2 class=" mt-5 pt-4 mb-4 text-center">Lets connect</h2>
 <div class="container">
 </div>
 <div class="container-fluid bg-white mt-5">
@@ -319,7 +319,7 @@
 <div class="col-lg-4 p-4">
 <h3 class="h-font fw-bold fs-3 mb-2">Grab&Go</h3>
 <p>
-lets eat something</p>
+"People who love to eat are always the best people."</p>
 </div>
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Links</h5>
