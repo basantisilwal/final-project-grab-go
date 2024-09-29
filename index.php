@@ -100,8 +100,7 @@
       <div class="modal-header">
       </div>
       <div class="modal-body login-container">
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
-
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="left-section">
           <img src="images/logo.png" alt="Website Logo" class="logo" />
           <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />

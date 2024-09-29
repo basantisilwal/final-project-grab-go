@@ -1,21 +1,30 @@
 // script.js
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('nav ul li a');
-    const sections = document.querySelectorAll('.page');
+document.addEventListener('DOMContentLoaded', function () {
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav a');
 
-    links.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const targetId = this.getAttribute('data-target');
+    function updateActiveLink() {
+      let index = sections.length;
+      while (--index && window.scrollY + 50 < sections[index].offsetTop) {}
+      navLinks.forEach((link) => link.classList.remove('active'));
+      navLinks[index].classList.add('active');
+    }
 
-            sections.forEach(section => {
-                if (section.id === targetId) {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-                
-            });
-        });
-    });
-});
+    updateActiveLink();
+    window.addEventListener('scroll', updateActiveLink);
+  });
+
+  // Back to top button functionality
+  const backToTopButton = document.getElementById('backToTop');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) {
+      backToTopButton.style.display = 'block';
+    } else {
+      backToTopButton.style.display = 'none';
+    }
+  });
+
+  backToTopButton.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
