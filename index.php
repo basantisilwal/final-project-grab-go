@@ -310,24 +310,6 @@
     </div>
   </div>
 
-  <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">Our Facilities</h2>
-<div class="container">
-  <div class="row justify-content-center"> <!-- Ensures alignment -->
-    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
-      <img src="images/features/wifi.svg" width="100px">
-      <h5 class="mt-3">Wifi</h5>
-    </div>
-    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
-      <img src="images/food.jpg" width="100px">
-      <h5 class="mt-3">Food</h5>
-    </div>
-    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
-      <img src="images/laundry.png" width="80px">
-      <h5 class="mt-3">Laundry</h5>
-    </div>
-  </div>
-</div>
-
 <!-- REACH US -->
 <h2 class=" mt-5 pt-4 mb-4 text-center">Reach Us</h2>
 <div class="container">
@@ -335,9 +317,9 @@
 <div class="container-fluid bg-white mt-5">
 <div class="row">
 <div class="col-lg-4 p-4">
-<h3 class="h-font fw-bold fs-3 mb-2">Her Home Hostel</h3>
+<h3 class="h-font fw-bold fs-3 mb-2">Grab&Go</h3>
 <p>
-hehehahahhahahaha</p>
+lets eat something</p>
 </div>
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Links</h5>
