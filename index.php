@@ -98,9 +98,10 @@
   <div class="modal-dialog modal-lg"> <!-- Adjust modal size if needed -->
     <div class="modal-content">
       <div class="modal-header">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body login-container">
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      
         <div class="left-section">
           <img src="images/logo.png" alt="Website Logo" class="logo" />
           <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
@@ -114,7 +115,19 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required /><br />
-
+            <!-- Dropdown menu -->
+            <label for="user-type">Select User Type:</label>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="userTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Choose an option
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="userTypeDropdown">
+                <li><a class="dropdown-item" href="#">Admin</a></li>
+                <li><a class="dropdown-item" href="#">Resturant</a></li>
+                <li><a class="dropdown-item" href="#">Customer</a></li>
+                <li><a class="dropdown-item" href="#">Dispatcher</a></li>
+              </ul>
+            </div><br />
             <button type="submit">LOG IN</button>
           </form>
           <p class="signup-text">
