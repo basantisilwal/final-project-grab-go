@@ -240,6 +240,14 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>  
+     <!-- HOME SECTION -->  
+    <div id="content"></div>
+        <section id="home" class="page active">  
+        <h1>Welcome to Our Website <br> FOOD DELIVERY</h1>
+        
+        <a href="login.html"><button class="home-button">ORDER NOW</button></a>
+        <p>Grab&Go</p>
+    </section>
 
 <!-- ABOUT US SECTION -->
  <section id="about" class="about-section-padding mt-5">
@@ -261,6 +269,7 @@
   </div>
  </section>
 
+
  <!-- CONTACT SECTION -->
   <section id="contact" class="contact-section-padding mt-5">
   <h2 class=" mt-5 pt-4 mb-4 text-center">Contact Us</h2>
@@ -268,9 +277,6 @@
     <div class="row align-items-center">
       <!-- Contact Image on the Left -->
       <div class="col-lg-4 col-md-12 col-12">
-        <div class="contact-img">
-          <img src="images/contactus.jpg" alt=" " class="img-fluid">
-        </div>
       </div>
       <!-- Contact Form on the Right -->
       <div class="col-lg-8 col-md-12 col-12">
@@ -320,6 +326,8 @@
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Contact Us</a> <br>
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Facilities</a>
 </div>
+
+
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Follow us</h5>
 <a href="#" class="d-inline-block text-dark text-decoration-none mb-2"> <i class="bi bi-twitter me-1"></i> Twitter
