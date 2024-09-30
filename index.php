@@ -11,6 +11,7 @@
     <!-- ADD BOOTSTRAP ICONS CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
     <style>
   body {
     background-color: #909EC1; 
@@ -73,6 +74,7 @@
     <a class="navbar-brand me-6 fq-bold fs-3" href="index.html">Grab and Go</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        
         <li class="nav-item">
           <a class="nav-link me-2" aria-current="page" href="#">Home</a>
         </li>
@@ -83,12 +85,12 @@
           <a class="nav-link me-2" href="#">Contact Us</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+          <a class="nav-link me-2" href="#">our Facilities</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
         </li>
-      </ul>
+        </ul>
     </div>
   </div>
 </nav>
@@ -100,13 +102,15 @@
       <div class="modal-header">
       </div>
       <div class="modal-body login-container">
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
+      
 
         <div class="left-section">
+        
           <img src="images/logo.png" alt="Website Logo" class="logo" />
           <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
         </div>
         <div class="right-section">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
           <h1>LOG IN</h1>
           <p>Welcome!! Login or signup to access our website</p>
           <form id="login-form">
@@ -127,7 +131,35 @@
   </div>
 </div>
 
-
+<!--customer dash -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="dashboard">Customer Dashboard</div>
+        </div>
+        <div class="main-content">
+            <div class="promo-section">
+                <h1>FOOD DELIVERY</h1>
+                <button class="shop-btn">SHOP NOW</button>
+                <p>Grab&Go</p>
+            </div>
+            <div class="image-section">
+                <img src="food1.jpg" alt="Food Image 1" class="food-image">
+                <img src="food2.jpg" alt="Food Image 2" class="food-image">
+                <img src="food3.jpg" alt="Food Image 3" class="food-image">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 
   <!-- Register Modal -->
   <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
@@ -135,7 +167,7 @@
     <div class="modal-content">
       <form>
         <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Register Hosteler</h5>
+          <h5 class="modal-title" id="registerModalLabel">Register customer</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -289,7 +321,7 @@
                 </div>
               </div>
               <div class="col-md-12">
-                <button class="btn btn-warning btn-lg btn-block mt-3">Send Now</button>
+                <button class="btn btn-warning btn-lg btn-block mt-3">order Now</button>
               </div>
             </div>
           </form>
@@ -303,15 +335,15 @@
   <div class="row justify-content-center"> <!-- Ensures alignment -->
     <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
       <img src="images/features/wifi.svg" width="100px">
-      <h5 class="mt-3">Wifi</h5>
+      <h5 class="mt-3">veg</h5>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
       <img src="images/food.jpg" width="100px">
-      <h5 class="mt-3">Food</h5>
+      <h5 class="mt-3">non-veg</h5>
     </div>
     <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
       <img src="images/laundry.png" width="80px">
-      <h5 class="mt-3">Laundry</h5>
+      <h5 class="mt-3">salad</h5>
     </div>
   </div>
 </div>
@@ -323,9 +355,9 @@
 <div class="container-fluid bg-white mt-5">
 <div class="row">
 <div class="col-lg-4 p-4">
-<h3 class="h-font fw-bold fs-3 mb-2">Her Home Hostel</h3>
+<h3 class="h-font fw-bold fs-3 mb-2">Grab&Go</h3>
 <p>
-hehehahahhahahaha</p>
+</p>
 </div>
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Links</h5>
