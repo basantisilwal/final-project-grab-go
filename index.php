@@ -154,15 +154,15 @@
           <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap th-base"></span>
           <div class="container-fluid">
             <div class="row">
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Name</label>
+              <div class="col-md-6 p-0 mb-3">
+                <label class="form-label"> Username</label>
                 <input type="text" class="form-control shadow-none">
               </div>
-              <div class="col-md-6 p-0">
+              <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control shadow-none">
               </div>
-              <div class="col-md-6 p-0">
+              <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Phone number</label>
                 <input type="number" class="form-control shadow-none">
               </div>
