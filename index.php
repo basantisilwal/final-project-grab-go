@@ -237,27 +237,27 @@
 
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="images/index1.jpg" class="d-block w-100" alt="...">
+      <img src="images/index 1.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>home page picture</h5>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/index2.jpg" class="d-block w-100" alt="...">
+      <img src="images/index 2.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Single Bed Room</h5>
         <p>Simple single room</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/index3.jpg" class="d-block w-100" alt="...">
+      <img src="images/index 3.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Double Bed Room</h5>
         <p>Some representative placeholder content for the second slide.</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/index4.jpg class="d-block w-100" alt="...">
+      <img src="images/index 4.jpg class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Triple Bed Room</h5>
         <p>Some representative placeholder content for the second slide.</p>
