@@ -57,6 +57,7 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin: 0 auto; /* Center the login container */
+  
 }
 
 .left-section {
@@ -91,8 +92,6 @@ form {
   display: flex;
   flex-direction: column;
 }
-
-
 
 input {
   padding: 10px;

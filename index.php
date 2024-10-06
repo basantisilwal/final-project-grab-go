@@ -11,6 +11,7 @@
     <!-- ADD BOOTSTRAP ICONS CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    
     <style>
   body {
     background-color: beige; 
@@ -73,6 +74,7 @@
     <a class="navbar-brand me-6 fq-bold fs-3" href="index.html">Grab and Go</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        
         <li class="nav-item">
           <a class="nav-link me-2" aria-current="page" href="#">Home</a>
         </li>
@@ -83,12 +85,12 @@
           <a class="nav-link me-2" href="#">Contact Us</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+          <a class="nav-link me-2" href="#">our Facilities</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
         </li>
-      </ul>
+        </ul>
     </div>
   </div>
 </nav>
@@ -103,10 +105,12 @@
       <div class="modal-body login-container">
       
         <div class="left-section">
+        
           <img src="images/logo.png" alt="Website Logo" class="logo" />
           <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
         </div>
         <div class="right-section">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
           <h1>LOG IN</h1>
           <p>Welcome!! Login or signup to access our website</p>
           <form id="login-form">
@@ -139,7 +143,35 @@
   </div>
 </div>
 
-
+<!--customer dash -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="dashboard">Customer Dashboard</div>
+        </div>
+        <div class="main-content">
+            <div class="promo-section">
+                <h1>FOOD DELIVERY</h1>
+                <button class="shop-btn">SHOP NOW</button>
+                <p>Grab&Go</p>
+            </div>
+            <div class="image-section">
+                <img src="food1.jpg" alt="Food Image 1" class="food-image">
+                <img src="food2.jpg" alt="Food Image 2" class="food-image">
+                <img src="food3.jpg" alt="Food Image 3" class="food-image">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 
   <!-- Register Modal -->
   <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
@@ -147,6 +179,7 @@
     <div class="modal-content">
       <form>
         <div class="modal-header">
+          <h5 class="modal-title" id="registerModalLabel">Register customer</h5>
           <h5 class="modal-title" id="registerModalLabel">Register Customer</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -206,7 +239,7 @@
     <div class="carousel-item active">
       <img src="images/index1.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
-        <h5>Hostel Picture</h5>
+        <h5>home page picture</h5>
       </div>
     </div>
     <div class="carousel-item">
@@ -299,7 +332,7 @@
                 </div>
               </div>
               <div class="col-md-12">
-                <button class="btn btn-warning btn-lg btn-block mt-3">Send Now</button>
+                <button class="btn btn-warning btn-lg btn-block mt-3">order Now</button>
               </div>
             </div>
           </form>
@@ -307,6 +340,24 @@
       </div>
     </div>
   </div>
+
+  <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">Our Facilities</h2>
+<div class="container">
+  <div class="row justify-content-center"> <!-- Ensures alignment -->
+    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
+      <img src="images/features/wifi.svg" width="100px">
+      <h5 class="mt-3">veg</h5>
+    </div>
+    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
+      <img src="images/food.jpg" width="100px">
+      <h5 class="mt-3">non-veg</h5>
+    </div>
+    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
+      <img src="images/laundry.png" width="80px">
+      <h5 class="mt-3">salad</h5>
+    </div>
+  </div>
+</div>
 
 <!-- REACH US -->
 <h2 class=" mt-5 pt-4 mb-4 text-center">Lets connect with us</h2>
@@ -317,6 +368,7 @@
 <div class="col-lg-4 p-4">
 <h3 class="h-font fw-bold fs-3 mb-2">Grab&Go</h3>
 <p>
+</p>
 "People who love to eat are always the best people."</p>
 </div>
 <div class="col-lg-4 p-4">
@@ -324,7 +376,6 @@
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a> <br>
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">About Us</a> <br>
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Contact Us</a> <br>
-<a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Facilities</a>
 </div>
 
 
