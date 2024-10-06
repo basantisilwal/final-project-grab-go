@@ -14,7 +14,7 @@
     
     <style>
   body {
-    background-color: #909EC1; 
+    background-color: beige; 
   }
 
   .contact-img img {
@@ -25,7 +25,7 @@
 
   /* Contact Form Background and Text Color */
   .contact-form {
-    background-color: beige; /* Light grayish blue background */
+    background-color: #F6BE00; /* Light grayish blue background */
     color: #333; /* Text color */
     border-radius: 10px; /* Rounded corners */
     padding: 20px;
@@ -100,10 +100,10 @@
   <div class="modal-dialog modal-lg"> <!-- Adjust modal size if needed -->
     <div class="modal-content">
       <div class="modal-header">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body login-container">
       
-
         <div class="left-section">
         
           <img src="images/logo.png" alt="Website Logo" class="logo" />
@@ -119,7 +119,19 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required /><br />
-
+            <!-- Dropdown menu -->
+            <label for="user-type">Select User Type:</label>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="userTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Choose an option
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="userTypeDropdown">
+                <li><a class="dropdown-item" href="#">Admin</a></li>
+                <li><a class="dropdown-item" href="#">Resturant</a></li>
+                <li><a class="dropdown-item" href="#">Customer</a></li>
+                <li><a class="dropdown-item" href="#">Dispatcher</a></li>
+              </ul>
+            </div><br />
             <button type="submit">LOG IN</button>
           </form>
           <p class="signup-text">
@@ -168,27 +180,24 @@
       <form>
         <div class="modal-header">
           <h5 class="modal-title" id="registerModalLabel">Register customer</h5>
+          <h5 class="modal-title" id="registerModalLabel">Register Customer</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap th-base"></span>
           <div class="container-fluid">
             <div class="row">
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Name</label>
+              <div class="col-md-6 p-0 mb-3">
+                <label class="form-label"> Username</label>
                 <input type="text" class="form-control shadow-none">
               </div>
-              <div class="col-md-6 p-0">
+              <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control shadow-none">
               </div>
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Phone Number</label>
-                <input type="number" class="form-control shadow-none">
-              </div>
               <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Picture</label>
-                <input type="file" class="form-control shadow-none">
+                <label class="form-label">Phone number</label>
+                <input type="number" class="form-control shadow-none">
               </div>
               <div class="col-md-12 ps-6 mb-3">
                 <label class="form-label">Address</label>
@@ -197,10 +206,6 @@
               <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Pincode</label>
                 <input type="number" class="form-control shadow-none">
-              </div>
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Date of Birth</label>
-                <input type="date" class="form-control shadow-none">
               </div>
               <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Password</label>
@@ -234,7 +239,7 @@
     <div class="carousel-item active">
       <img src="images/index1.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
-        <h5>Hostel Picture</h5>
+        <h5>home page picture</h5>
       </div>
     </div>
     <div class="carousel-item">
@@ -268,6 +273,14 @@
     <span class="visually-hidden">Next</span>
   </button>
 </div>  
+     <!-- HOME SECTION -->  
+    <div id="content"></div>
+        <section id="home" class="page active">  
+        <h1>Welcome to Our Website <br> FOOD DELIVERY</h1>
+        
+        <a href="login.html"><button class="home-button">ORDER NOW</button></a>
+        <p>Grab&Go</p>
+    </section>
 
 <!-- ABOUT US SECTION -->
  <section id="about" class="about-section-padding mt-5">
@@ -289,6 +302,7 @@
   </div>
  </section>
 
+
  <!-- CONTACT SECTION -->
   <section id="contact" class="contact-section-padding mt-5">
   <h2 class=" mt-5 pt-4 mb-4 text-center">Contact Us</h2>
@@ -296,9 +310,6 @@
     <div class="row align-items-center">
       <!-- Contact Image on the Left -->
       <div class="col-lg-4 col-md-12 col-12">
-        <div class="contact-img">
-          <img src="images/contactus.jpg" alt=" " class="img-fluid">
-        </div>
       </div>
       <!-- Contact Form on the Right -->
       <div class="col-lg-8 col-md-12 col-12">
@@ -349,7 +360,7 @@
 </div>
 
 <!-- REACH US -->
-<h2 class=" mt-5 pt-4 mb-4 text-center">Reach Us</h2>
+<h2 class=" mt-5 pt-4 mb-4 text-center">Lets connect with us</h2>
 <div class="container">
 </div>
 <div class="container-fluid bg-white mt-5">
@@ -358,14 +369,16 @@
 <h3 class="h-font fw-bold fs-3 mb-2">Grab&Go</h3>
 <p>
 </p>
+"People who love to eat are always the best people."</p>
 </div>
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Links</h5>
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a> <br>
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">About Us</a> <br>
 <a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Contact Us</a> <br>
-<a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Facilities</a>
 </div>
+
+
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Follow us</h5>
 <a href="#" class="d-inline-block text-dark text-decoration-none mb-2"> <i class="bi bi-twitter me-1"></i> Twitter
