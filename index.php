@@ -110,8 +110,8 @@
           <h1>LOG IN</h1>
           <p>Welcome!! Login or signup to access our website</p>
           <form id="login-form">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required /><br />
+            <label for="username">username:</label>
+            <input type="text" id="username" name="username"/><br />
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required /><br />
