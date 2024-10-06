@@ -14,8 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     section.style.display = 'none';
                 }
+
+                
                 
             });
         });
     });
 });
+<script>
+  // Add event listener to the "Create an account...!" link
+  document.getElementById('create-account-link').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+    
+    // Redirect to the registration page
+    window.location.href = 'register.html'; // Replace 'register.html' with your registration page URL
+  });
+</script>
