@@ -129,16 +129,16 @@
                 Choose an option
               </button>
               <ul class="dropdown-menu" aria-labelledby="userTypeDropdown">
-                <li><a class="dropdown-item" href="#">Admin</a></li>
+                <li><a class="dropdown-item" href="#admindashboard">Admin</a></li>
                 <li><a class="dropdown-item" href="#">Resturant</a></li>
-                <li><a class="dropdown-item" href="#">Customer</a></li>
+                <li><a class="dropdown-item" href="#customerdashboard">Customer</a></li>
                 <li><a class="dropdown-item" href="#">Dispatcher</a></li>
               </ul>
             </div><br />
             <button type="submit">LOG IN</button>
           </form>
           <p class="signup-text">
-            Not registered? <a href="#">Create an account...!</a>
+            Not registered? <a href="#registermodel">Create an account...!</a>
           </p>
         </div>
       </div>
