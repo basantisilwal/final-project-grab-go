@@ -88,6 +88,9 @@
           <a class="nav-link me-2" href="#">our Facilities</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link me-2" href="#registerModal">Register</a>
+        </li>
+        <li class="nav-item">
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
         </li>
         </ul>
@@ -173,8 +176,8 @@
 </body>
 </html>
 
-  <!-- Register Modal -->
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <!-- registerModal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form>
