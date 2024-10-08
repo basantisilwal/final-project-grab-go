@@ -85,9 +85,6 @@
           <a class="nav-link me-2" href="#">Contact Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-2" href="#">our Facilities</a>
-        </li>
-        <li class="nav-item">
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
         </li>
         </ul>
@@ -98,6 +95,7 @@
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg"> <!-- Adjust modal size if needed -->
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
     <div class="modal-content">
       <div class="modal-header">
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -110,7 +108,7 @@
           <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
         </div>
         <div class="right-section">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
+        
           <h1>LOG IN</h1>
           <p>Welcome!! Login or signup to access our website</p>
           <form id="login-form">
@@ -135,7 +133,7 @@
             <button type="submit">LOG IN</button>
           </form>
           <p class="signup-text">
-            Not registered? <a href="#">Create an account...!</a>
+          Not registered? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Create an account...!</a>
           </p>
         </div>
       </div>
@@ -143,43 +141,13 @@
   </div>
 </div>
 
-<!--customer dash -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Delivery Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div class="dashboard">Customer Dashboard</div>
-        </div>
-        <div class="main-content">
-            <div class="promo-section">
-                <h1>FOOD DELIVERY</h1>
-                <button class="shop-btn">SHOP NOW</button>
-                <p>Grab&Go</p>
-            </div>
-            <div class="image-section">
-                <img src="food1.jpg" alt="Food Image 1" class="food-image">
-                <img src="food2.jpg" alt="Food Image 2" class="food-image">
-                <img src="food3.jpg" alt="Food Image 3" class="food-image">
-            </div>
-        </div>
-    </div>
-</body>
-</html>
 
   <!-- Register Modal -->
-  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form>
+      <form id="registerForm">
         <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Register customer</h5>
           <h5 class="modal-title" id="registerModalLabel">Register Customer</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -187,33 +155,36 @@
           <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap th-base"></span>
           <div class="container-fluid">
             <div class="row">
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label"> Username</label>
-                <input type="text" class="form-control shadow-none">
+              <!-- Left Column (6 columns) -->
+              <div class="col-md-10 mb-3">
+                <label class="form-label">Name</label>
+                <textarea class="form-control shadow" name="name" rows="1" required></textarea>
               </div>
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control shadow-none">
-              </div>
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Phone number</label>
-                <input type="number" class="form-control shadow-none">
-              </div>
-              <div class="col-md-12 ps-6 mb-3">
+
+               <!-- Full width column for Address -->
+               <div class="col-md-10 mb-3">
                 <label class="form-label">Address</label>
-                <textarea class="form-control shadow" rows="1"></textarea>
+                <textarea class="form-control shadow" name="address" rows="1" required></textarea>
               </div>
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Pincode</label>
-                <input type="number" class="form-control shadow-none">
+
+              <div class="col-md-10 mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="number" class="form-control shadow-none" name="phone" num_rows="1" required>
               </div>
-              <div class="col-md-6 p-0 mb-3">
+
+              <div class="col-md-10 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control shadow-none" name="email" required>
+              </div>
+              
+              <div class="col-md-10 mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control shadow-none">
+                <input type="password" class="form-control shadow-none" name="password" required>
               </div>
-              <div class="col-md-6 p-0 mb-3">
+
+              <div class="col-md-10 mb-3">
                 <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control shadow-none">
+                <input type="password" class="form-control shadow-none" name="confirm_password" required>
               </div>
             </div>
           </div>
@@ -225,6 +196,7 @@
     </div>
   </div>
 </div>
+
 
     <!-- FOR IMAGE SLIDE  -->
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
@@ -338,23 +310,6 @@
     </div>
   </div>
 
-  <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">Our Facilities</h2>
-<div class="container">
-  <div class="row justify-content-center"> <!-- Ensures alignment -->
-    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
-      <img src="images/features/wifi.svg" width="100px">
-      <h5 class="mt-3">veg</h5>
-    </div>
-    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
-      <img src="images/food.jpg" width="100px">
-      <h5 class="mt-3">non-veg</h5>
-    </div>
-    <div class="col-lg-2 col-md-4 col-sm-6 text-center bg-white rounded shadow py-4 my-3 mx-3"> 
-      <img src="images/laundry.png" width="80px">
-      <h5 class="mt-3">salad</h5>
-    </div>
-  </div>
-</div>
 
 <!-- REACH US -->
 <h2 class=" mt-5 pt-4 mb-4 text-center">Lets connect with us</h2>
