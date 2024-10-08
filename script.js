@@ -1,32 +1,15 @@
-// script.js
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('nav ul li a');
-    const sections = document.querySelectorAll('.page');
-
-    links.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            const targetId = this.getAttribute('data-target');
-
-            sections.forEach(section => {
-                if (section.id === targetId) {
-                    section.style.display = 'block';
-                } else {
-                    section.style.display = 'none';
-                }
-
-                
-                
-            });
-        });
-    });
-});
 <script>
-  // Add event listener to the "Create an account...!" link
-  document.getElementById('create-account-link').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the default link behavior
-    
-    // Redirect to the registration page
-    window.location.href = 'register.html'; // Replace 'register.html' with your registration page URL
+  document.getElementById('registerForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from submitting for validation
+    var password = document.querySelector('input[name="password"]').value;
+    var confirmPassword = document.querySelector('input[name="confirm_password"]').value;
+
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+    } else {
+      alert('Registration successful!'); // Replace this with actual form submission logic
+      // Optionally submit the form here, using AJAX or a traditional form submission
+      // this.submit();
+    }
   });
 </script>
