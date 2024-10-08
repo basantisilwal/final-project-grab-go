@@ -79,10 +79,10 @@
           <a class="nav-link me-2" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-2" href="#">About Us</a>
+          <a class="nav-link me-2" href="#about">About Us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link me-2" href="#">Contact Us</a>
+          <a class="nav-link me-2" href="#contact">Contact Us</a>
         </li>
         <li class="nav-item">
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
