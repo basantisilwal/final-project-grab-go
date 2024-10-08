@@ -112,11 +112,14 @@
           <h1>LOG IN</h1>
           <p>Welcome!! Login or signup to access our website</p>
           <form id="login-form">
+            <div class="mb-3">
             <label for="username">username:</label>
-            <input type="text" id="username" name="username"/><br />
-
+            <input type="text" class="form-control" id="username" required placeholder="Enter correct Username">
+</div>
+               <div class="mb-3">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required /><br />
+            <input type="text" class="form-control" id="password" required placeholder="Enter correct Password">
+</div>
             <!-- Dropdown menu -->
             <label for="user-type">Select User Type:</label>
             <div class="dropdown">
