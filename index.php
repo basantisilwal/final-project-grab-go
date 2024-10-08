@@ -1,3 +1,64 @@
+<?php
+session_start();
+$host = 'localhost';
+$user = 'root'; 
+$password = ''; 
+$database = 'grab&go'; 
+$errorMessage = '';
+$conn = new mysqli($host, $user, $password, $database);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $userType = $_POST['user_type'];
+
+    switch ($userType) {
+        case 'Admin':
+            $table = 'tbl_admin';
+            $dashboard = 'Admin/admindashboard.php';
+            break;
+        case 'Resturant':
+            $table = 'tbl_resturant';
+            $dashboard = 'Resturant/restaurantdashboard.php';
+            break;
+        case 'Customer':
+            $table = 'tbl_customer';
+            $dashboard = 'Customer/customerdashboard.php';
+            break;
+            case 'Dispatcher':
+                $table = 'tbl_dispatcher';
+                $dashboard = 'Dispatcher/dispatcherdashboard.php';
+                break;
+        default:
+            $errorMessage = "Invalid user type selected";
+            break;
+    }
+
+    if (empty($errorMessage)) {
+        $stmt = $conn->prepare("SELECT * FROM $table WHERE username = ? AND password = ?");
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            
+            $_SESSION['username'] = $username; 
+            header("Location: $dashboard");
+            exit();
+        } else {
+            $errorMessage = "Invalid username or password.";
+               }
+
+        $stmt->close();
+    }
+}
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +74,7 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
+
   body {
     background-color: beige; 
   }
@@ -94,54 +156,48 @@
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg"> <!-- Adjust modal size if needed -->
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> <!-- Cancel icon -->
-    <div class="modal-content">
-      <div class="modal-header">
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body login-container">
-      
-        <div class="left-section">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body login-container">
+            <div class="left-section">
         
-          <img src="images/logo.png" alt="Website Logo" class="logo" />
-          <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
-        </div>
-        <div class="right-section">
-        
-          <h1>LOG IN</h1>
-          <p>Welcome!! Login or signup to access our website</p>
-          <form id="login-form">
-            <div class="mb-3">
-            <label for="username">username:</label>
-            <input type="text" class="form-control" id="username" required placeholder="Enter correct Username">
-</div>
-               <div class="mb-3">
-            <label for="password">Password:</label>
-            <input type="text" class="form-control" id="password" required placeholder="Enter correct Password">
-</div>
-            <!-- Dropdown menu -->
-            <label for="user-type">Select User Type:</label>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="userTypeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Choose an option
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="userTypeDropdown">
-                <li><a class="dropdown-item" href="#">Admin</a></li>
-                <li><a class="dropdown-item" href="#">Resturant</a></li>
-                <li><a class="dropdown-item" href="#">Customer</a></li>
-                <li><a class="dropdown-item" href="#">Dispatcher</a></li>
-              </ul>
-            </div><br />
-            <button type="submit">LOG IN</button>
-          </form>
-          <p class="signup-text">
-          Not registered? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Create an account...!</a>
-          </p>
-        </div>
+        <img src="images/logo.png" alt="Website Logo" class="logo" />
+        <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
       </div>
+
+                <div class="right-section">
+                    <h1>LOG IN</h1>
+                    <p>Welcome!! Login or signup to access our website</p>
+                    <form id="login-form" method="POST" action="">
+                        <div class="mb-3">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required placeholder="Enter correct Username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required placeholder="Enter correct Password">
+                        </div>
+                        <!-- Dropdown menu -->
+                        <label for="user-type">Select User Type:</label>
+                        <select name="user_type" class="form-control" id="userTypeDropdown" required>
+                            <option value="">Choose an option</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Resturant">Resturant</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Dispatcher">Dispatcher</option>
+                        </select><br />
+                        <button type="submit" class="btn btn-primary">LOG IN</button>
+                    </form>
+                    <p class="signup-text">
+                        Not registered? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Create an account...!</a>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
