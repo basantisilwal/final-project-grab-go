@@ -3,64 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Search</title>
+    <title>Grab & Go</title>
     <link rel="stylesheet" href="cstyle.css">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <span class="menu-icon">&#9776;</span>
-            <span class="brand">yummy.</span>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Find Food</a></li>
-                <li><a href="#">Categories</a></li>
-                <li><a href="#">Restaurant</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-        </nav>
-        <div class="contact">
-            <a href="tel:98765434210">98765434210</a>
+        <div class="logo">GRAB&GO</div>
+        <div class="location">Damauli, Tanahun</div>
+        <div class="search">
+            <input type="text" placeholder="Search for restaurant, cuisine or dish" id="searchBar">
         </div>
     </header>
 
-    <section class="hero">
-        <h1>Discover Restaurants that deliver near you</h1>
-        <div class="search-bar">
-            <input type="text" placeholder="Enter delivery address">
-            <button>Ok</button>
+    <section class="inspiration">
+        <h2>Inspiration for your first order</h2>
+        <div class="categories">
+            <div class="category">
+                <img src="pizza.jpg" alt="Pizza">
+                <p>Pizza</p>
+            </div>
+            <div class="category">
+                <img src="burger.jpg" alt="Burger">
+                <p>Burger</p>
+            </div>
+            <div class="category">
+                <img src="chicken.jpg" alt="Chicken">
+                <p>Chicken</p>
+            </div>
+            <div class="category">
+                <img src="mutton.jpg" alt="Mutton">
+                <p>Mutton</p>
+            </div>
         </div>
     </section>
 
-    <section class="categories">
-        <div class="category">
-            <img src="food.jpg" alt="Food">
-            <a href="#">Food</a>
+    <section class="restaurants">
+        <h2>Order food online near to your location</h2>
+        <div class="restaurant-list">
+            <div class="restaurant">
+                <img src="momo.jpg" alt="Mayur Cafe">
+                <div class="restaurant-info">
+                    <h3>Mayur cafe</h3>
+                    <p>Kalikamarga vays-2</p>
+                    <p class="rating">5.3</p>
+                    <p class="price">RS 120</p>
+                </div>
+            </div>
+            <div class="restaurant">
+                <img src="biryani.jpg" alt="Diamond Restro">
+                <div class="restaurant-info">
+                    <h3>Diamond restro</h3>
+                    <p>Safasadak vays-2</p>
+                    <p class="rating">4.2</p>
+                    <p class="price">RS 520</p>
+                </div>
+            </div>
         </div>
-        <div class="category">
-            <img src="pizza.jpg" alt="Pizza">
-            <a href="#">Pizza</a>
-        </div>
-        <div class="category">
-            <img src="healthy.jpg" alt="Healthy">
-            <a href="#">Healthy</a>
-        </div>
-    </section>
-
-    <section class="images">
-        <img src="burger.jpg" alt="Burger">
-        <img src="pasta.jpg" alt="Pasta">
-        <img src="tacos.jpg" alt="Tacos">
     </section>
 
     <footer>
-        <div class="account">
-            <a href="#">Account</a>
-            <a href="#" class="confirm-order">Confirm Order</a>
-        </div>
+        <p>&copy; 2024 Grab & Go</p>
     </footer>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
