@@ -27,7 +27,7 @@
                 <p>Burger</p>
             </div>
             <div class="category">
-                <img src="chicken.jpg" alt="Chicken">
+                <img src="images/fry chicken leg piece.jpg" alt="Chicken">
                 <p>Chicken</p>
             </div>
             <div class="category">

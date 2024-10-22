@@ -1,111 +1,112 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 body {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f6eaa8;
-    padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f6eaa8;
+  padding: 10px 20px;
 }
 
 .logo {
-    font-weight: bold;
-    color: #ff5e00;
-    font-size: 24px;
+  font-weight: bold;
+  color: #ff5e00;
+  font-size: 24px;
 }
 
 .location {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .search input {
-    padding: 5px;
-    font-size: 16px;
+  padding: 5px;
+  font-size: 16px;
 }
 
 .inspiration {
-    text-align: center;
-    padding: 20px;
-    background-color: white;
-    margin-top: 10px;
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  margin-top: 10px;
 }
 
 .categories {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .category img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .category p {
-    margin-top: 5px;
-    font-size: 16px;
+  margin-top: 5px;
+  font-size: 16px;
 }
 
 .restaurants {
-    padding: 20px;
+  padding: 20px;
 }
 
 .restaurant-list {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .restaurant {
-    background-color: white;
-    padding: 10px;
-    border-radius: 10px;
-    width: 45%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 45%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .restaurant img {
-    width: 100%;
-    border-radius: 10px;
+  width: 80%;
+  height: 80;
+  border-radius: 10px;
 }
 
 .restaurant-info {
-    text-align: center;
+  text-align: center;
 }
 
 .restaurant-info h3 {
-    margin-top: 10px;
-    font-size: 18px;
+  margin-top: 10px;
+  font-size: 18px;
 }
 
 .restaurant-info p {
-    margin: 5px 0;
-    font-size: 14px;
+  margin: 5px 0;
+  font-size: 14px;
 }
 
 .restaurant-info .rating {
-    color: green;
-    font-weight: bold;
+  color: green;
+  font-weight: bold;
 }
 
 .restaurant-info .price {
-    color: #ff5e00;
+  color: #ff5e00;
 }
 
 footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #f6eaa8;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+  text-align: center;
+  padding: 10px;
+  background-color: #f6eaa8;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
