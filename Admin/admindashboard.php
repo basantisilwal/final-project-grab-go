@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="astyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -12,35 +15,23 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Admin Dashboard</h2>
-                <input type="text" placeholder="Search" class="search-bar">
             </div>
             <ul class="sidebar-menu">
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="#">My Project</a></li>
-                <li><a href="#">Data</a></li>
-                <li><a href="#">Statistics</a></li>
-                <li><a href="#">Team</a></li>
-                <li><a href="#">Saved</a></li>
-                <li><a href="#">Draft</a></li>
-                <li><a href="#">Trash</a></li>
+                <li><a href="#" data-bs-toggle="modal" data-bs-target="#restaurantModal">Manage Restaurant</a></li>
+                <li><a href="#">View Customer</a></li>
+                <li><a href="#">Settings</a></li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="content">
             <section class="content-header">
+                <input type="text" placeholder="Search" class="search-bar form-control">
                 <h1>Admin Dashboard</h1>
             </section>
-            <section class="management-buttons">
-            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#restaurantModal">Manage Restaurant</button>
-                <button class="manage-btn">Food Menu</button>
-                <button class="manage-btn">Manage Payment</button>
-            </section>
-            <section class="images">
-                <img src="phone-food.jpg" alt="Food Image">
-            </section>
-        </main>
-    </div>
+            
+
     <!-- Manage Restaurant Modal -->
     <div class="modal fade" id="restaurantModal" tabindex="-1" aria-labelledby="restaurantModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -62,18 +53,18 @@
 
                         <!-- Form to input restaurant details -->
                         <form action="manage-restaurant.php" method="POST">
-                            <div class="form-group">
-                                <label for="restaurant-name">Restaurant Name:</label>
+                            <div class="mb-3">
+                                <label for="restaurant-name" class="form-label">Restaurant Name:</label>
                                 <input type="text" id="restaurant-name" name="restaurant_name" class="form-control" required>
                             </div>
 
-                            <div class="form-group">
-                                <label for="email">Restaurant Email:</label>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Restaurant Email:</label>
                                 <input type="email" id="email" name="restaurant_email" class="form-control" required>
                             </div>
 
-                            <div class="form-group">
-                                <label for="address">Restaurant Address:</label>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Restaurant Address:</label>
                                 <input type="text" id="address" name="restaurant_address" class="form-control" required>
                             </div>
 
@@ -84,8 +75,6 @@
             </div> 
         </div>
     </div> 
-
-
 
     <script src="script.js"></script>
 </body>
