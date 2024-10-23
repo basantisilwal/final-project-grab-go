@@ -34,7 +34,7 @@ header {
 
 .inspiration {
   text-align: center;
-  padding: 20px;
+  padding: 100px;
   background-color: white;
   margin-top: 10px;
 }
@@ -45,11 +45,12 @@ header {
 }
 
 .category img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px;
+  width: 80%; /* Set to a percentage of the parent */
+  max-width: 500px; /* Optional: cap the maximum size */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Optional: rounded corners */
 }
+
 
 .category p {
   margin-top: 5px;
