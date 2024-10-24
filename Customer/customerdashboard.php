@@ -19,19 +19,19 @@
         <h2>Inspiration for Your First Order</h2>
         <div class="categories">
             <div class="category">
-                <img src="../images/pizza.jpg" alt="Momo" class="circle-img">
+                <img src="../images/pizza.jpg" alt="pizza" class="circle-img">
                 <p>Pizza</p>
             </div>
             <div class="category">
-            <img src="images/pizza.jpg" alt="" class="img-fluid">
+            <img src="../images/burger.webp" alt="burger" class="circle-img">
                 <p>Burger</p>
             </div>
             <div class="category">
-                <img src="images/fry-chicken-leg-piece.jpg" alt="Chicken" class="circle-img">
+                <img src="../images/hole chicken.jpg" alt="Chicken" class="circle-img">
                 <p>Chicken</p>
             </div>
             <div class="category">
-                <img src="images/mutton.jpg" alt="Mutton" class="circle-img">
+                <img src="../images/image.png" alt="Mutton" class="circle-img">
                 <p>Mutton</p>
             </div>
         </div>
@@ -41,7 +41,7 @@
         <h2>Order Food Online Near You</h2>
         <div class="restaurant-list">
             <div class="restaurant">
-                <img src="images/big-momo.jpg" alt="Mayur Cafe" class="circle-img">
+                <img src="../images/big-momo.jpg" alt="Mayur Cafe" class="circle-img">
                 <div class="restaurant-info">
                     <h3>Mayur Cafe</h3>
                     <p>Kalikamarga Vays-2</p>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="restaurant">
-                <img src="images/hole-chicken.jpg" alt="Diamond Restro" class="circle-img">
+                <img src="../images/hole-chicken.jpg" alt="Diamond Restro" class="circle-img">
                 <div class="restaurant-info">
                     <h3>Diamond Restro</h3>
                     <p>Safasadak Vays-2</p>
