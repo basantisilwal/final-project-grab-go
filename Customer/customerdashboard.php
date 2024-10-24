@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="cstyle.css">
 </head>
 <body>
-    <header>
+<header>
         <div class="logo">GRAB&GO</div>
         <div class="location">Damauli, Tanahun</div>
         <div class="search">
@@ -18,20 +18,20 @@
     <section class="inspiration">
         <h2>Inspiration for Your First Order</h2>
         <div class="categories">
-            <div class="category img">
-                <img src="images/pizza.jpg" alt="">
+            <div class="category">
+                <img src="images/pizza.jpg" alt="Momo" class="circle-img">
                 <p>Pizza</p>
             </div>
             <div class="category">
-                <img src="images/burger.jpg" alt="Burger">
+                <img src="images/burger.jpg" alt="Burger" class="circle-img">
                 <p>Burger</p>
             </div>
             <div class="category">
-                <img src="images/fry-chicken-leg-piece.jpg" alt="Chicken">
+                <img src="images/fry-chicken-leg-piece.jpg" alt="Chicken" class="circle-img">
                 <p>Chicken</p>
             </div>
             <div class="category">
-                <img src="images/mutton.jpg" alt="Mutton">
+                <img src="images/mutton.jpg" alt="Mutton" class="circle-img">
                 <p>Mutton</p>
             </div>
         </div>
@@ -41,7 +41,7 @@
         <h2>Order Food Online Near You</h2>
         <div class="restaurant-list">
             <div class="restaurant">
-                <img src="images/momo.jpg" alt="Mayur Cafe">
+                <img src="images/big-momo.jpg" alt="Mayur Cafe" class="circle-img">
                 <div class="restaurant-info">
                     <h3>Mayur Cafe</h3>
                     <p>Kalikamarga Vays-2</p>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="restaurant">
-                <img src="images/biryani.jpg" alt="Diamond Restro">
+                <img src="images/hole-chicken.jpg" alt="Diamond Restro" class="circle-img">
                 <div class="restaurant-info">
                     <h3>Diamond Restro</h3>
                     <p>Safasadak Vays-2</p>

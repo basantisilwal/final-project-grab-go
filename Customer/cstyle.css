@@ -44,13 +44,12 @@ header {
   justify-content: space-around;
 }
 
-.category img {
-  width: 80%; /* Set to a percentage of the parent */
-  max-width: 500px; /* Optional: cap the maximum size */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 10px; /* Optional: rounded corners */
+.circle-img {
+  width: 300px;
+  height: 200px;
+  border-radius: 1000%;
+  object-fit: cover; /* Ensures the image fits the container */
 }
-
 
 .category p {
   margin-top: 5px;
@@ -78,6 +77,12 @@ header {
   width: 80%;
   height: 80;
   border-radius: 10px;
+}
+.circle-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .restaurant-info {

@@ -31,7 +31,7 @@
                 <li><a href="admindashboard.php">Dashboard</a></li>
                 <li><a href="manage.php">Manage Restaurant</a></li>
                 <li><a href="admindashboard.php">View Customer</a></li>
-                <li><a href="admindashboard.php">Setting</a></li>
+                <li><a href="setting.php">Setting</a></li>
             </ul>
         </aside>
 
