@@ -316,7 +316,7 @@ $conn->close();
     <div class="row align-items-top">
       <div class="col-lg-3 col-md-12 col-12">
         <div class="about-img">
-        <img src="images/logo.png" alt="" class="img-fluid">
+        <img src="images/pizza.jpg" alt="" class="img-fluid">
         </div>
       </div>
       <div class="col-lg-9 col-md-12 col-12 ps-lg-0 mt-md-5">

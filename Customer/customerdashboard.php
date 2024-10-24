@@ -19,11 +19,11 @@
         <h2>Inspiration for Your First Order</h2>
         <div class="categories">
             <div class="category">
-                <img src="images/pizza.jpg" alt="Momo" class="circle-img">
+                <img src="../images/pizza.jpg" alt="Momo" class="circle-img">
                 <p>Pizza</p>
             </div>
             <div class="category">
-                <img src="images/burger.jpg" alt="Burger" class="circle-img">
+            <img src="images/pizza.jpg" alt="" class="img-fluid">
                 <p>Burger</p>
             </div>
             <div class="category">
