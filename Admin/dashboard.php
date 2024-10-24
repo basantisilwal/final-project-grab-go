@@ -17,23 +17,17 @@
                 <h2>Admin Dashboard</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="admindashboard.php">Dashboard</a></li>
+                <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="manage.php">Manage Restaurant</a></li>
                 <li><a href="admindashboard.php">View Customer</a></li>
                 <li><a href="admindashboard.php">Setting</a></li>
             </ul>
         </aside>
-
-        <!-- Main Content -->
         <main class="content">
             <section class="content-header">
                 <input type="text" placeholder="Search" class="search-bar form-control">
                 <h1>Admin Dashboard</h1>
             </section>
-            
-
-   
-
-    <script src="script.js"></script>
+            <script src="script.js"></script>
 </body>
 </html>
