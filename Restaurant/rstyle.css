@@ -38,8 +38,15 @@ body {
 .main-content {
     flex: 1;
     padding: 40px;
-    background-color: #f4f4f4;
+    background-image: url('images/Backgroung.jpg'); /* Ensure the path to the image is correct */
+    background-size: cover; /* Makes sure the background covers the entire container */
+    background-position: center; /* Centers the background image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    min-height: 500vh; /* Ensures that the section has full viewport height */
+    padding: 80px; /* Adds some padding for content spacing */
+    color: white; /* Makes text readable if background is dark */
 }
+
 
 .main-content h1 {
     font-size: 24px;
@@ -65,3 +72,5 @@ body {
 .buttons button:hover {
     background-color: #e68a00;
 }
+
+   
