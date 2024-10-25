@@ -1,76 +1,70 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
 
 .dashboard {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
 }
 
 .sidebar {
-    background-color: #202020;
-    color: #fff;
-    padding: 20px;
-    width: 250px;
-    display: flex;
-    flex-direction: column;
+  background-color: #202020;
+  color: #fff;
+  padding: 20px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar h2 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .sidebar ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .sidebar ul li {
-    margin: 15px 0;
-    cursor: pointer;
+  margin: 15px 0;
+  cursor: pointer;
 }
 
 .main-content {
-    flex: 1;
-    padding: 40px;
-    background-image: url('images/Backgroung.jpg'); /* Ensure the path to the image is correct */
-    background-size: cover; /* Makes sure the background covers the entire container */
-    background-position: center; /* Centers the background image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    min-height: 500vh; /* Ensures that the section has full viewport height */
-    padding: 80px; /* Adds some padding for content spacing */
-    color: white; /* Makes text readable if background is dark */
+  background-image: url("../images/background.jpg"); /* Replace with the path to your image */
+  background-size: cover; /* Make the image cover the entire area */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-position: center; /* Center the image */
+  padding: 20px; /* Add padding if needed */
+  color: #333; /* Set text color to make it readable */
 }
 
-
 .main-content h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .buttons {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .buttons button {
-    background-color: #ff9900;
-    border: none;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
+  background-color: #0a0a0a;
+  border: none;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .buttons button:hover {
-    background-color: #e68a00;
+  background-color: #0f0f0e;
 }
-
-   
