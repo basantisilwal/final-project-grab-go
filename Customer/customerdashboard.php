@@ -41,7 +41,7 @@
         <h2>Order Food Online Near You</h2>
         <div class="restaurant-list">
             <div class="restaurant">
-                <img src="../images/big-momo.jpg" alt="Mayur Cafe" class="circle-img">
+                <img src="../images/buff momo image.jpg" alt="Mayur Cafe" class="circle-img">
                 <div class="restaurant-info">
                     <h3>Mayur Cafe</h3>
                     <p>Kalikamarga Vays-2</p>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="restaurant">
-                <img src="../images/hole-chicken.jpg" alt="Diamond Restro" class="circle-img">
+                <img src="../images/chicken fry momo.jpg" alt="Diamond Restro" class="circle-img">
                 <div class="restaurant-info">
                     <h3>Diamond Restro</h3>
                     <p>Safasadak Vays-2</p>
