@@ -165,5 +165,15 @@ h1 {
     color: red;
     margin-bottom: 15px;
 }
-=======
->>>>>>> 8f6ede84ef99a63849eecd8ccbb2f27d9bad652c
+.logo {
+    flex-grow: 1;
+    text-align: center;
+    padding: 20px;
+}
+
+.logo img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
