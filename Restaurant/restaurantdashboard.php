@@ -23,6 +23,7 @@
 
         <div class="main-content">
             <h1>Restaurant Dashboard</h1>
+            <img src="../images/Background.jpg" alt="background" class="rectangle-img">
             <div class="buttons">
                 <button onclick="showAlert('Pending food orders')">Pending food orders</button>
                 <button onclick="showAlert('Manage food menu')">Manage food menu</button>
