@@ -35,18 +35,16 @@ body {
   cursor: pointer;
 }
 
-.main-content {
-  background-image: url("../images/background.jpg"); /* Replace with the path to your image */
-  background-size: cover; /* Make the image cover the entire area */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
-  background-position: center; /* Center the image */
-  padding: 20px; /* Add padding if needed */
-  color: #333; /* Set text color to make it readable */
-}
-
 .main-content h1 {
   font-size: 24px;
   margin-bottom: 20px;
+  background-image: url("your-image.jpg"); /* Replace 'your-image.jpg' with the path to your image */
+  background-size: cover; /* Ensures the image covers the entire panel */
+  background-position: center; /* Centers the image within the panel */
+  color: white; /* Adjust text color to contrast with background */
+  padding: 20px;
+  height: 100vh; /* Makes the main content take up full height */
+  overflow: auto; /* Allows scrolling if content exceeds panel height */
 }
 
 .buttons {
