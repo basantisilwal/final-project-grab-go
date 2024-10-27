@@ -26,7 +26,7 @@
             <img src="../images/Background.jpg" alt="bg" class="background=img">
             
             <div class="buttons">
-                <button data-action="showPendingOrders">Pending food orders</button>
+                <button onclick="showAlert('Pending food order')">Pending food order</button>
                 <button onclick="showAlert('Manage food menu')">Manage food menu</button>
                 <button onclick="showAlert('Manage payment')">Manage payment</button>
                 <button onclick="showAlert('Give Token ID')">Give Token ID</button>
