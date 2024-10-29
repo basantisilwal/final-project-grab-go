@@ -25,7 +25,7 @@ body {
 
 .sidebar h2 {
   margin-bottom: 20px;
-  color: #ffa726;
+  color: #cac145;
 }
 
 .sidebar ul {
@@ -80,7 +80,7 @@ body {
 }
 
 .buttons button:hover {
-  background-color: #ffa726;
+  background-color: #0b0b0b;
 }
 
 .modal {
