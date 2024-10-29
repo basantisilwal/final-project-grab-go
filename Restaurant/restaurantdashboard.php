@@ -22,24 +22,29 @@
         </nav>
 
         <div class="main-content">
-            <h1>Restaurant Dashboard</h1>
-            <img src="../images/Background.jpg" alt="bg" class="background=img">
-            
+            <div class="header">
+                <h1>Restaurant Dashboard</h1>
+            </div>
+            <div class="background-img">
+                <img src="path/to/your/background.jpg" alt="Food Background">
+            </div>
             <div class="buttons">
-                <button onclick="showAlert('Pending food order')">Pending food order</button>
+                <button onclick="showPendingOrders()">Pending food orders</button>
                 <button onclick="showAlert('Manage food menu')">Manage food menu</button>
                 <button onclick="showAlert('Manage payment')">Manage payment</button>
                 <button onclick="showAlert('Give Token ID')">Give Token ID</button>
             </div>
         </div>
-        <!-- Hidden Pending Orders Section -->
-        <div class="pending-orders hidden" id="pendingOrders">
+    </div>
+
+    <!-- Hidden Pending Orders Section -->
+    <div class="modal hidden" id="pendingOrdersModal">
+        <div class="modal-content">
             <h2>Pending Orders</h2>
             <ul>
                 <li>Order #1 - Pizza</li>
                 <li>Order #2 - Burger</li>
                 <li>Order #3 - Pasta</li>
-                <!-- Add more orders as needed -->
             </ul>
             <button onclick="hidePendingOrders()">Close</button>
         </div>
