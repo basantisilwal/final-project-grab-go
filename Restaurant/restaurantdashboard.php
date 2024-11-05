@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurant Dashboard</title>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="rstyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</head>
 </head>
 <body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>Dashboard</h2>
-            <ul>
-                <li>My Project</li>
-                <li>Data</li>
-                <li>Statistics</li>
-                <li>Team</li>
-                <li>Saved</li>
-                <li>Draft</li>
-                <li>Trash</li>
+<div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+            <li><a href="pandingfoodorder.php">Panding</a></li>
+                <li><a href="managefoodmenu.php">Menu</a></li>
+                <li><a href="restaurantdashboard.php">Viewr</a></li>
+                <li><a href="setting.php">Setting</a></li>
             </ul>
-        </nav>
+        </aside>
+
 
         <div class="main-content">
             <div class="header">

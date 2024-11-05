@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +10,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="main-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -28,7 +25,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="content">
+        <main class="form-container">
             <section class="content-header">
                 <input type="text" placeholder="Search" class="search-bar form-control">
                 <h1>Admin Dashboard</h1>

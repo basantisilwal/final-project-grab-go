@@ -1,179 +1,153 @@
-<<<<<<< HEAD
-=======
 
->>>>>>> 8f6ede84ef99a63849eecd8ccbb2f27d9bad652c
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
+    border:0;
+    list-style: none;
+    appearance: none;
 }
-
 body {
-    background-color: #f4f4f4;
-}
-
-.container {
     display: flex;
     height: 100vh;
-}
-
-/* Sidebar Styling */
-.sidebar {
-    background-color: #343a40; /* Dark background */
-    color: white;
-    padding: 20px;
-    height: 100vh; /* Full height */
-}
-.sidebar-menu a {
-    color: white; /* Link color */
-    text-decoration: none;
-}
-.sidebar-menu a:hover {
-    text-decoration: underline; /* Add underline on hover */
-}
-.content-header {
-    background-color: #f8f9fa; /* Light background */
-    padding: 20px;
-    border-bottom: 1px solid #dee2e6; /* Add a border */
-}
-.content-header h1 {
-    font-size: 24px; /* Change header font size */
-    color: #495057; /* Change header color */
-}
-
-/* Main Content Styling */
-.content {
-    flex-grow: 1;
-    padding: 20px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
     justify-content: center;
     align-items: center;
-}
-
-.content-header h1 {
-    font-size: 24px;
-    color: #000;
-    margin-bottom: 20px;
-}
-
-.management-buttons {
-    margin-bottom: 30px;
-}
-
-.manage-btn {
-    display: block;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    padding: 15px 30px;
-    margin: 10px 0;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    text-transform: uppercase;
-}
-
-.manage-btn:hover {
-    background-color: #ffcb00;
-    color: #000;
-}
-
-.images img {
-    width: 300px;
-    height: auto;
-    border-radius: 15px;
-}
-<<<<<<< HEAD
-
-
-.container {
-    display: flex;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: #2c3e50;
-    padding: 20px;
-    color: white;
-}
-
-.sidebar-header h2 {
     margin: 0;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #fff;
+    background-color: #f9f5e7;
+  }
+  
+  .main-container {
+    display: flex;
+    width: 100vw;
+  height: 100vh;
+    background-color: #fff8e1;
 }
 
-.sidebar-menu {
+/* Sidebar styling */
+.sidebar {
+    width: 280px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+.sidebar-header h2 {
+    border-bottom: 1px solid #fff8e1;
+    padding-bottom: 10px;
+}
+.sidebar-menu li {
     list-style: none;
-    padding: 0;
+    margin: 15px 0;
 }
-
 .sidebar-menu li a {
     color: white;
     text-decoration: none;
-    display: block;
-    padding: 10px 0;
+    font-weight: bold;
 }
-
+.sidebar-menu li a:hover {
+    text-decoration: underline;
+}
+/* Content styling */
 .content {
-    flex-grow: 1;
+    flex: 1;
     padding: 20px;
+    order: 1; /* Ensures content is on the left side */
+}
+.content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.search-bar {
+    max-width: 300px;
+    margin-right: 20px;
+
+
+
+
+/*  form-container */
+.form-container {
+    flex: 1;
+    display: flex;
+    background-color:#fff8e1;
+    justify-content: center; /* Center the form horizontally in the remaining space */
+    padding: 20px;
+    max-width: 500px; /* Set a maximum width for the form container */
+    height: 100vh;
 }
 
-h1 {
-    font-size: 24px;
+/* Dashboard form */
+.content-header{
+    position: absolute;
+    top: 20px; /* Adjust this value to position it higher */
+    right: 60px; 
+}
+
+
+/* Restaurant management form */
+.form{
+    max-width: 300px;
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 60px;
+    top: 20px; /* Adjust this value to position it higher */
+    right: 200px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h2 {
+    font-weight: bold;
+    text-align: center;
     margin-bottom: 20px;
 }
 
-.restaurant-management {
-    max-width: 600px;
-    margin: 0 auto;
+/* Form group styling */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
 }
 
-.form-group {
-    margin-bottom: 15px;
+.form-group input[type="text"],
+.form-group input[type="email"] {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    background-color: #f9f9f9;
+    padding: 0 5px;
+    font-size: 14px;
+    color: #333;
 }
 
-.form-group input {
+input[type="submit"] {
     width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-}
-
-.submit-btn {
-    padding: 10px 15px;
-    background-color: #3498db;
+    padding: 10px;
+    background-color: #4CAF50;
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.success-message {
-    color: green;
-    margin-bottom: 15px;
+input[type="submit"]:hover {
+    background-color: #45a049;
 }
 
-.error-message {
-    color: red;
-    margin-bottom: 15px;
-}
-.logo {
-    flex-grow: 1;
-    text-align: center;
-    padding: 20px;
-}
 
-.logo img {
-    width: 120px;
-    height: auto;
-    margin-bottom: 20px;
+/* Setting form */
+.logo{
+    position: absolute;
+    top: 600px; /* Adjust this value to position it higher */
+    right: 20px; 
 }
-

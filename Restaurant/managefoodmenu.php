@@ -4,85 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Add New Food</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-color: #f9f5e7;
-    }
-
-    .container {
-        width: 300px;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
-
-    .container h2 {
-        margin-bottom: 20px;
-    }
-
-    .input-group {
-        margin-bottom: 15px;
-        text-align: left;
-    }
-
-    .input-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-size: 14px;
-    }
-
-    .input-group input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    .photo-preview {
-        width: 100%;
-        height: 100px;
-        background-color: #e0e0e0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #666;
-        margin-bottom: 15px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .button-group {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .button-group button {
-        width: 80px;
-        padding: 10px;
-        background-color: #4ca3dd;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .button-group button:hover {
-        background-color: #3682b8;
-    }
-</style>
 </head>
 <body>
-
-<div class="container">
+<div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+            <li><a href="pandingfoodorder.php">Panding</a></li>
+                <li><a href="managefoodmenu.php">Menu</a></li>
+                <li><a href="restaurantdashboard.php">Viewr</a></li>
+                <li><a href="setting.php">Setting</a></li>
+            </ul>
+        </aside>
+        
+        <div class="main-content">
     <h2>Add New Food</h2>
 
     <div class="input-group">
