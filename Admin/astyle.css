@@ -8,146 +8,109 @@
     list-style: none;
     appearance: none;
 }
-body {
+
+  body {
     display: flex;
-    height: 100vh;
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
     justify-content: center;
     align-items: center;
-    margin: 0;
-    background-color: #f9f5e7;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    font-size: 0.9rem;
   }
-  
-  .main-container {
-    display: flex;
-    width: 100vw;
-  height: 100vh;
-    background-color: #fff8e1;
-}
 
-/* Sidebar styling */
-.sidebar {
-    width: 280px;
-    background-color: #333;
-    color: white;
-    padding: 20px;
-}
-.sidebar-header h2 {
-    border-bottom: 1px solid #fff8e1;
-    padding-bottom: 10px;
-}
-.sidebar-menu li {
-    list-style: none;
-    margin: 15px 0;
-}
-.sidebar-menu li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-.sidebar-menu li a:hover {
-    text-decoration: underline;
-}
-/* Content styling */
-.content {
-    flex: 1;
-    padding: 20px;
-    order: 1; /* Ensures content is on the left side */
-}
-.content-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-.search-bar {
-    max-width: 300px;
-    margin-right: 20px;
-
-
-
-
-/*  form-container */
-.form-container {
-    flex: 1;
-    display: flex;
-    background-color:#fff8e1;
-    justify-content: center; /* Center the form horizontally in the remaining space */
-    padding: 20px;
-    max-width: 500px; /* Set a maximum width for the form container */
+  /* dahboard*/
+  .sidebar {
     height: 100vh;
+    background-color: #f8f9fa;
+    padding-top: 20px;
 }
-
-/* Dashboard form */
-.content-header{
-    position: absolute;
-    top: 20px; /* Adjust this value to position it higher */
-    right: 60px; 
-}
-
-
-/* Restaurant management form */
-.form{
-    max-width: 300px;
-    width: 100%;
-    background-color: #f9f9f9;
-    padding: 60px;
-    top: 20px; /* Adjust this value to position it higher */
-    right: 200px; 
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.form-container h2 {
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Form group styling */
-.form-group {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"] {
-    width: 50%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-}
-
-.form-group label {
-    position: absolute;
-    top: -8px;
-    left: 10px;
-    background-color: #f9f9f9;
-    padding: 0 5px;
-    font-size: 14px;
+.sidebar .nav-link {
     color: #333;
+    padding: 0.5rem 1rem;
 }
-
-input[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+}
+.sidebar .nav-link.active {
+    background-color: #0d6efd;
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+}
+.main-content {
+    padding: 15px;
+}
+.card {
+    margin-bottom: 15px;
+}
+.card-body {
+    padding: 1rem;
+}
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+.card-text.display-4 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.card-text {
+    font-size: 0.8rem;
+}
+#monthlyOrdersChart {
+    height: 300px !important;
 }
 
-input[type="submit"]:hover {
-    background-color: #45a049;
+/* Add Restaurant*/
+.main-content {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-
-/* Setting form */
-.logo{
-    position: absolute;
-    top: 600px; /* Adjust this value to position it higher */
-    right: 20px; 
+h2 {
+  text-align: center;
+}
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+label {
+  grid-column: span 1;
+}
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 4px 0;
+}
+textarea {
+  resize: vertical;
+}
+.buttons {
+  grid-column: span 2;
+  text-align: center;
+}
+button {
+  margin: 5px;
+  padding: 8px 16px;
+  background-color: #6ca0dc;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #5588c3;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+table, th, td {
+  border: 1px solid #dddddd;
+}
+th, td {
+  padding: 8px;
+  text-align: left;
 }

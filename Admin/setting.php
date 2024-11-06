@@ -28,7 +28,7 @@
         </aside>
 
         <!-- Logo -->
-<div class="form-container">
+<div class="main-content">
     <section class= "logo">
 <form action="upload_logo.php" method="POST" enctype="multipart/form-data">
     <div class="mb-3">

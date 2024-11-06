@@ -17,10 +17,21 @@
                 <h2>Admin Dashboard</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="manage.php">Manage Restaurant</a></li>
-                <li><a href="admindashboard.php">View Customer</a></li>
-                <li><a href="setting.php">Setting</a></li>
+            <a href="#" class="nav-link active">
+        Dashboard
+      </a>
+      <a href="#" class="nav-link">
+        Manage Restaurants
+      </a>
+      <a href="#" class="nav-link">
+        View Costumer
+      </a>
+      <a href="#" class="nav-link">
+        Setting
+      </a>
+      <a href="#" class="nav-link">
+        Logout
+      </a>
             </ul>
         </aside>
         <main class="form-container">

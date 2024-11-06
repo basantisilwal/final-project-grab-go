@@ -13,3 +13,10 @@ document.getElementById('logoUpload').addEventListener('change', function(event)
         reader.readAsDataURL(file);
     }
 });
+
+
+
+
+
+   
+  
