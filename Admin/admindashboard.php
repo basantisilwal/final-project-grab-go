@@ -7,6 +7,50 @@
     <title>Restaurant Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-size: 0.9rem;
+        }
+        .sidebar {
+            height: 100vh;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .main-content {
+            padding: 15px;
+        }
+        .card {
+            margin-bottom: 15px;
+        }
+        .card-body {
+            padding: 1rem;
+        }
+        .card-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .card-text.display-4 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .card-text {
+            font-size: 0.8rem;
+        }
+        #monthlyOrdersChart {
+            height: 300px !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -24,7 +68,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="manage.php">
                                 <i class="bi bi-shop me-2"></i>
-                               Manage Restaurants
+                               Add Restaurants
                             </a>
                         </li>
                         <li class="nav-item">
@@ -70,7 +114,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Total Customers</h5>
-                                <p class="card-text display-4">10</p>
+                                <p class="card-text display-4">10,500</p>
                                 <p class="card-text text-success">
                                     <i class="bi bi-arrow-up"></i> 7.1% increase
                                 </p>
