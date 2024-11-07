@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>restaurantdashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="rstyle.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -16,7 +16,7 @@
         <aside class="sidebar">
             <div class="logo">
                 <img src="icecream-logo.png" alt="Blue Sky Summer Logo">
-                <h2>Blue Sky <br> Summer</h2>
+                <h2>Mayur <br> cafe</h2>
             </div>
             <div class="profile">
                 <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
