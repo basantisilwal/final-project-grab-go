@@ -18,9 +18,18 @@
                 <img src="icecream-logo.png" alt="Blue Sky Summer Logo">
                 <h2>Mayur <br> cafe</h2>
             </div>
-            <div class="profile">
-                <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
-                <h3>Selena Ansari</h3>
+            <ul class="sidebar-menu">
+            <li><a href="pandingfoodorder.php">Panding</a></li>
+                <li><a href="managefoodmenu.php">Menu</a></li>
+                <li><a href="restaurantdashboard.php">Viewr</a></li>
+                <li><a href="setting.php">Setting</a></li>
+            </ul>
+        </aside>
+
+
+        <div class="main-content">
+            <div class="header">
+                <h1>Restaurant Dashboard</h1>
             </div>
             <nav class="menu">
                 <a href="#">Dashboard</a>
