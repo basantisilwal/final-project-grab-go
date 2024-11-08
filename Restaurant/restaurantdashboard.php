@@ -3,22 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <title>Blue Sky Summer Dashboard</title>
     <link rel="stylesheet" href="rstyle.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-</head>
 </head>
 <body>
-<div class="main-container">
+    <div class="container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Dashboard</h2>
+            <div class="logo">
+                <img src="icecream-logo.png" alt="Blue Sky Summer Logo">
+                <h2>Blue Sky <br> Summer</h2>
             </div>
             <ul class="sidebar-menu">
-            <li><a href="pendingfoodorder.php">Panding</a></li>
+            <li><a href="pandingfoodorder.php">Panding</a></li>
                 <li><a href="managefoodmenu.php">Menu</a></li>
                 <li><a href="restaurantdashboard.php">Viewr</a></li>
                 <li><a href="setting.php">Setting</a></li>
@@ -30,31 +27,46 @@
             <div class="header">
                 <h1>Restaurant Dashboard</h1>
             </div>
-            <div class="background-img">
-                <img src="path/to/your/background.jpg" alt="Food Background">
+            <nav class="menu">
+                <a href="#">Dashboard</a>
+                <a href="#">Add Products</a>
+                <a href="#">View Products</a>
+                <a href="#">Accounts</a>
+                <a href="#">Logout</a>
+            </nav>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
             </div>
-            <div class="buttons">
-                <button onclick="showPendingOrders()">Pending food orders</button>
-                <button onclick="showAlert('Manage food menu')">Manage food menu</button>
-                <button onclick="showAlert('Manage payment')">Manage payment</button>
-                <button onclick="showAlert('Give Token ID')">Give Token ID</button>
+        </aside>
+
+        <!-- Dashboard -->
+        <main class="dashboard">
+            <h1>Dashboard</h1>
+            <div class="welcome">
+                <h2>Welcome, Selena Ansari!</h2>
+                <button onclick="updateProfile()">Update Profile</button>
             </div>
-        </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <p>Unread Messages</p>
+                    <h3>1</h3>
+                    <button onclick="seeMessages()">See Messages</button>
+                </div>
+                <div class="stat-card">
+                    <p>Products Added</p>
+                    <h3>8</h3>
+                </div>
+                <div class="stat-card">
+                    <p>Total Active Products</p>
+                    <h3>8</h3>
+                </div>
+            </div>
+        </main>
     </div>
-
-    <!-- Hidden Pending Orders Section -->
-    <div class="modal hidden" id="pendingOrdersModal">
-        <div class="modal-content">
-            <h2>Pending Orders</h2>
-            <ul>
-                <li>Order #1 - Pizza</li>
-                <li>Order #2 - Burger</li>
-                <li>Order #3 - Pasta</li>
-            </ul>
-            <button onclick="hidePendingOrders()">Close</button>
-        </div>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
