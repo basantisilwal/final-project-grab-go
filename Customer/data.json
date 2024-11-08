@@ -1,0 +1,41 @@
+{
+    "categories": [
+      {
+        "name": "Pizza",
+        "image": "../images/pizza.jpg",
+        "description": "Delicious cheesy pizza with fresh toppings."
+      },
+      {
+        "name": "Burger",
+        "image": "../images/burger.webp",
+        "description": "Juicy burger with a crispy bun and fresh ingredients."
+      },
+      {
+        "name": "Chicken",
+        "image": "../images/hole chicken.jpg",
+        "description": "Grilled whole chicken with a perfect blend of spices."
+      },
+      {
+        "name": "Mutton",
+        "image": "../images/image.png",
+        "description": "Tender mutton pieces cooked to perfection."
+      }
+    ],
+    "restaurants": [
+      {
+        "name": "Mayur Cafe",
+        "address": "Kalikamarga Vays-2",
+        "rating": 5.3,
+        "price": 120,
+        "image": "../images/buff momo image.jpg"
+      },
+      {
+        "name": "Diamond Restro",
+        "address": "Safasadak Vays-2",
+        "rating": 4.2,
+        "price": 520,
+        "image": "../images/chicken fry momo.jpg"
+      }
+    ]
+  }
+  
