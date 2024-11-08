@@ -9,10 +9,10 @@
 <body>
   <div class="sidebar">
     <div class="logo">
-      <img src="logo.png" alt="Blue Sky Summer">
+      <img src="../images/logo.png" alt="Grab & Go">
     </div>
     <div class="profile">
-      <img src="profile.jpg" alt="Profile Picture">
+      <img src="../images/buff momo image.jpg" alt="Profile Picture">
       <h2>Diamon Restro</h2>
     </div>
     <ul class="menu">
@@ -26,23 +26,57 @@
 
   <div class="main-content">
     <div class="header">
-      <h1>Welcome, Diamon Restro</h1>
+      <h2>Welcome, Diamon Restro</h2>
       <button onclick="updateProfile()">Update Profile</button>
     </div>
     <div class="dashboard-cards">
       <div class="card">
-        <h2>1</h2>
+        <h2>0</h2>
         <p>Unread Messages</p>
         <button onclick="showMessages()">See Messages</button>
       </div>
       <div class="card">
-        <h2>8</h2>
-        <p>Products Added</p>
+        <h2>0</h2>
+        <p>Product Added</p>
+        <button onclick="showMessages()">Add new Products</button>
       </div>
       <div class="card">
-        <h2>8</h2>
+        <h2>0</h2>
         <p>Total Active Products</p>
+        <button onclick="showMessages()">See Products</button>
       </div>
+      <div class="card">
+        <h2>0</h2>
+        <p>Total Deactive Products</p>
+        <button onclick="showMessages()">See Products</button>
+      </div>
+      <div class="card">
+        <h2>0</h2>
+        <p>User Account</p>
+        <button onclick="showMessages()">See Users</button>
+      </div>
+      <div class="card">
+        <h2>0</h2>
+        <p>Admin Account</p>
+        <button onclick="showMessages()">See Admin</button>
+      </div>
+      <div class="card">
+        <h2>0</h2>
+        <p>Total canceled orders</p>
+        <button onclick="showMessages()">Canceled Orders</button>
+      </div>
+     
+      <div class="card">
+        <h2>0</h2>
+        <p>Total Confirm Orders</p>
+        <button onclick="showMessages()">Confirm orders</button>
+      </div>
+      <div class="card">
+        <h2>0</h2>
+        <p>Total Orders</p>
+        <button onclick="showMessages()">All orders</button>
+      </div>
+      
     </div>
   </div>
 
