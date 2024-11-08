@@ -18,7 +18,7 @@
                 <h2>Dashboard</h2>
             </div>
             <ul class="sidebar-menu">
-            <li><a href="pandingfoodorder.php">Panding</a></li>
+            <li><a href="pendingfoodorder.php">Panding</a></li>
                 <li><a href="managefoodmenu.php">Menu</a></li>
                 <li><a href="restaurantdashboard.php">Viewr</a></li>
                 <li><a href="setting.php">Setting</a></li>
