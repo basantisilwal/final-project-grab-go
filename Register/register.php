@@ -48,22 +48,17 @@ $activation_code=str_shuffle("abcdefghijklmnop".$act_str);
                 <label class="form-label">Phone Number</label>
                 <input type="number" class="form-control shadow-none">
               </div>
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Picture</label>
-                <input type="file" class="form-control shadow-none">
-              </div>
+              
               <div class="col-md-12 ps-6 mb-3">
                 <label class="form-label">Address</label>
                 <textarea class="form-control shadow" rows="1"></textarea>
               </div>
-              <div class="col-md-6 p-0 mb-3">
-                <label class="form-label">Pincode</label>
-                <input type="number" class="form-control shadow-none">
+              <div class="col-md-12 ps-6 mb-3">
+                <label class="form-label">Username</label>
+                <textarea class="form-control shadow" rows="1"></textarea>
               </div>
-              <div class="col-md-6 ps-0 mb-3">
-                <label class="form-label">Date of Birth</label>
-                <input type="date" class="form-control shadow-none">
-              </div>
+             
+      
               <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Password</label>
                 <input type="password" class="form-control shadow-none">

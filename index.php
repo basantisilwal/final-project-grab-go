@@ -235,6 +235,11 @@ $conn->close();
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control shadow-none" name="email" required>
               </div>
+
+              <div class="col-md-10 mb-3">
+                <label class="form-label">Username</label>
+                <input type="username" class="form-control shadow-none" name="username" required>
+              </div>
               
               <div class="col-md-10 mb-3">
                 <label class="form-label">Password</label>
