@@ -125,9 +125,7 @@
       <button type="button" class="save-btn" id="save-btn" onclick="saveForm()">Save</button>
       <button type="button" class="edit-btn" id="edit-btn" onclick="toggleEditMode()" disabled>Edit</button>
     </div>
-    <div class="button-group">
-      <button type="button" class="cancel-btn" onclick="resetForm()">Cancel</button>
-    </div>
+    
   </form>
 </div>
 
