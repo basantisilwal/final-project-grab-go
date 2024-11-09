@@ -77,14 +77,14 @@ if (isset($_POST['register'])) {
             echo "
             <script>
                 alert('Check your email for the verification code.');
-                window.location.href = 'http://localhost/login-system-with-email-verification/verification.php';
+                window.location.href = 'http://localhost/Grabandgo/verification.php';
             </script>
             ";
         } else {
             echo "
             <script>
                 alert('User already exists.');
-                window.location.href = 'http://localhost/login-system-with-email-verification/index.php';
+                window.location.href = 'http://localhost/Grabandgo/index.php';
             </script>
             ";
         }
@@ -108,7 +108,7 @@ if (isset($_POST['verify'])) {
             echo "
             <script>
                 alert('Registered Successfully.');
-                window.location.href = 'http://localhost/login-system-with-email-verification/index.php';
+                window.location.href = 'http://localhost/Grabandgo/index.php';
             </script>
             ";
         } else {
