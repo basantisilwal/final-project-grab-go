@@ -19,7 +19,7 @@
       <li><a href="#">Dashboard</a></li>
       <li><a href="addfood.php">Add Food</a></li>
       <li><a href="#">View Food</a></li>
-      <li><a href="#">Accounts</a></li>
+      <li><a href="account.php">Accounts</a></li>
       <li><a href="#">Logout</a></li>
     </ul>
   </div>

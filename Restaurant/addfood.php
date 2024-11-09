@@ -73,10 +73,7 @@
       background-color: #ff6699;
       color: white;
     }
-    .button-group .cancel-btn {
-      background-color: #dc3545;
-      color: white;
-    }
+  
   </style>
 </head>
 <body>
