@@ -1,4 +1,5 @@
-<?php
+<?php include ('./conn/conn.php') ?>
+<?php 
 session_start();
 $host = 'localhost';
 $user = 'root'; 
@@ -147,7 +148,7 @@ $conn->close();
           <a class="nav-link me-2" href="#contact">Contact Us</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginForm">Login</button>
         </li>
         </ul>
     </div>
@@ -155,7 +156,7 @@ $conn->close();
 </nav>
 
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade" id="loginForm" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -192,7 +193,7 @@ $conn->close();
                         <button type="submit" class="btn btn-primary">LOG IN</button>
                     </form>
                     <p class="signup-text">
-                        Not registered? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Create an account...!</a>
+                        Not registered? <a href="#" data-bs-toggle="modal" data-bs-target="#registrationForm">Create an account...!</a>
                     </p>
                 </div>
             </div>
@@ -202,7 +203,7 @@ $conn->close();
 
 
   <!-- Register Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+<div class="modal fade" id="registrationForm" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="registerForm">

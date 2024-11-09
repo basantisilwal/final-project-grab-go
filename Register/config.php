@@ -1,4 +1,4 @@
-CREATE TABLE `tbl_user` (
+CREATE TABLE `tbl_otp` (
   `tbl_otp_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,

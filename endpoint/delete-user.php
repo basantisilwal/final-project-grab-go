@@ -1,15 +1,16 @@
 <?php
-include ('../conn/conn.php');
+include('../conn/conn.php');
 
 if (isset($_GET['user'])) {
     $user = $_GET['user'];
 
     try {
-
-        $query = "DELETE FROM `tbl_user` WHERE `tbl_user_id` = '$user'";
-
+        // Prepare the DELETE query using a parameterized statement to prevent SQL injection
+        $query = "DELETE FROM `tbl_otp` WHERE `tbl_otp_id` = :user_id";
         $stmt = $conn->prepare($query);
 
+        // Bind the parameter and execute the query
+        $stmt->bindParam(':user_id', $user, PDO::PARAM_INT);
         $query_execute = $stmt->execute();
 
         if ($query_execute) {
@@ -22,15 +23,28 @@ if (isset($_GET['user'])) {
         } else {
             echo "
             <script>
-                alert('User to Delete Subject');
+                alert('Failed to Delete User');
                 window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
             </script>
             ";
         }
 
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        // Output error message
+        echo "
+        <script>
+            alert('Error: " . $e->getMessage() . "');
+            window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+        </script>
+        ";
     }
+} else {
+    // If 'user' parameter is not set, redirect with an error message
+    echo "
+    <script>
+        alert('Invalid Request: User ID not provided.');
+        window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+    </script>
+    ";
 }
-
 ?>
