@@ -11,6 +11,7 @@ body {
 }
 
 .sidebar {
+  grid-column: span 4; /* Occupies 4 columns */
   width: 250px;
   background-color: #f8e9e8;
   padding: 20px;
@@ -53,8 +54,9 @@ body {
 }
 
 .main-content {
+  grid-column: span 8; /* Occupies 8 columns */
   margin-left: 250px;
-  padding: 40px;
+  padding: 20px;
   width: 100%;
 }
 
