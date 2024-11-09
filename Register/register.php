@@ -1,12 +1,3 @@
-<?php
-include"config.php";
-$otp_str=str_shuffle("0123456789");
-$otp=substr($otp_str,0,5);
-
-$act_str=rand(100000,10000000);
-$activation_code=str_shuffle("abcdefghijklmnop".$act_str);
-?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,29 +15,34 @@ $activation_code=str_shuffle("abcdefghijklmnop".$act_str);
 </head>
     <body>
 
-<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+ <!-- Register Modal -->
+ <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form>
+      <form id="registerForm">
         <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Register customer</h5>
+          <h5 class="modal-title" id="registerModalLabel">Register Customer</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap th-base"></span>
           <div class="container-fluid">
             <div class="row">
-              <div class="col-md-6 ps-0 mb-3">
+              <!-- Left Column (6 columns) -->
+              <div class="col-md-10 mb-3">
                 <label class="form-label">Name</label>
-                <input type="text" class="form-control shadow-none">
+                <textarea class="form-control shadow" name="name" rows="1" required></textarea>
               </div>
-              <div class="col-md-6 p-0">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control shadow-none">
+
+               <!-- Full width column for Address -->
+               <div class="col-md-10 mb-3">
+                <label class="form-label">Address</label>
+                <textarea class="form-control shadow" name="address" rows="1" required></textarea>
               </div>
-              <div class="col-md-6 ps-0 mb-3">
+
+              <div class="col-md-10 mb-3">
                 <label class="form-label">Phone Number</label>
-                <input type="number" class="form-control shadow-none">
+                <input type="number" class="form-control shadow-none" name="phone" num_rows="1" required>
               </div>
               
               <div class="col-md-12 ps-6 mb-3">
@@ -61,11 +57,12 @@ $activation_code=str_shuffle("abcdefghijklmnop".$act_str);
       
               <div class="col-md-6 p-0 mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control shadow-none">
+                <input type="password" class="form-control shadow-none" name="password" required>
               </div>
-              <div class="col-md-6 p-0 mb-3">
+
+              <div class="col-md-10 mb-3">
                 <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control shadow-none">
+                <input type="password" class="form-control shadow-none" name="confirm_password" required>
               </div>
             </div>
           </div>
