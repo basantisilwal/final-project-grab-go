@@ -6,7 +6,7 @@ if (isset($_GET['user'])) {
 
     try {
         // Prepare the DELETE query using a parameterized statement to prevent SQL injection
-        $query = "DELETE FROM `tbl_otp` WHERE `tbl_otp_id` = :user_id";
+        $query = "DELETE FROM `tbl_otp` WHERE `tbl_user_id` = :user_id";
         $stmt = $conn->prepare($query);
 
         // Bind the parameter and execute the query
@@ -17,14 +17,14 @@ if (isset($_GET['user'])) {
             echo "
             <script>
                 alert('User Deleted Successfully');
-                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
             </script>
             ";
         } else {
             echo "
             <script>
                 alert('Failed to Delete User');
-                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
             </script>
             ";
         }
@@ -34,7 +34,7 @@ if (isset($_GET['user'])) {
         echo "
         <script>
             alert('Error: " . $e->getMessage() . "');
-            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
+            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
         </script>
         ";
     }
@@ -43,7 +43,7 @@ if (isset($_GET['user'])) {
     echo "
     <script>
         alert('Invalid Request: User ID not provided.');
-        window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
+        window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
     </script>
     ";
 }

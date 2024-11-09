@@ -122,6 +122,8 @@
             const address = document.getElementById("address").value;
             const email = document.getElementById("email").value;
             const contact = document.getElementById("contact").value;
+            const date = document.getElementById("date").value;
+            const time = document.getElementById("time").value;
 
             const row = table.insertRow();
             row.insertCell(0).textContent = table.rows.length;
@@ -198,18 +200,25 @@
         $password = "";
         $dbname = "`grab&go`";
 
+        // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
 
+        // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
+        // Get data from form
         $name = $_POST['name'];
         $address = $_POST['address'];
         $email = $_POST['email'];
         $contact = $_POST['contact'];
+        $date = $_POST['date']; // Getting date
+        $time = $_POST['time']; // Getting time
 
-        $sql = "INSERT INTO tbl_restaurantname (name, address, email, contact) VALUES ('$name', '$address', '$email', '$contact')";
+        // Insert data into the database
+        $sql = "INSERT INTO tbl_restaurantname (name, address, email, contact, date, time) 
+                VALUES ('$name', '$address', '$email', '$contact', '$date', '$time')";
 
         if ($conn->query($sql) === TRUE) {
             echo "<script>alert('New record created successfully');</script>";
@@ -217,6 +226,7 @@
             echo "<script>alert('Error: " . $sql . "<br>" . $conn->error . "');</script>";
         }
 
+        // Close connection
         $conn->close();
     }
     ?>

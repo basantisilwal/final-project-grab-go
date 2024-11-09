@@ -1,15 +1,5 @@
+ <?php include ('./conn/conn.php');
 
-<?php 
-session_start();
-$host = 'localhost';
-$user = 'root'; 
-$password = ''; 
-$database = 'grab&go'; 
-$errorMessage = '';
-$conn = new mysqli($host, $user, $password, $database);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $username = $_POST['username'];
@@ -56,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
 }
-$conn->close();
 ?>
 
 
@@ -148,151 +137,13 @@ $conn->close();
           <a class="nav-link me-2" href="#contact">Contact Us</a>
         </li>
         <li class="nav-item">
-          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginForm">Login</button>
+        <a href="register.php" class="btn btn-primary me-2">Login</a>
         </li>
         </ul>
     </div>
   </div>
 </nav>
 
-<!-- Login Modal -->
-<div class="modal fade" id="loginForm" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body login-container">
-            <div class="left-section">
-        
-        <img src="images/logo.png" alt="Website Logo" class="logo" />
-        <img src="images/loginpic.jpg" alt="Login Graphic" class="sidepicture" />
-      </div>
-
-                <div class="right-section">
-                    <h1>LOG IN</h1>
-                    <p>Welcome!! Login or signup to access our website</p>
-                    <form id="login-form" method="POST" action="">
-                        <div class="mb-3">
-                            <label for="username">Username:</label>
-                            <input type="text" class="form-control" id="username" name="username" required placeholder="Enter correct Username">
-                        </div>
-                        <div class="mb-3">
-                            <label for="password">Password:</label>
-                            <input type="password" class="form-control" id="password" name="password" required placeholder="Enter correct Password">
-                        </div>
-                        <!-- Dropdown menu -->
-                        <label for="user-type">Select User Type:</label>
-                        <select name="user_type" class="form-control" id="userTypeDropdown" required>
-                            <option value="">Choose an option</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Resturant">Resturant</option>
-                            <option value="Customer">Customer</option>
-                            <option value="Dispatcher">Dispatcher</option>
-                        </select><br />
-                        <button type="submit" class="btn btn-primary">LOG IN</button>
-                    </form>
-                    <p class="signup-text">
-                        Not registered? <a href="#" data-bs-toggle="modal" data-bs-target="#registrationForm">Create an account...!</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-  <!-- Register Modal -->
-<div class="modal fade" id="registrationForm" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="registerForm">
-        <div class="modal-header">
-          <h5 class="modal-title" id="registerModalLabel">Register Customer</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap th-base"></span>
-          <div class="container-fluid">
-            <div class="row">
-              <!-- Left Column (6 columns) -->
-              <div class="col-md-10 mb-3">
-                <label class="form-label">Name</label>
-                <textarea class="form-control shadow" name="name" rows="1" required></textarea>
-              </div>
-
-               <!-- Full width column for Address -->
-               <div class="col-md-10 mb-3">
-                <label class="form-label">Address</label>
-                <textarea class="form-control shadow" name="address" rows="1" required></textarea>
-              </div>
-
-              <div class="col-md-10 mb-3">
-                <label class="form-label">Phone Number</label>
-                <input type="number" class="form-control shadow-none" name="phone" num_rows="1" required>
-              </div>
-
-              <div class="col-md-10 mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control shadow-none" name="email" required>
-              </div>
-
-              <div class="col-md-10 mb-3">
-                <label class="form-label">Username</label>
-                <input type="username" class="form-control shadow-none" name="username" required>
-              </div>
-              
-              <div class="col-md-10 mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control shadow-none" name="password" required>
-              </div>
-
-              <div class="col-md-10 mb-3">
-                <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control shadow-none" name="confirm_password" required>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Register</button>
-        </div>
-      </form>
-    </div>
-  </div>
-    </div>
-    </div>
-    <script>
-        const loginForm = document.getElementById('loginForm');
-        const registrationForm = document.getElementById('registrationForm');
-
-        registrationForm.style.display = "none";
-
-
-        function showRegistrationForm() {
-            registrationForm.style.display = "";
-            loginForm.style.display = "none";
-        }
-
-        function showLoginForm() {
-            registrationForm.style.display = "none";
-            loginForm.style.display = "";
-        }
-
-        function sendVerificationCode() {
-            const registrationElements = document.querySelectorAll('.registration');
-
-            registrationElements.forEach(element => {
-                element.style.display = 'none';
-            });
-
-            const verification = document.querySelector('.verification');
-            if (verification) {
-                verification.style.display = 'none';
-            }
-        }
-
-    </script>
 
 
     <!-- FOR IMAGE SLIDE  -->
