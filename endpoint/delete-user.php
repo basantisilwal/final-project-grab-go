@@ -17,14 +17,14 @@ if (isset($_GET['user'])) {
             echo "
             <script>
                 alert('User Deleted Successfully');
-                window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
             </script>
             ";
         } else {
             echo "
             <script>
                 alert('Failed to Delete User');
-                window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
             </script>
             ";
         }
@@ -34,7 +34,7 @@ if (isset($_GET['user'])) {
         echo "
         <script>
             alert('Error: " . $e->getMessage() . "');
-            window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
         </script>
         ";
     }
@@ -43,7 +43,7 @@ if (isset($_GET['user'])) {
     echo "
     <script>
         alert('Invalid Request: User ID not provided.');
-        window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+        window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/customer.php';
     </script>
     ";
 }

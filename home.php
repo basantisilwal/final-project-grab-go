@@ -140,7 +140,7 @@
                     $result = $stmt->fetchAll();
 
                     foreach ($result as $row) {
-                        $userID = $row['tbl_user_id'];
+                        $userID = $row['user_id'];
                         $Name = $row['name'];
                         $Address = $row['address'];
                         $PhoneNumber = $row['contact_number'];

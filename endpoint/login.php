@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT `password` FROM `tbl_user` WHERE `username` = :username");
+    $stmt = $conn->prepare("SELECT `password` FROM `tbl_otp` WHERE `username` = :username");
     $stmt->bindParam(':username', $username);
     $stmt->execute();
 
@@ -17,14 +17,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "
             <script>
                 alert('Login Successfully!');
-                window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/home.php';
             </script>
             "; 
         } else {
             echo "
             <script>
                 alert('Login Failed, Incorrect Password!');
-                window.location.href = 'http://localhost/login-system-with-email-verification/login.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/login.php';
             </script>
             ";
         }
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "
             <script>
                 alert('Login Failed, User Not Found!');
-                window.location.href = 'http://localhost/login-system-with-email-verification/login.php';
+                window.location.href = 'http://http://localhost/Grabandgo/final-project-grab-go/login.php';
             </script>
             ";
     }

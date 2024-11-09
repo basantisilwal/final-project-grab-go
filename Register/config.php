@@ -1,5 +1,5 @@
 CREATE TABLE `tbl_otp` (
-  `tbl_otp_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `phone_number` varchar(255) NOT NULL,
@@ -7,5 +7,5 @@ CREATE TABLE `tbl_otp` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `verification_code` int(6) NOT NULL,
-  PRIMARY KEY (`tbl_user_id`)
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

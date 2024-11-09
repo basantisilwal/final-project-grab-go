@@ -1,4 +1,4 @@
-<?php include ('./conn/conn.php') ?>
+
 <?php 
 session_start();
 $host = 'localhost';
