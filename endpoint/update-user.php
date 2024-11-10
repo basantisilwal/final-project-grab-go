@@ -14,7 +14,7 @@ try {
     $conn->beginTransaction();
 
     // Check if another user with the same first and last name exists, excluding the current user
-    $stmt = $conn->prepare("SELECT `tbl_user_id` FROM `tbl_user` WHERE `first_name` = :first_name AND `last_name` = :last_name AND `tbl_user_id` != :userID");
+    $stmt = $conn->prepare("SELECT `tbl_user_id` FROM `tbl_otp` WHERE `first_name` = :first_name AND `last_name` = :last_name AND `tbl_user_id` != :userID");
     $stmt->execute([
         'first_name' => $updateFirstName,
         'last_name' => $updateLastName,
@@ -24,7 +24,7 @@ try {
 
     if (!$nameExist) {
         // Prepare the update statement
-        $updateStmt = $conn->prepare("UPDATE `tbl_user` SET `first_name` = :first_name, `last_name` = :last_name, `contact_number` = :contact_number, `email` = :email, `username` = :username, `password` = :password WHERE `tbl_user_id` = :userID");
+        $updateStmt = $conn->prepare("UPDATE `tbl_otp` SET `first_name` = :first_name, `last_name` = :last_name, `contact_number` = :contact_number, `email` = :email, `username` = :username, `password` = :password WHERE `tbl_user_id` = :userID");
 
         // Bind parameters
         $updateStmt->bindParam(':first_name', $updateFirstName, PDO::PARAM_STR);
@@ -44,7 +44,7 @@ try {
         echo "
         <script>
             alert('Updated Successfully');
-            window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
         </script>
         ";
     } else {
@@ -54,7 +54,7 @@ try {
         echo "
         <script>
             alert('User Already Exists');
-            window.location.href = 'http://llogin-system-with-email-verification/home.php';
+            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
         </script>
         ";
     }
@@ -64,7 +64,7 @@ try {
     echo "
     <script>
         alert('An error occurred: " . $e->getMessage() . "');
-        window.location.href = 'http://localhost/login-system-with-email-verification/home.php';
+        window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
     </script>
     ";
 }

@@ -1,4 +1,4 @@
-<?php include ('./conn/conn.php') ?>
+<?php include ('../conn/conn.php') ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +51,6 @@
 </head>
 <body>
     
-    
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary" style="width: 100%;">
         <a class="navbar-brand ml-5" href="home.php">User Registration and Login System</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,19 +79,19 @@
                     <form action="./endpoint/update-user.php" method="POST">
                         <div class="form-group row">
                             <div class="col-6">
-                                <input type="text" name="tbl_otp_id" id="updateUserID" hidden>
-                                <label for="updateName">Name:</label>
-                                <input type="text" class="form-control" id="updateName" name="name">
+                                <input type="text" name="tbl_user_id" id="updateUserID" hidden>
+                                <label for="updateFirstName">First Name:</label>
+                                <input type="text" class="form-control" id="updateFirstName" name="first_name">
                             </div>
                             <div class="col-6">
-                                <label for="updateAddress">Address:</label>
-                                <input type="text" class="form-control" id="updateAddress" name="address">
+                                <label for="updateLastName">Last Name:</label>
+                                <input type="text" class="form-control" id="updateLastName" name="last_name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-5">
-                                <label for="updatePhoneNumber">Phone Number:</label>
-                                <input type="number" class="form-control" id="updatePhoneNumber" name="phone_number" maxlength="11">
+                                <label for="updateContactNumber">Contact Number:</label>
+                                <input type="number" class="form-control" id="updateContactNumber" name="contact_number" maxlength="11">
                             </div>
                             <div class="col-7">
                                 <label for="updateEmail">Email:</label>
@@ -122,9 +121,9 @@
             <thead>
                 <tr>
                 <th scope="col">User ID</th>
-                <th scope="col"> Name</th>
-                <th scope="col">Address</th>
-                <th scope="col">Phone Number</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Contact Number</th>
                 <th scope="col">Email</th>
                 <th scope="col">Username</th>
                 <th scope="col">Password</th>
@@ -141,10 +140,10 @@
                     $result = $stmt->fetchAll();
 
                     foreach ($result as $row) {
-                        $userID = $row['user_id'];
-                        $name = $row['name'];
-                        $address = $row['address'];
-                        $phoneNumber = $row['phone_number'];
+                        $userID = $row['tbl_user_id'];
+                        $firstName = $row['first_name'];
+                        $lastName = $row['last_name'];
+                        $contactNumber = $row['contact_number'];
                         $email = $row['email'];
                         $username = $row['username'];
                         $password = $row['password'];
@@ -153,9 +152,9 @@
 
                     <tr>
                         <td id="userID-<?= $userID ?>"><?php echo $userID ?></td>
-                        <td id="name-<?= $userID ?>"><?php echo $firstName ?></td>
-                        <td id="address-<?= $userID ?>"><?php echo $address?></td>
-                        <td id="phoneNumber-<?= $userID ?>"><?php echo $phoneNumber ?></td>
+                        <td id="firstName-<?= $userID ?>"><?php echo $firstName ?></td>
+                        <td id="lastName-<?= $userID ?>"><?php echo $lastName ?></td>
+                        <td id="contactNumber-<?= $userID ?>"><?php echo $contactNumber ?></td>
                         <td id="email-<?= $userID ?>"><?php echo $email ?></td>
                         <td id="username-<?= $userID ?>"><?php echo $username ?></td>
                         <td id="password-<?= $userID ?>"><?php echo $password ?></td>
@@ -179,19 +178,20 @@
             $("#updateUserModal").modal("show");
 
             let updateUserID = $("#userID-" + id).text();
-            let updateName = $("#Name-" + id).text();
-            let updateAddress = $("#address-" + id).text();
-            let updatePhoneNumber = $("#PhoneNumber-" + id).text();
+            let updateFirstName = $("#firstName-" + id).text();
+            let updateLastName = $("#lastName-" + id).text();
+            let updateContactNumber = $("#contactNumber-" + id).text();
             let updateEmail = $("#email-" + id).text();
             let updateUsername = $("#username-" + id).text();
             let updatePassword = $("#password-" + id).text();
 
-            console.log(updateName);
+            console.log(updateFirstName);
+            console.log(updateLastName);
 
             $("#updateUserID").val(updateUserID);
-            $("#updateFirstName").val(updateName);
-            $("#updateLastName").val(updateAddress);
-            $("#updateContactNumber").val(updatePhoneNumber);
+            $("#updateFirstName").val(updateFirstName);
+            $("#updateLastName").val(updateLastName);
+            $("#updateContactNumber").val(updateContactNumber);
             $("#updateEmail").val(updateEmail);
             $("#updateUsername").val(updateUsername);
             $("#updatePassword").val(updatePassword);
