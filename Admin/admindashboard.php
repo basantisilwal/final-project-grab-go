@@ -53,45 +53,21 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-                <div class="position-sticky">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="admindashboard.php">
-                                <i class="bi bi-speedometer2 me-2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="manage.php">
-                                <i class="bi bi-shop me-2"></i>
-                               Add Restaurants
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="customer.php">
-                                <i class="bi bi-people me-2"></i>
-                                View Customers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="setting.php">
-                                <i class="bi bi-cart me-2"></i>
-                                Setting
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-graph-up me-2"></i>
-                                Analytics
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+<div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+            <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
+      <a href="customer.php" class="nav-link">View Costumer </a>
+      <a href="setting.php" class="nav-link"> Setting</a>
+      <a href="#" class="nav-link">  Logout </a>
+            </ul>
+        </aside>
+    </div>
 
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
