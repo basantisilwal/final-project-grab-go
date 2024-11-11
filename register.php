@@ -65,6 +65,14 @@
                         <label for="password">Password:</label>
                         <input type="password" class="form-control" id="password" name="password">
                     </div>
+                    <div class="form-group">
+                <select class="form-control" name="user_type" required>
+                    <option value="customer">Customer</option>
+                    <option value="admin">Admin</option>
+                    <option value="restaurant">Restaurant</option>
+                    <option value="dispatcher">Dispatcher</option>
+                </select>
+            </div>
                     <p>No Account? Register <span  class="switch-form-link" onclick="showRegistrationForm()">Here.</span></p>
                     <button type="submit" class="btn btn-secondary login-btn form-control" >Login</button>
                 </form>
