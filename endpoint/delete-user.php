@@ -6,7 +6,7 @@ if (isset($_GET['user'])) {
 
     try {
         // Prepare the DELETE query using a parameterized statement to prevent SQL injection
-        $query = "DELETE FROM `tbl_otp` WHERE `tbl_otp_id` = :user_id";
+        $query = "DELETE FROM `tbl_otp` WHERE `tbl_user_id` = :user_id";
         $stmt = $conn->prepare($query);
 
         // Bind the parameter and execute the query

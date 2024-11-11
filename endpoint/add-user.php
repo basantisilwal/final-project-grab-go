@@ -14,6 +14,7 @@ if (isset($_POST['register'])) {
     try {
         $firstName = $_POST['first_name'];
         $lastName = $_POST['last_name'];
+        $address = $_POST['address'];
         $contactNumber = $_POST['contact_number'];
         $email = $_POST['email'];
         $username = $_POST['username'];
@@ -31,9 +32,10 @@ if (isset($_POST['register'])) {
         if (empty($nameExist)) {
             $verificationCode = rand(100000, 999999);
     
-            $insertStmt = $conn->prepare("INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`, `contact_number`, `email`, `username`, `password`, `verification_code`) VALUES (NULL, :first_name, :last_name, :contact_number, :email, :username, :password, :verification_code)");
+            $insertStmt = $conn->prepare("INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`,`address`, `contact_number`, `email`, `username`, `password`, `verification_code`) VALUES (NULL, :first_name, :last_name,:address, :contact_number, :email, :username, :password, :verification_code)");
             $insertStmt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
             $insertStmt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
+            $insertStmt->bindParam(':address', $address, PDO::PARAM_STR);
             $insertStmt->bindParam(':contact_number', $contactNumber, PDO::PARAM_INT);
             $insertStmt->bindParam(':email', $email, PDO::PARAM_STR);
             $insertStmt->bindParam(':username', $username, PDO::PARAM_STR);

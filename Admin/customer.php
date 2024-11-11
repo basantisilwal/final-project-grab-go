@@ -89,6 +89,10 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                        <div class="col-7">
+                                <label for="updateAddress">Address:</label>
+                                <input type="text" class="form-control" id="updateAddress" name="address">
+                            </div>
                             <div class="col-5">
                                 <label for="updateContactNumber">Contact Number:</label>
                                 <input type="number" class="form-control" id="updateContactNumber" name="contact_number" maxlength="11">
@@ -123,6 +127,7 @@
                 <th scope="col">User ID</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
+                <th scope="col">Address</th>
                 <th scope="col">Contact Number</th>
                 <th scope="col">Email</th>
                 <th scope="col">Username</th>
@@ -143,6 +148,7 @@
                         $userID = $row['tbl_user_id'];
                         $firstName = $row['first_name'];
                         $lastName = $row['last_name'];
+                        $address = $row['address'];
                         $contactNumber = $row['contact_number'];
                         $email = $row['email'];
                         $username = $row['username'];
@@ -154,6 +160,7 @@
                         <td id="userID-<?= $userID ?>"><?php echo $userID ?></td>
                         <td id="firstName-<?= $userID ?>"><?php echo $firstName ?></td>
                         <td id="lastName-<?= $userID ?>"><?php echo $lastName ?></td>
+                        <td id="address-<?= $userID ?>"><?php echo $address ?></td>
                         <td id="contactNumber-<?= $userID ?>"><?php echo $contactNumber ?></td>
                         <td id="email-<?= $userID ?>"><?php echo $email ?></td>
                         <td id="username-<?= $userID ?>"><?php echo $username ?></td>
@@ -180,6 +187,7 @@
             let updateUserID = $("#userID-" + id).text();
             let updateFirstName = $("#firstName-" + id).text();
             let updateLastName = $("#lastName-" + id).text();
+            let updateAddress = $("#address-" + id).text();
             let updateContactNumber = $("#contactNumber-" + id).text();
             let updateEmail = $("#email-" + id).text();
             let updateUsername = $("#username-" + id).text();
@@ -191,6 +199,7 @@
             $("#updateUserID").val(updateUserID);
             $("#updateFirstName").val(updateFirstName);
             $("#updateLastName").val(updateLastName);
+            $("#updateAddress").val(updateAddress);
             $("#updateContactNumber").val(updateContactNumber);
             $("#updateEmail").val(updateEmail);
             $("#updateUsername").val(updateUsername);

@@ -4,6 +4,7 @@ include('../conn/conn.php');
 $updateUserID = $_POST['tbl_user_id'];
 $updateFirstName = $_POST['first_name'];
 $updateLastName = $_POST['last_name'];
+$updateAddress = $_POST['address'];
 $updateContactNumber = $_POST['contact_number'];
 $updateEmail = $_POST['email'];
 $updateUsername = $_POST['username'];
@@ -24,11 +25,12 @@ try {
 
     if (!$nameExist) {
         // Prepare the update statement
-        $updateStmt = $conn->prepare("UPDATE `tbl_otp` SET `first_name` = :first_name, `last_name` = :last_name, `contact_number` = :contact_number, `email` = :email, `username` = :username, `password` = :password WHERE `tbl_user_id` = :userID");
+        $updateStmt = $conn->prepare("UPDATE `tbl_otp` SET `first_name` = :first_name, `last_name` = :last_name,`address` = :address, `contact_number` = :contact_number, `email` = :email, `username` = :username, `password` = :password WHERE `tbl_user_id` = :userID");
 
         // Bind parameters
         $updateStmt->bindParam(':first_name', $updateFirstName, PDO::PARAM_STR);
         $updateStmt->bindParam(':last_name', $updateLastName, PDO::PARAM_STR);
+        $updateStmt->bindParam(':address', $updateAddress, PDO::PARAM_STR);
         $updateStmt->bindParam(':contact_number', $updateContactNumber, PDO::PARAM_STR); // Use PARAM_STR for contact_number
         $updateStmt->bindParam(':email', $updateEmail, PDO::PARAM_STR);
         $updateStmt->bindParam(':username', $updateUsername, PDO::PARAM_STR);
