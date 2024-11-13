@@ -77,6 +77,22 @@
   </style>
 </head>
 <body>
+   <div class="sidebar">
+    <div class="logo">
+      <img src="../images/logo.png" alt="Grab & Go">
+    </div>
+    <div class="profile">
+      <img src="../images/buff momo image.jpg" alt="Profile Picture">
+      <h2>Diamon Restro</h2>
+    </div>
+    <ul class="menu">
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="addfood.php">Add Food</a></li>
+      <li><a href="viewfood.php">View Food</a></li>
+      <li><a href="account.php">Accounts</a></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </div>
 
 <div class="add-food-panel">
   <h2>Add/Edit Food Item</h2>
