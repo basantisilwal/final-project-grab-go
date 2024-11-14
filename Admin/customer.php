@@ -1,4 +1,4 @@
-<?php include ('./conn/conn.php') ?>
+<?php include ('../conn/conn.php') ?>
 
 <!DOCTYPE html>
 <html lang="en">

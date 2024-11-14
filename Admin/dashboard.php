@@ -20,18 +20,10 @@
             <a href="#" class="nav-link active">
         Dashboard
       </a>
-      <a href="#" class="nav-link">
-        Manage Restaurants
-      </a>
-      <a href="#" class="nav-link">
-        View Costumer
-      </a>
-      <a href="#" class="nav-link">
-        Setting
-      </a>
-      <a href="#" class="nav-link">
-        Logout
-      </a>
+      <a href="#" class="nav-link">Manage Restaurants</a>
+      <a href="#" class="nav-link"> View Costumer</a>
+      <a href="#" class="nav-link"> Setting</a>
+      <a href="#" class="nav-link"> Logout </a>
             </ul>
         </aside>
         <main class="form-container">

@@ -3,69 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Restaurant</title>
+    <link rel="stylesheet" href="astyle.css">
+    <title>Restaurant Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            font-size: 0.9rem;
         }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .sidebar {
+            height: 100vh;
+            background-color: #f8f9fa;
+            padding-top: 20px;
         }
-        h2 {
-            text-align: center;
+        .sidebar .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
         }
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
         }
-        label {
-            grid-column: span 1;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin: 4px 0;
-        }
-        textarea {
-            resize: vertical;
-        }
-        .buttons {
-            grid-column: span 2;
-            text-align: center;
-        }
-        button {
-            margin: 5px;
-            padding: 8px 16px;
-            background-color: #6ca0dc;
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
             color: white;
-            border: none;
-            cursor: pointer;
         }
-        button:hover {
-            background-color: #5588c3;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #dddddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
+        .main-content {
+            padding: 15px;
         }
     </style>
 </head>
 <body>
+<div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+            <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
+      <a href="customer.php" class="nav-link">View Costumer </a>
+      <a href="setting.php" class="nav-link"> Setting</a>
+      <a href="index.php" class="nav-link">  Logout </a>
+            </ul>
+        </aside>
+    </div>
+
+
     <div class="container">
         <h2>Add New Restaurant</h2>
         <form id="restaurantForm" method="POST" action="">

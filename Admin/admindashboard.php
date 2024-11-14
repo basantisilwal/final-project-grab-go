@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="astyle.css">
-    <title>Restaurant Management System</title>
+    <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -64,7 +64,7 @@
       <a href="manage.php" class="nav-link"> Manage Restaurants</a>
       <a href="customer.php" class="nav-link">View Costumer </a>
       <a href="setting.php" class="nav-link"> Setting</a>
-      <a href="#" class="nav-link">  Logout </a>
+      <a href="index.php" class="nav-link">  Logout </a>
             </ul>
         </aside>
     </div>
