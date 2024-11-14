@@ -1,4 +1,4 @@
-<?php include ('../conn/conn.php') ?>
+<?php include ('./conn/conn.php') ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -88,11 +88,11 @@
                                 <input type="text" class="form-control" id="updateLastName" name="last_name">
                             </div>
                         </div>
-                        <div class="form-group row">
-                        <div class="col-7">
-                                <label for="updateAddress">Address:</label>
+                        <div class="col-6">
+                                <label for="updateLastName">Address:</label>
                                 <input type="text" class="form-control" id="updateAddress" name="address">
                             </div>
+                        <div class="form-group row">
                             <div class="col-5">
                                 <label for="updateContactNumber">Contact Number:</label>
                                 <input type="number" class="form-control" id="updateContactNumber" name="contact_number" maxlength="11">

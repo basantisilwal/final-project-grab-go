@@ -97,11 +97,11 @@
                         <input type="text" class="form-control" id="lastName" name="last_name">
                     </div>
                 </div>
-                <div class="form-group registration row">
                 <div class="col-7">
                         <label for="address">Address:</label>
                         <input type="text" class="form-control" id="address" name="address">
                     </div>
+                <div class="form-group registration row">
                     <div class="col-5">
                         <label for="contactNumber">Contact Number:</label>
                         <input type="number" class="form-control" id="contactNumber" name="contact_number" maxlength="11">

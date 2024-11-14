@@ -32,15 +32,20 @@
       align-items: center;
     }
     .profile-pic {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       overflow: hidden;
       margin-bottom: 15px;
+      border: 2px solid #ff6699;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .profile-pic img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
     }
     .profile-form h2 {
       font-size: 24px;
@@ -88,8 +93,8 @@
 
 <!-- Profile Update Form -->
 <div class="profile-form" id="updateProfileForm">
-  <div class="profile-pic">
-    <img src="../image/loginpic logo.png" alt="Profile Picture">
+  <div class="profile-pic" id="profilePicContainer">
+    <img id="profilePicPreview" src="../image/loginpic logo.png" alt="Profile Picture">
   </div>
   <h2>Update Profile</h2>
   <div class="form-group">
@@ -102,7 +107,7 @@
   </div>
   <div class="form-group">
     <label for="image">Update Pic:</label>
-    <input type="file" id="image" name="image">
+    <input type="file" id="image" name="image" accept="image/*">
   </div>
   <div class="form-group">
     <label for="oldPassword">Old Password:</label>
@@ -110,29 +115,48 @@
   </div>
   <div class="form-group">
     <label for="newPassword">New Password:</label>
-    <input type="password" id="newPassword" name="newPassword" placeholder="enter your new password">
+    <input type="password" id="newPassword" name="newPassword" placeholder="Enter your new password">
   </div>
   <div class="form-group">
     <label for="confirmPassword">Confirm Password:</label>
-    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="confirm your new password">
+    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your new password">
   </div>
   <button type="button" class="update-button" onclick="updateProfile()">Update Now</button>
 </div>
 
 <script>
+  // Image preview functionality
+  const imageInput = document.getElementById('image');
+  const profilePicPreview = document.getElementById('profilePicPreview');
+
+  imageInput.addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        profilePicPreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
   function updateProfile() {
     // Validate passwords
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
+
     if (newPassword !== confirmPassword) {
       alert('New password and confirm password do not match');
       return;
     }
-    
+
     // Here you would typically send the form data to the server
     alert('Profile updated successfully');
+
     // Reset the form after update
     document.getElementById('updateProfileForm').reset();
+    // Reset profile picture preview to default
+    profilePicPreview.src = "../image/loginpic logo.png";
   }
 </script>
 

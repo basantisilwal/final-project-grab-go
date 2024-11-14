@@ -1,5 +1,5 @@
 <?php
-include('../conn/conn.php');
+include ('../conn/conn.php');
 
 $updateUserID = $_POST['tbl_user_id'];
 $updateFirstName = $_POST['first_name'];
@@ -11,37 +11,26 @@ $updateUsername = $_POST['username'];
 $updatePassword = $_POST['password'];
 
 try {
-    // Start a transaction
-    $conn->beginTransaction();
-
-    // Check if another user with the same first and last name exists, excluding the current user
-    $stmt = $conn->prepare("SELECT `tbl_user_id` FROM `tbl_otp` WHERE `first_name` = :first_name AND `last_name` = :last_name AND `tbl_user_id` != :userID");
+    $stmt = $conn->prepare("SELECT `first_name`, `last_name` FROM `tbl_otp` WHERE `first_name` = :first_name AND `last_name` = :last_name");
     $stmt->execute([
         'first_name' => $updateFirstName,
-        'last_name' => $updateLastName,
-        'userID' => $updateUserID
+        'last_name'=> $updateLastName
     ]);
     $nameExist = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$nameExist) {
-        // Prepare the update statement
-        $updateStmt = $conn->prepare("UPDATE `tbl_otp` SET `first_name` = :first_name, `last_name` = :last_name,`address` = :address, `contact_number` = :contact_number, `email` = :email, `username` = :username, `password` = :password WHERE `tbl_user_id` = :userID");
+    if (empty($nameExist)) {
+        $conn->beginTransaction();
 
-        // Bind parameters
+        $updateStmt = $conn->prepare("UPDATE `tbl_otp` SET `first_name` = :first_name, `last_name` = :last_name,`address` = :address, `contact_number` = :contact_number, `email` = :email, `username` = :username, `password` = :password WHERE `tbl_user_id` = :userID");
         $updateStmt->bindParam(':first_name', $updateFirstName, PDO::PARAM_STR);
         $updateStmt->bindParam(':last_name', $updateLastName, PDO::PARAM_STR);
         $updateStmt->bindParam(':address', $updateAddress, PDO::PARAM_STR);
-        $updateStmt->bindParam(':contact_number', $updateContactNumber, PDO::PARAM_STR); // Use PARAM_STR for contact_number
+        $updateStmt->bindParam(':contact_number', $updateContactNumber, PDO::PARAM_INT);
         $updateStmt->bindParam(':email', $updateEmail, PDO::PARAM_STR);
         $updateStmt->bindParam(':username', $updateUsername, PDO::PARAM_STR);
         $updateStmt->bindParam(':password', $updatePassword, PDO::PARAM_STR);
         $updateStmt->bindParam(':userID', $updateUserID, PDO::PARAM_INT);
-
-        // Execute the update statement
         $updateStmt->execute();
-
-        // Commit the transaction
-        $conn->commit();
 
         echo "
         <script>
@@ -49,25 +38,21 @@ try {
             window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
         </script>
         ";
-    } else {
-        // Rollback transaction if a duplicate name is found
-        $conn->rollBack();
 
+        $conn->commit();
+    } else {
         echo "
         <script>
-            alert('User Already Exists');
-            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
+            alert('User Already Exist');
+            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/register.php';
         </script>
         ";
     }
 } catch (PDOException $e) {
-    // Rollback the transaction if an error occurred
-    $conn->rollBack();
-    echo "
-    <script>
-        alert('An error occurred: " . $e->getMessage() . "');
-        window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
-    </script>
-    ";
+    echo "Error: " . $e->getMessage();
 }
+
+
+
 ?>
+

@@ -32,7 +32,7 @@ if (isset($_POST['register'])) {
         if (empty($nameExist)) {
             $verificationCode = rand(100000, 999999);
     
-            $insertStmt = $conn->prepare("INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`,`address`, `contact_number`, `email`, `username`, `password`, `verification_code`) VALUES (NULL, :first_name, :last_name,:address, :contact_number, :email, :username, :password, :verification_code)");
+            $insertStmt = $conn->prepare("INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`,`address`, `contact_number`, `email`, `username`, `password`, `verification_code`) VALUES (NULL, :first_name, :last_name, :address, :contact_number, :email, :username, :password, :verification_code)");
             $insertStmt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
             $insertStmt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
             $insertStmt->bindParam(':address', $address, PDO::PARAM_STR);
@@ -82,7 +82,7 @@ if (isset($_POST['register'])) {
             echo "
             <script>
                 alert('User Already Exists');
-                window.location.href = 'http://localhost/lGrabandgo/final-project-grab-go/register.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/register.php';
             </script>
             ";
         }
