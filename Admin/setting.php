@@ -34,7 +34,7 @@
         .logo {
             background: #ffffff;
             border-radius: 10px;
-            padding: 20px;
+            padding: 210px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -71,9 +71,6 @@
         </aside>
     </div>
 
-    <!-- Main content -->
-    <main class="main-content">
-        <h1 class="h4 mb-3">Dashboard</h1>
 
         <!-- Logo Upload Section -->
         <div class="logo">
