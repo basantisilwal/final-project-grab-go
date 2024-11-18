@@ -1,24 +1,12 @@
-<?php
-// Database connection setup
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "restaurant_db"; // Change this to your database name
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
+<?php 
+include ('../conn/conn.php');
 // Handle file upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['logo'])) {
     $logo = $_FILES['logo'];
     $uploadDir = "uploads/"; // Folder to store uploaded logos
     $uploadFile = $uploadDir . basename($logo['name']);
 
-    // Create the directory if it doesn't exist
+    // Create the uploads directory if it doesn't exist
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
@@ -26,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['logo'])) {
     // Check if the file is an image
     $check = getimagesize($logo['tmp_name']);
     if ($check !== false) {
-        // Move the uploaded file
+        // Move the uploaded file to the upload directory
         if (move_uploaded_file($logo['tmp_name'], $uploadFile)) {
             $logoName = $logo['name'];
             $logoPath = $uploadFile;
 
-            // Insert logo info into the database
-            $stmt = $conn->prepare("INSERT INTO logos (logo_name, logo_path) VALUES (?, ?)");
+            // Insert logo information into the database
+            $stmt = $conn->prepare("INSERT INTO tbl_logo (logo_name, logo_path) VALUES (?, ?)");
             $stmt->bind_param("ss", $logoName, $logoPath);
 
             if ($stmt->execute()) {
@@ -52,11 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['logo'])) {
 
 // Fetch the latest logo from the database
 $logoPath = "https://via.placeholder.com/150.png?text=Logo"; // Default placeholder image
-$result = $conn->query("SELECT * FROM logos ORDER BY uploaded_at DESC LIMIT 1");
-if ($result && $row = $result->fetch_assoc()) {
+$result = $conn->query("SELECT * FROM tbl_logo ORDER BY u_id DESC LIMIT 1");
+if ($result && $row = $result->fetch(PDO::FETCH_ASSOC)) {
     $logoPath = $row['logo_path'];
 }
-$conn->close();
+
+// Close the connection (set to null in PDO)
+$conn = null;
 ?>
 
 <!DOCTYPE html>
@@ -146,9 +136,8 @@ $conn->close();
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript for logo preview -->
     <script>
-        // JavaScript for logo preview
         const logoUpload = document.getElementById('logoUpload');
         const logoPreview = document.getElementById('logoPreview');
 
