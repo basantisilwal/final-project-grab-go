@@ -30,7 +30,13 @@
         }
         .main-content {
             padding: 15px;
-        }
+            background-color: white;
+            padding: 110px;
+            border-radius: 110px;
+            width: 300%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+        
     </style>
 </head>
 <body>

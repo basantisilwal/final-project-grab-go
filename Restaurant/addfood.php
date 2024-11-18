@@ -1,3 +1,101 @@
+<?php
+// Include the database connection
+include('../conn/conn.php');
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'];
+
+    // Add Food Item
+    if ($action === 'add') {
+        $foodName = $_POST['food-name'];
+        $price = $_POST['price'];
+        $category = $_POST['category'];
+        $description = $_POST['description'];
+        $image = $_FILES['image'];
+
+        // Handle image upload
+        $targetDir = "uploads/";
+        $targetFile = $targetDir . basename($image['name']);
+
+        if (move_uploaded_file($image['tmp_name'], $targetFile)) {
+            $imagePath = $targetFile;
+        } else {
+            die("Error uploading image.");
+        }
+
+        $sql = "INSERT INTO tbl_addfood (food_name, price, category, description, image) 
+                VALUES (:food_name, :price, :category, :description, :image)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':food_name', $foodName);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':image', $imagePath);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Food item added successfully.');</script>";
+        } else {
+            echo "<script>alert('Error adding food item.');</script>";
+        }
+    }
+
+    // Edit Food Item
+    if ($action === 'edit') {
+        $foodId = $_POST['food_id'];
+        $foodName = $_POST['food-name'];
+        $price = $_POST['price'];
+        $category = $_POST['category'];
+        $description = $_POST['description'];
+        $image = $_FILES['image'];
+
+        $sqlUpdate = "UPDATE tbl_addfood 
+                      SET food_name = :food_name, price = :price, category = :category, description = :description";
+
+        if (!empty($image['name'])) {
+            // Handle image upload
+            $targetDir = "uploads/";
+            $targetFile = $targetDir . basename($image['name']);
+
+            if (move_uploaded_file($image['tmp_name'], $targetFile)) {
+                $imagePath = $targetFile;
+                $sqlUpdate .= ", image = :image";
+            } else {
+                die("Error uploading image.");
+            }
+        }
+
+        $sqlUpdate .= " WHERE f_id = :food_id";
+        $stmt = $conn->prepare($sqlUpdate);
+        $stmt->bindParam(':food_name', $foodName);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':food_id', $foodId);
+
+        if (!empty($image['name'])) {
+            $stmt->bindParam(':image', $imagePath);
+        }
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Food item updated successfully.');</script>";
+        } else {
+            echo "<script>alert('Error updating food item.');</script>";
+        }
+    }
+}
+
+// Fetch Food Items
+$foodItems = [];
+$sql = "SELECT * FROM tbl_addfood";
+$stmt = $conn->query($sql);
+
+if ($stmt->rowCount() > 0) {
+    $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,17 +125,28 @@
             background-color: #0d6efd;
             color: white;
         }
-        .main-content {
-            padding: 15px;
-        }
-        .add-food-panel {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      width: 100%;
-    }
+        .main-container {
+    display: flex;
+}
+
+.sidebar {
+    flex: 0 0 250px; /* Sidebar width */
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Align the panel to the right */
+    padding: 1px; /* Add padding for spacing */
+}
+
+.add-food-panel {
+  text-align: center;
+      background-color: #ffffff;
+      border-radius: 10px;
+            padding: 310px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
     .add-food-panel h2 {
       margin-top: 0;
       font-size: 24px;
@@ -116,19 +225,18 @@
     <!-- Food Name -->
     <div class="form-group">
       <label for="food-name">Food Name:</label>
-      <input type="text" id="food-name" name="food-name" placeholder="Enter food name" required>
+      <input type="text" id="food-name" name="food-name" class="form-control" required>
     </div>
     
     <!-- Price -->
     <div class="form-group">
       <label for="price">Price:</label>
-      <input type="number" id="price" name="price" placeholder="Enter price" required>
-    </div>
+      <input type="number" id="price" name="price" class="form-control" required>
 
     <!-- Category -->
     <div class="form-group">
       <label for="category">Category:</label>
-      <select id="category" name="category" required>
+      <select id="category" name="category" class="form-control" required>
         <option value="">Select a category</option>
         <option value="appetizer">Appetizer</option>
         <option value="main-course">Main Course</option>
@@ -140,13 +248,13 @@
     <!-- Description -->
     <div class="form-group">
       <label for="description">Description:</label>
-      <textarea id="description" name="description" rows="3" placeholder="Enter food description" required></textarea>
+      <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
     </div>
 
     <!-- Image Upload -->
     <div class="form-group">
       <label for="image">Upload Image:</label>
-      <input type="file" id="image" name="image" accept="image/*" required>
+      <input type="file" id="image" name="image" class="form-control" accept="image/*" required>
     </div>
 
     <!-- Buttons -->
@@ -199,6 +307,42 @@
   // Initially disable fields to simulate "view mode"
   disableFormFields();
 </script>
+<!-- Display Food Items -->
+<div class="card mt-4">
+    <div class="card-header">
+        <h3>Food Items</h3>
+    </div>
+    <div class="card-body">
+        <?php if (count($foodItems) > 0): ?>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Food Name</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($foodItems as $item): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($item['f_id']) ?></td>
+                            <td><?= htmlspecialchars($item['food_name']) ?></td>
+                            <td><?= htmlspecialchars($item['price']) ?></td>
+                            <td><?= htmlspecialchars($item['category']) ?></td>
+                            <td><?= htmlspecialchars($item['description']) ?></td>
+                            <td><img src="<?= htmlspecialchars($item['image']) ?>" alt="Image" style="width: 100px; height: 100px;"></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>No food items found.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
 </body>
 </html>
