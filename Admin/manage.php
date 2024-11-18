@@ -1,4 +1,61 @@
-<?php include ('../conn/conn.php') ?>
+<?php
+// Include the database connection
+include ('../conn/conn.php');
+
+// Form Submission Handler
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // For Adding New Restaurant
+    if (!isset($_POST['id'])) {
+        // Retrieve POST data
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $date = $_POST['date'];
+        $time = $_POST['time'];
+        $email = $_POST['email'];
+        $contact = $_POST['contact'];
+
+        try {
+            // Prepare an SQL statement to insert data
+            $stmt = $conn->prepare("INSERT INTO tbl_restaurantname (name, address, date, time, email, contact_number) VALUES (?, ?, ?, ?, ?, ?)");
+
+            // Execute the statement with provided values
+            if ($stmt->execute([$name, $address, $date, $time, $email, $contact])) {
+                echo "<script>alert('New restaurant added successfully');</script>";
+            } else {
+                echo "<script>alert('Failed to add restaurant. Please try again.');</script>";
+            }
+
+        } catch (PDOException $e) {
+            echo "<script>alert('Database Error: " . $e->getMessage() . "');</script>";
+        }
+    } elseif (isset($_POST['id'])) {
+        // For Editing Existing Restaurant
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $date = $_POST['date'];
+        $time = $_POST['time'];
+        $email = $_POST['email'];
+        $contact = $_POST['contact'];
+
+        $stmt = $conn->prepare("UPDATE tbl_restaurantname SET name=?, address=?, date=?, time=?, email=?, contact_number=? WHERE r_id=?");
+        if ($stmt->execute([$name, $address, $date, $time, $email, $contact, $id])) {
+            echo "<script>alert('Restaurant updated successfully'); window.location.href='manage.php';</script>";
+        } else {
+            echo "<script>alert('Failed to update restaurant');</script>";
+        }
+    }
+}
+
+// Delete restaurant
+if (isset($_GET['delete_id'])) {
+    $id = $_GET['delete_id'];
+    $stmt = $conn->prepare("DELETE FROM tbl_restaurantname WHERE r_id=?");
+    if ($stmt->execute([$id])) {
+        echo "<script>alert('Restaurant deleted'); window.location.href='manage.php';</script>";
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,140 +63,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <title>Restaurant Management System</title>
-    <style>
-        body {
-            font-size: 0.9rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #e9ecef;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-        .main-content {
-            padding: 15px;
-        }
-    </style>
 </head>
 <body>
-    <div class="main-container d-flex">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Admin Dashboard</h2>
+    <div class="container mt-4">
+        <h2>Add / Edit Restaurant</h2>
+        <form method="POST" id="restaurantForm">
+            <?php if (isset($_GET['edit_id'])):
+                $id = $_GET['edit_id'];
+                $stmt = $conn->prepare("SELECT * FROM tbl_restaurantname WHERE r_id=?");
+                $stmt->execute([$id]);
+                $restaurant = $stmt->fetch();
+            ?>
+            <input type="hidden" name="id" value="<?php echo $restaurant['r_id']; ?>">
+            <?php endif; ?>
+            <div class="mb-3">
+                <input type="text" class="form-control" name="name" placeholder="Restaurant Name" value="<?php echo $restaurant['name'] ?? ''; ?>" required>
             </div>
-            <ul class="list-unstyled">
-            <a href="admindashboard.php" class="nav-link active">Dashboard</a>
-      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
-      <a href="customer.php" class="nav-link">View Costumer </a>
-      <a href="setting.php" class="nav-link"> Setting</a>
-      <a href="index.php" class="nav-link">  Logout </a>
-            </ul>
-        </aside>
+            <div class="mb-3">
+                <textarea class="form-control" name="address" placeholder="Address" required><?php echo $restaurant['address'] ?? ''; ?></textarea>
+            </div>
+            <div class="mb-3">
+                <input type="date" class="form-control" name="date" value="<?php echo $restaurant['date'] ?? ''; ?>" required>
+            </div>
+            <div class="mb-3">
+                <input type="time" class="form-control" name="time" value="<?php echo $restaurant['time'] ?? ''; ?>" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" class="form-control" name="email" placeholder="Email" value="<?php echo $restaurant['email'] ?? ''; ?>" required>
+            </div>
+            <div class="mb-3">
+                <input type="tel" class="form-control" name="contact" placeholder="Contact Number" value="<?php echo $restaurant['contact_number'] ?? ''; ?>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <?php echo isset($restaurant) ? 'Update' : 'Add'; ?> Restaurant
+            </button>
+        </form>
 
-        <!-- Main Content -->
-        <div class="container">
-            <h2 class="mt-3">Add New Restaurant</h2>
-            <form id="restaurantForm" method="POST">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <textarea class="form-control" id="address" name="address" required></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="date" class="form-label">Date</label>
-                    <input type="date" class="form-control" id="date" name="date" required>
-                </div>
-                <div class="mb-3">
-                    <label for="time" class="form-label">Time</label>
-                    <input type="time" class="form-control" id="time" name="time" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email ID</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="contact" class="form-label">Contact No</label>
-                    <input type="tel" class="form-control" id="contact" name="contact" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Restaurant</button>
-            </form>
-
-            <h3 class="mt-4">Restaurant List</h3>
-            <table class="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Email</th>
-                        <th>Contact No</th>
-                    </tr>
-                </thead>
-                <tbody>
-               <?php 
-                    // Form Submission Handler
-                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                        $name = $_POST['name'];
-                        $address = $_POST['address'];
-                        $date = $_POST['date'];
-                        $time = $_POST['time'];
-                        $email = $_POST['email'];
-                        $contact = $_POST['contact'];
-
-                        // Insert Data into Database
-                        $sql = "INSERT INTO tbl_restaurantname (name, address, email, contact) 
-                                VALUES ('$name', '$address', '$email', '$contact')";
-
-                        if ($conn->query($sql) === TRUE) {
-                            echo "<script>alert('New restaurant added successfully');</script>";
-                        } else {
-                            echo "<script>alert('Error: " . $conn->error . "');</script>";
-                        }
+        <h3 class="mt-4">Restaurant List</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            try {
+                $stmt = $conn->query("SELECT * FROM tbl_restaurantname");
+                $restaurants = $stmt->fetchAll();
+                if ($restaurants) {
+                    $sn = 1;
+                    foreach ($restaurants as $restaurant) {
+                        echo "<tr>
+                            <td>{$sn}</td>
+                            <td>{$restaurant['name']}</td>
+                            <td>{$restaurant['address']}</td>
+                            <td>{$restaurant['date']}</td>
+                            <td>{$restaurant['time']}</td>
+                            <td>{$restaurant['email']}</td>
+                            <td>{$restaurant['contact_number']}</td>
+                            <td>
+                                <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'>Edit</a>
+                                <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'>Delete</a>
+                            </td>
+                          </tr>";
+                        $sn++;
                     }
-
-                    // Fetching Data from Database
-                    $sql = "SELECT * FROM tbl_restaurantname";
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                        $sn = 1;
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                    <td>" . $sn++ . "</td>
-                                    <td>" . $row['name'] . "</td>
-                                    <td>" . $row['address'] . "</td>
-                                    <td>" . $row['email'] . "</td>
-                                    <td>" . $row['contact'] . "</td>
-                                  </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='5'>No data found</td></tr>";
-                    }
-
-                    // Closing the Connection
-                    $conn->close();
-                    ?>
-                </tbody>
-            </table>
-        </div>
+                } else {
+                    echo "<tr><td colspan='8'>No restaurants found</td></tr>";
+                }
+            } catch (PDOException $e) {
+                echo "<tr><td colspan='8'>Error: " . $e->getMessage() . "</td></tr>";
+            }
+            ?>
+            </tbody>
+        </table>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
