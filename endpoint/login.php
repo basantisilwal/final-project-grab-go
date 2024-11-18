@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "
             <script>
                 alert('Login Successfully!');
-                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
+                window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php';
             </script>
             "; 
         } else {

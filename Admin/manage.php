@@ -1,4 +1,25 @@
-<?php include ('../conn/conn.php') ?>
+<?php include ('../conn/conn.php');
+
+// Form Submission Handler
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $address = $_POST['address'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $email = $_POST['email'];
+    $contact = $_POST['contact'];
+
+    // Insert Data into Database
+    $stmt = $conn->prepare("INSERT INTO tbl_restaurantname (name, address, date, time, email, contact_number) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$name, $address, $date, $time, $email, $contact]);
+    if ($stmt->execute()) {
+        echo "<script>alert('New restaurant added successfully');</script>";
+    } else {
+        echo "<script>alert('Error: " . $stmt->error . "');</script>";
+    }
+    $stmt->null();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,11 +62,11 @@
                 <h2>Admin Dashboard</h2>
             </div>
             <ul class="list-unstyled">
-            <a href="admindashboard.php" class="nav-link active">Dashboard</a>
-      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
-      <a href="customer.php" class="nav-link">View Costumer </a>
-      <a href="setting.php" class="nav-link"> Setting</a>
-      <a href="index.php" class="nav-link">  Logout </a>
+                <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+                <a href="manage.php" class="nav-link">Manage Restaurants</a>
+                <a href="customer.php" class="nav-link">View Customers</a>
+                <a href="setting.php" class="nav-link">Setting</a>
+                <a href="index.php" class="nav-link">Logout</a>
             </ul>
         </aside>
 
@@ -54,7 +75,7 @@
             <h2 class="mt-3">Add New Restaurant</h2>
             <form id="restaurantForm" method="POST">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label">Restaurant's Name</label>
                     <input type="text" class="form-control" id="name" name="name" required>
                 </div>
                 <div class="mb-3">
@@ -74,7 +95,7 @@
                     <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
-                    <label for="contact" class="form-label">Contact No</label>
+                    <label for="contact" class="form-label">Contact_Number</label>
                     <input type="tel" class="form-control" id="contact" name="contact" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Restaurant</button>
@@ -85,56 +106,39 @@
                 <thead>
                     <tr>
                         <th>SN</th>
-                        <th>Name</th>
+                        <th>Restaurant's Name</th>
                         <th>Address</th>
+                        <th>Date</th>
+                        <th>Time</th>
                         <th>Email</th>
-                        <th>Contact No</th>
+                        <th>Contact_Number</th>
                     </tr>
                 </thead>
                 <tbody>
-               <?php 
-                    // Form Submission Handler
-                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                        $name = $_POST['name'];
-                        $address = $_POST['address'];
-                        $date = $_POST['date'];
-                        $time = $_POST['time'];
-                        $email = $_POST['email'];
-                        $contact = $_POST['contact'];
+                <?php
+                // Fetch Data from Database
+                $sql = "SELECT * FROM tbl_restaurantname";
+                $result = $conn->query($sql);
 
-                        // Insert Data into Database
-                        $sql = "INSERT INTO tbl_restaurantname (name, address, email, contact) 
-                                VALUES ('$name', '$address', '$email', '$contact')";
-
-                        if ($conn->query($sql) === TRUE) {
-                            echo "<script>alert('New restaurant added successfully');</script>";
-                        } else {
-                            echo "<script>alert('Error: " . $conn->error . "');</script>";
-                        }
+                if ($result->rowCount() > 0) {
+                    $sn = 1;
+                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                        echo "<tr>
+                                <td>" . $sn++ . "</td>
+                                <td>" . $row['name'] . "</td>
+                                <td>" . $row['address'] . "</td>
+                                <td>" . $row['date'] . "</td>
+                                <td>" . $row['time'] . "</td>
+                                <td>" . $row['email'] . "</td>
+                                <td>" . $row['contact_number'] . "</td>
+                              </tr>";
                     }
-
-                    // Fetching Data from Database
-                    $sql = "SELECT * FROM tbl_restaurantname";
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                        $sn = 1;
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                    <td>" . $sn++ . "</td>
-                                    <td>" . $row['name'] . "</td>
-                                    <td>" . $row['address'] . "</td>
-                                    <td>" . $row['email'] . "</td>
-                                    <td>" . $row['contact'] . "</td>
-                                  </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='5'>No data found</td></tr>";
-                    }
-
-                    // Closing the Connection
-                    $conn->close();
-                    ?>
+                } else {
+                    echo "<tr><td colspan='7'>No data found</td></tr>";
+                }
+                // Close Connection
+                $conn = null;
+                ?>
                 </tbody>
             </table>
         </div>

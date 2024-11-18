@@ -20,17 +20,39 @@
             <a href="#" class="nav-link active">
         Dashboard
       </a>
-      <a href="#" class="nav-link">Manage Restaurants</a>
-      <a href="#" class="nav-link"> View Costumer</a>
-      <a href="#" class="nav-link"> Setting</a>
-      <a href="#" class="nav-link"> Logout </a>
+      <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
+      <a href="customer.php" class="nav-link">View Costumer </a>
+      <a href="setting.php" class="nav-link"> Setting</a>
+      <a href="index.php" class="nav-link">  Logout </a>
             </ul>
         </aside>
         <main class="form-container">
-            <section class="content-header">
-                <input type="text" placeholder="Search" class="search-bar form-control">
-                <h1>Admin Dashboard</h1>
-            </section>
-            <script src="script.js"></script>
-</body>
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="px-4">
+                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }} |
+                    {{ Auth::user()->user_type }}
+                </div>
+                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('profile.edit')">
+                    {{ __('Profile') }}
+                </x-responsive-nav-link>
+
+                <!-- Authentication -->
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+
+                    <x-responsive-nav-link :href="route('logout')"
+                        onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                        {{ __('Log Out') }}
+                    </x-responsive-nav-link>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
 </html>
