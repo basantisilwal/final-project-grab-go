@@ -29,14 +29,74 @@
             color: white;
         }
         .main-content {
-            padding: 15px;
-            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            max-width:1200px;
+            background-color: pink;
             padding: 110px;
-            border-radius: 110px;
-            width: 300%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-        
+            border-radius: 8px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+         .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .header button {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .header button:hover {
+            background-color: #0056b3;
+        }
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            font-size: 2rem;
+            color: #0d6efd;
+            margin-bottom: 10px;
+        }
+        .card p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .card button {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .card button:hover {
+            background-color: #0056b3;
+        }
+        .unread-messages {
+          order: -1;
+        }
     </style>
 </head>
 <body>
@@ -47,7 +107,7 @@
                 <h2>Restaurant Dashboard</h2>
             </div>
             <ul class="sidebar-menu">
-            <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
+      <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
       <a href="addfood.php" class="nav-link"> Add Food</a>
       <a href="updateprofile.php" class="nav-link">Update profile</a>
       <a href="viewfood.php" class="nav-link">View Food </a>
@@ -59,7 +119,7 @@
 
   <div class="main-content">
     <div class="header">
-      <h2>Welcome, Diamon Restro</h2>
+      <h1>Welcome, Diamon Restro</h1>
       <button onclick="updateProfile()">Update Profile</button>
     </div>
     <div class="dashboard-cards">
@@ -67,7 +127,7 @@
         <h2>0</h2>
         <p>Unread Messages</p>
         <button onclick="showMessages()">See Messages</button>
-      </div>
+      </div><br>
       <div class="card">
         <h2>0</h2>
         <p>Product Added</p>
@@ -109,10 +169,16 @@
         <p>Total Orders</p>
         <button onclick="showMessages()">All orders</button>
       </div>
-      
-    </div>
+      </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    function showMessages() {
+        alert("Feature under construction!");
+    }
+    function updateProfile() {
+        alert("Redirecting to Update Profile page!");
+    }
+  </script>
 </body>
 </html>

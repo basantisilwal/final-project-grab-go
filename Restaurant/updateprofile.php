@@ -104,6 +104,7 @@
     .update-button:hover {
       background-color: #ff4d80;
     }
+    
   </style>
 </head>
 <body>
