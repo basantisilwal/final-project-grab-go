@@ -5,47 +5,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login System with Email Verification</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Restaurant Management</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
         body {
+            font-size: 0.9rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-image: url("https://images.unsplash.com/photo-1485470733090-0aae1788d5af?q=80&w=1517&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
             height: 100vh;
         }
+        .sidebar {
+            height: 100vh;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .main-content {
+            padding: 15px;
+        }
 
         .content {
             backdrop-filter: blur(100px);
-            color: rgb(255, 255, 255);
-            padding: 40px;
+            color: rgb(26, 22, 22);
+            padding: 200px;
             border: 2px solid;
             border-radius: 10px;
             margin-top: 100px;
         }
 
         .table {
-            color: rgb(255, 255, 255) !important;
+            color: rgb(26, 22, 22) !important;
         }
 
         td button {
             font-size: 20px;
-            width: 30px;
+            width: 100px;
         }
     </style>
 </head>
@@ -64,6 +73,21 @@
             </ul>
         </div>
     </nav>
+
+    <div class="main-container d-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="list-unstyled">
+                <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+                <a href="manage.php" class="nav-link">Manage Restaurants</a>
+                <a href="customer.php" class="nav-link">View Customers</a>
+                <a href="setting.php" class="nav-link">Setting</a>
+                <a href="index.php" class="nav-link">Logout</a>
+            </ul>
+        </aside>
 
     <!-- Update Modal -->
     <div class="modal fade mt-5" id="updateUserModal" tabindex="-1" aria-labelledby="updateUser" aria-hidden="true">

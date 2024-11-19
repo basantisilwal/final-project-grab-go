@@ -63,9 +63,49 @@ if (isset($_GET['delete_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Restaurant Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Restaurant Management</title>
+    <style>
+        body {
+            font-size: 0.9rem;
+        }
+        .sidebar {
+            height: 100vh;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .main-content {
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
+    <div class="main-container d-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+            </div>
+            <ul class="list-unstyled">
+                <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+                <a href="manage.php" class="nav-link">Manage Restaurants</a>
+                <a href="customer.php" class="nav-link">View Customers</a>
+                <a href="setting.php" class="nav-link">Setting</a>
+                <a href="index.php" class="nav-link">Logout</a>
+            </ul>
+        </aside>
+
     <div class="container mt-4">
         <h2>Add / Edit Restaurant</h2>
         <form method="POST" id="restaurantForm">
