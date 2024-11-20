@@ -14,6 +14,8 @@
         <div class="search">
             <input type="text" placeholder="Search for restaurant, cuisine or dish" id="searchBar">
         </div>
+
+        
     </header>
 
     <section class="inspiration">
