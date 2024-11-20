@@ -38,10 +38,10 @@
 
     /* Profile Update Form */
     .profile-form {
-      max-width: 600px;
-      width: 100%;
+      max-width: 800px;
+      width: 200%;
       background-color: #ffffff;
-      padding: 20px;
+      padding: 15px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       display: flex;
