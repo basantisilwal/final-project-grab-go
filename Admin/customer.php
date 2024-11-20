@@ -42,7 +42,7 @@
         .content {
             backdrop-filter: blur(100px);
             color: rgb(26, 22, 22);
-            padding: 200px;
+            padding: 100px;
             border: 2px solid;
             border-radius: 10px;
             margin-top: 100px;
@@ -54,7 +54,7 @@
 
         td button {
             font-size: 20px;
-            width: 100px;
+            width: 31px;
         }
     </style>
 </head>

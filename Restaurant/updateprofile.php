@@ -179,12 +179,8 @@
     const confirmPassword = document.getElementById('confirmPassword').value;
 
     if (newPassword !== confirmPassword) {
-      alert('New password and confirm password do not match');
       return;
     }
-
-    // Here you would typically send the form data to the server
-    alert('Profile updated successfully');
 
     // Reset the form after update
     document.getElementById('updateProfileForm').reset();

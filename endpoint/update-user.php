@@ -32,27 +32,18 @@ try {
         $updateStmt->bindParam(':userID', $updateUserID, PDO::PARAM_INT);
         $updateStmt->execute();
 
-        echo "
-        <script>
-            alert('Updated Successfully');
-            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php';
-        </script>
-        ";
+        header('Location: http://localhost/Grabandgo/final-project-grab-go/Admin/customer.php');
+        exit; // Always use exit after header to stop further script execution
 
         $conn->commit();
     } else {
-        echo "
-        <script>
-            alert('User Already Exist');
-            window.location.href = 'http://localhost/Grabandgo/final-project-grab-go/register.php';
-        </script>
-        ";
+        // Redirect to register page if names exist
+        header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php');
+        exit; // Exit to ensure no further code is executed
     }
 } catch (PDOException $e) {
+    // Handle errors if any
     echo "Error: " . $e->getMessage();
 }
-
-
-
 ?>
 
