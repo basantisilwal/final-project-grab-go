@@ -54,124 +54,123 @@
 </head>
 <body>
 <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Admin Dashboard</h2>
-            </div>
-            <ul class="sidebar-menu">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>Admin Dashboard</h2>
+        </div>
+        <ul class="sidebar-menu">
             <a href="admindashboard.php" class="nav-link active">Dashboard</a>
-      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
-      <a href="customer.php" class="nav-link">View Costumer </a>
-      <a href="setting.php" class="nav-link"> Setting</a>
-      <a href="index.php" class="nav-link">  Logout </a>
-            </ul>
-        </aside>
-    </div>
+            <a href="manage.php" class="nav-link">Manage Restaurants</a>
+            <a href="customer.php" class="nav-link">View Customers</a>
+            <a href="setting.php" class="nav-link">Settings</a>
+            <a href="logout.php" class="nav-link">Logout</a> <!-- Updated Logout Link -->
+        </ul>
+    </aside>
+</div>
 
-            <!-- Main content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <h1 class="h4 mb-3">Dashboard</h1>
+<!-- Main content -->
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+    <h1 class="h4 mb-3">Dashboard</h1>
 
-                <!-- Cards for total restaurants and customers -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Restaurants</h5>
-                                <p class="card-text display-4">150</p>
-                                <p class="card-text text-success">
-                                    <i class="bi bi-arrow-up"></i> 5.3% increase
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Total Customers</h5>
-                                <p class="card-text display-4">10,500</p>
-                                <p class="card-text text-success">
-                                    <i class="bi bi-arrow-up"></i> 7.1% increase
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Cards for total restaurants and customers -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Restaurants</h5>
+                    <p class="card-text display-4">150</p>
+                    <p class="card-text text-success">
+                        <i class="bi bi-arrow-up"></i> 5.3% increase
+                    </p>
                 </div>
-
-                <!-- Bar graph -->
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Monthly Orders</h5>
-                        <canvas id="monthlyOrdersChart"></canvas>
-                    </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Customers</h5>
+                    <p class="card-text display-4">10,500</p>
+                    <p class="card-text text-success">
+                        <i class="bi bi-arrow-up"></i> 7.1% increase
+                    </p>
                 </div>
-            </main>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Chart.js configuration
-        const ctx = document.getElementById('monthlyOrdersChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Number of Orders',
-                    data: [1200, 1900, 3000, 5000, 2000, 3000, 4500, 5500, 6000, 4000, 3500, 4800],
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Orders',
-                            font: {
-                                size: 10
-                            }
-                        },
-                        ticks: {
-                            font: {
-                                size: 10
-                            }
+    <!-- Bar graph -->
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">Monthly Orders</h5>
+            <canvas id="monthlyOrdersChart"></canvas>
+        </div>
+    </div>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Chart.js configuration
+    const ctx = document.getElementById('monthlyOrdersChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Number of Orders',
+                data: [1200, 1900, 3000, 5000, 2000, 3000, 4500, 5500, 6000, 4000, 3500, 4800],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Orders',
+                        font: {
+                            size: 10
                         }
                     },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Month',
-                            font: {
-                                size: 10
-                            }
-                        },
-                        ticks: {
-                            font: {
-                                size: 10
-                            }
+                    ticks: {
+                        font: {
+                            size: 10
                         }
                     }
                 },
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                size: 10
-                            }
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 10
                         }
                     }
                 }
             }
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>

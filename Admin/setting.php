@@ -1,52 +1,64 @@
-<?php 
-include ('../conn/conn.php');
-// Handle file upload
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['logo'])) {
-    $logo = $_FILES['logo'];
-    $uploadDir = "uploads/"; // Folder to store uploaded logos
-    $uploadFile = $uploadDir . basename($logo['name']);
+<?php
+// Include database connection
+include('../conn/conn.php');
 
-    // Create the uploads directory if it doesn't exist
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+// Initialize variables
+$LogoPath = '';
+$targetDir = "../logoimages/";
 
-    // Check if the file is an image
-    $check = getimagesize($logo['tmp_name']);
-    if ($check !== false) {
-        // Move the uploaded file to the upload directory
-        if (move_uploaded_file($logo['tmp_name'], $uploadFile)) {
-            $logoName = $logo['name'];
-            $logoPath = $uploadFile;
+// Ensure the logo directory exists
+if (!is_dir($targetDir)) {
+    mkdir($targetDir, 0777, true);
+}
 
-            // Insert logo information into the database
-            $stmt = $conn->prepare("INSERT INTO tbl_logo (logo_name, logo_path) VALUES (?, ?)");
-            $stmt->bind_param("ss", $logoName, $logoPath);
+// Fetch current logo
+$sql = "SELECT * FROM tbl_logo WHERE u_id = 1 LIMIT 1"; // Replace 1 with dynamic user ID if needed
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($stmt->execute()) {
-                echo "<script>alert('Logo uploaded and saved to database successfully!');</script>";
+if ($row) {
+    $LogoPath = $row['logo_path'];
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_FILES['logo']['name'])) {
+        $newLogoName = basename($_FILES['logo']['name']);
+        $newLogoPath = $targetDir . $newLogoName;
+
+        // Upload file to server
+        if (move_uploaded_file($_FILES['logo']['tmp_name'], $newLogoPath)) {
+            $LogoPath = $newLogoName; // Update the logo path
+
+            // Update or insert into the database
+            if ($row) {
+                $sql = "UPDATE tbl_logo SET logo_name = ?, logo_path = ? WHERE u_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(1, $newLogoName);
+                $stmt->bindValue(2, $LogoPath);
+                $stmt->bindValue(3, $row['u_id']);
             } else {
-                echo "<script>alert('Database error: " . $stmt->error . "');</script>";
+                $sql = "INSERT INTO tbl_logo (u_id, logo_name, logo_path) VALUES (?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue(1, 1); // Static user ID (replace with dynamic ID if necessary)
+                $stmt->bindValue(2, $newLogoName);
+                $stmt->bindValue(3, $LogoPath);
             }
 
-            $stmt->close();
+            if ($stmt->execute()) {
+                echo "<script>alert('Logo updated successfully!');</script>";
+                header("Refresh:0"); // Refresh the page to reflect changes
+            } else {
+                echo "<script>alert('Error updating the database.');</script>";
+            }
         } else {
-            echo "<script>alert('Failed to upload the file.');</script>";
+            echo "<script>alert('Error uploading the file.');</script>";
         }
     } else {
-        echo "<script>alert('Uploaded file is not an image.');</script>";
+        echo "<script>alert('No file selected.');</script>";
     }
 }
-
-// Fetch the latest logo from the database
-$logoPath = "https://via.placeholder.com/150.png?text=Logo"; // Default placeholder image
-$result = $conn->query("SELECT * FROM tbl_logo ORDER BY u_id DESC LIMIT 1");
-if ($result && $row = $result->fetch(PDO::FETCH_ASSOC)) {
-    $logoPath = $row['logo_path'];
-}
-
-// Close the connection (set to null in PDO)
-$conn = null;
 ?>
 
 <!DOCTYPE html>
@@ -111,11 +123,11 @@ $conn = null;
                 <h2>Admin Dashboard</h2>
             </div>
             <ul class="sidebar-menu">
-            <a href="admindashboard.php" class="nav-link active">Dashboard</a>
-      <a href="manage.php" class="nav-link"> Manage Restaurants</a>
-      <a href="customer.php" class="nav-link">View Costumer </a>
-      <a href="setting.php" class="nav-link"> Setting</a>
-      <a href="index.php" class="nav-link">  Logout </a>
+                <a href="admindashboard.php" class="nav-link active">Dashboard</a>
+                <a href="manage.php" class="nav-link">Manage Restaurants</a>
+                <a href="customer.php" class="nav-link">View Customers</a>
+                <a href="setting.php" class="nav-link">Settings</a>
+                <a href="logout.php" class="nav-link">Logout</a>
             </ul>
         </aside>
 
@@ -124,7 +136,11 @@ $conn = null;
             <div class="logo">
                 <form action="" method="POST" enctype="multipart/form-data">
                     <div class="mb-3 text-center">
-                        <img id="logoPreview" src="<?= $logoPath ?>" alt="Logo">
+                        <?php if ($LogoPath): ?>
+                            <img id="logoPreview" src="<?= "../logoimages/" . htmlspecialchars($LogoPath) ?>" alt="Logo">
+                        <?php else: ?>
+                            <p>No logo uploaded yet.</p>
+                        <?php endif; ?>
                     </div>
                     <div class="mb-3">
                         <label for="logoUpload" class="form-label"><strong>Change Logo:</strong></label>

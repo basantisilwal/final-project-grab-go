@@ -85,7 +85,7 @@
                 <a href="manage.php" class="nav-link">Manage Restaurants</a>
                 <a href="customer.php" class="nav-link">View Customers</a>
                 <a href="setting.php" class="nav-link">Setting</a>
-                <a href="index.php" class="nav-link">Logout</a>
+                <a href="logout.php" class="nav-link">Logout</a>
             </ul>
         </aside>
 
