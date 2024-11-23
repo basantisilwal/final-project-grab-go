@@ -88,7 +88,7 @@
   <aside class="sidebar">
     <h2>Restaurant Dashboard</h2>
     <a href="das.php">Dashboard</a>
-    <a href="#">My Project</a>
+    <a href="myproject.php">My Project</a>
     <a href="#">Data</a>
     <a href="#">Statistics</a>
     <a href="#">Team</a>
