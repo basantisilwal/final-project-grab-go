@@ -1,184 +1,154 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="rstyle.css">
     <title>Restaurant Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body {
-            font-size: 0.9rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #e9ecef;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-        .main-content {
-            padding: 20px;
-            margin: 20px auto;
-            max-width:1200px;
-            background-color: pink;
-            padding: 110px;
-            border-radius: 8px;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .header h2 {
-            font-size: 1.5rem;
-            color: #333;
-        }
-        .header button {
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .header button:hover {
-            background-color: #0056b3;
-        }
-        .dashboard-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .card h2 {
-            font-size: 2rem;
-            color: #0d6efd;
-            margin-bottom: 10px;
-        }
-        .card p {
-            font-size: 1rem;
-            color: #555;
-            margin-bottom: 15px;
-        }
-        .card button {
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .card button:hover {
-            background-color: #0056b3;
-        }
-        .unread-messages {
-          order: -1;
-        }
-    </style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+
+    .dashboard-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .dashboard-buttons button {
+      padding: 15px 20px;
+      font-size: 1rem;
+      color: #fff;
+      background-color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .dashboard-buttons button:hover {
+      background-color: #ff6700;
+    }
+
+    /* Footer Settings */
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-<div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Restaurant Dashboard</h2>
-            </div>
-            <ul class="sidebar-menu">
-      <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
-      <a href="addfood.php" class="nav-link"> Add Food</a>
-      <a href="updateprofile.php" class="nav-link">Update profile</a>
-      <a href="viewfood.php" class="nav-link">View Food </a>
-      <a href="account.php" class="nav-link"> Accounts</a>
-      <a href="index.php" class="nav-link">  Logout </a>
-            </ul>
-        </aside>
-    </div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="#">My Project</a>
+    <a href="#">Data</a>
+    <a href="#">Statistics</a>
+    <a href="#">Team</a>
+    <a href="#">Saved</a>
+    <a href="#">Draft</a>
+    <a href="#">Trash</a>
+    </aside>
 
-  <div class="main-content">
-    <div class="header">
-      <h1>Welcome, Diamon Restro</h1>
-      <button onclick="updateProfile()">Update Profile</button>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="dashboard-header">
+      <h1>Restaurant Dashboard</h1>
+      <p>Manage your restaurant activities here.</p>
     </div>
-    <div class="dashboard-cards">
-      <div class="card">
-        <h2>0</h2>
-        <p>Unread Messages</p>
-        <button onclick="showMessages()">See Messages</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Product Added</p>
-        <button onclick="showMessages()">Add new Food</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Active Food</p>
-        <button onclick="showMessages()">See Food</button>
-      </div>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Deactive Food</p>
-        <button onclick="showMessages()">See Food</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>User Account</p>
-        <button onclick="showMessages()">See Users</button>
-      </div>
-      <div class="card">
-        <h2>0</h2>
-        <p>Admin Account</p>
-        <button onclick="showMessages()">See Admin</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total canceled orders</p>
-        <button onclick="showMessages()">Canceled Orders</button>
-      </div>
-     
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Confirm Orders</p>
-        <button onclick="showMessages()">Confirm orders</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Orders</p>
-        <button onclick="showMessages()">All orders</button>
-      </div>
-      </div>
-  </div>
+    <div class="dashboard-buttons">
+    <button id="pendingOrders">Pending food orders</button>
+      <button id="manageMenu">Manage food menu</button>
+      <button id="View food">View food</button>
+      <button id="managePayment">Manage payment</button>
+      <button id="giveToken">Give Token ID</button>
+    </div>
+    <div class="footer">
+      <p>Settings</p>
+    </div>
+  </main>
+                     <script>
+    // Add click event listeners to the buttons
+    document.getElementById('pendingOrders').addEventListener('click', () => {
+      window.location.href = 'pendingOrders.html'; // Replace with your file path
+    });
 
-  <script>
-    function showMessages() {
-        alert("Feature under construction!");
-    }
-    function updateProfile() {
-        alert("Redirecting to Update Profile page!");
-    }
+    document.getElementById('manageMenu').addEventListener('click', () => {
+      window.location.href = 'addfood.php'; // Replace with your file path
+    });
+    document.getElementById('viewfood').addEventListener('click', () => {
+      window.location.href = 'viewfood.php'; // Replace with your file path
+    });
+
+    document.getElementById('managePayment').addEventListener('click', () => {
+      window.location.href = 'managePayment.html'; // Replace with your file path
+    });
+
+    document.getElementById('giveToken').addEventListener('click', () => {
+      window.location.href = 'giveToken.html'; // Replace with your file path
+    });
+
+    document.getElementById('giveToken').addEventListener('click', () => {
+      alert('Navigating to Give Token ID Page...');
+      // Add navigation or actions here, e.g., window.location.href = 'giveToken.html';
+    });
   </script>
+<script>  fetch('/api/endpoint', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ action: 'pendingOrders' })
+}).then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+  </script>
+  
+
 </body>
 </html>

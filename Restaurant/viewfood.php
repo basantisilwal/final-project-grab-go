@@ -94,20 +94,18 @@ button:nth-child(3) {
 </style>
 <body>
 <div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Restaurant Dashboard</h2>
-            </div>
-            <ul class="sidebar-menu">
-            <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
-      <a href="addfood.php" class="nav-link"> Add Food</a>
-      <a href="updateprofile.php" class="nav-link">Update profile</a>
-      <a href="viewfood.php" class="nav-link">View Food </a>
-      <a href="account.php" class="nav-link"> Accounts</a>
-      <a href="index.php" class="nav-link">  Logout </a>
-            </ul>
-        </aside>
+         <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">My Project</a>
+    <a href="#">Data</a>
+    <a href="#">Statistics</a>
+    <a href="#">Team</a>
+    <a href="#">Saved</a>
+    <a href="#">Draft</a>
+    <a href="#">Trash</a>
+  </aside>
     </div>
 
     <div class="gallery">

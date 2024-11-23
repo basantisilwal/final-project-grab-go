@@ -23,7 +23,7 @@
     }
     .sidebar {
       height: 100vh;
-      background-color: #f8f9fa;
+      background-color: #555;
       padding-top: 20px;
       width: 250px;
       transition: transform 0.3s ease-in-out;
@@ -34,7 +34,7 @@
       padding: 0.5rem 1rem;
     }
     .sidebar .nav-link:hover {
-      background-color: #e9ecef;
+      background-color:#0d6efd ;
     }
     .sidebar .nav-link.active {
       background-color: #0d6efd;

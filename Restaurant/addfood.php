@@ -335,12 +335,22 @@ if ($stmt->rowCount() > 0) {
                             <td><?= htmlspecialchars($item['description']) ?></td>
                             <td><img src="<?= htmlspecialchars($item['image']) ?>" alt="Image" style="width: 100px; height: 100px;"></td>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>No food items found.</p>
-        <?php endif; ?>
+                        <?php
+$servername = "localhost"; // or the IP of your database server
+$username = "root"; // database username
+$password = ""; // database password (empty for XAMPP by default)
+$dbname = "your_database_name"; // name of your database
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($condition) {
+  echo "Something";
+
+}
+?>
+
     </div>
 </div>
 
