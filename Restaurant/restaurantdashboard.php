@@ -89,12 +89,12 @@
     <h2>Restaurant Dashboard</h2>
     <a href="das.php">Dashboard</a>
     <a href="myproject.php">My Project</a>
-    <a href="#">Data</a>
-    <a href="#">Statistics</a>
-    <a href="#">Team</a>
-    <a href="#">Saved</a>
-    <a href="#">Draft</a>
-    <a href="#">Trash</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
     </aside>
 
   <!-- Main Content -->

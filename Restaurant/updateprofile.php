@@ -13,35 +13,48 @@
       box-sizing: border-box;
     }
     body {
-      font-size: 0.9rem;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
     }
 
-    /* Sidebar styles */
-    .main-container {
-      display: flex;
-      overflow-x: hidden;
-    }
+    /* Sidebar Styles */
     .sidebar {
-      height: 100vh;
-      background-color: #555;
-      padding-top: 20px;
       width: 250px;
-      transition: transform 0.3s ease-in-out;
-      transform: translateX(0);
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
     }
-    .sidebar .nav-link {
-      color: #333;
-      padding: 0.5rem 1rem;
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
     }
-    .sidebar .nav-link:hover {
-      background-color:#0d6efd ;
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
     }
-    .sidebar .nav-link.active {
-      background-color: #0d6efd;
-      color: white;
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
     }
-    .sidebar.collapsed {
-      transform: translateX(-100%);
+
+    /* Main Content */
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #f8f8f8;
     }
     .main-content {
       flex-grow: 1;
@@ -72,23 +85,17 @@
   </style>
 </head>
 <body>
-  <!-- Toggle Button -->
-  <button class="toggle-button" id="toggleSidebar">☰</button>
 
-  <div class="main-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>Restaurant Dashboard</h2>
-      </div>
-      <ul class="sidebar-menu">
-        <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
-        <a href="addfood.php" class="nav-link">Add Food</a>
-        <a href="updateprofile.php" class="nav-link">Update Profile</a>
-        <a href="viewfood.php" class="nav-link">View Food</a>
-        <a href="account.php" class="nav-link">Accounts</a>
-        <a href="index.php" class="nav-link">Logout</a>
-      </ul>
+  <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
     </aside>
 
     <!-- Main Content -->

@@ -9,28 +9,51 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body {
-            font-size: 0.9rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #e9ecef;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-        .main-content {
-            padding: 15px;
-        }
+       body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+
         .container {
       text-align: center;
       max-width: 600px;
@@ -93,27 +116,18 @@
     </style>
 </head>
 <body>
-<div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-        <div class="sidebar">
-    <div class="logo">
-      <img src="../images/logo.png" alt="Grab & Go">
-    </div>
-    <div class="profile">
-      <img src="../images/buff momo image.jpg" alt="Profile Picture">
-      <h2>Diamon Restro</h2>
-    </div>
-            <ul class="sidebar-menu">
-            <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
-      <a href="addfood.php" class="nav-link"> Add Food</a>
-      <a href="updateprofile.php" class="nav-link">Update profile</a>
-      <a href="viewfood.php" class="nav-link">View Food </a>
-      <a href="account.php" class="nav-link"> Accounts</a>
-      <a href="index.php" class="nav-link">  Logout </a>
-            </ul>
-        </aside>
-    </div>
+<aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
+    </aside>
+
 
 
 
