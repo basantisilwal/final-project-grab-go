@@ -22,8 +22,13 @@
         .sidebar {
             height: 100vh;
             background-color: #f8f9fa;
-            padding-top: 20px;
+            padding-top: 50px;
         }
+        .sidebar-header h2 {
+    font-size: 1.25rem; /* Smaller font size for the title */
+    font-weight: bold;  /* Optional: Make it bold */
+    margin-bottom: 20px; /* Optional: Adjust the space below the title */
+}
         .sidebar .nav-link {
             color: #333;
             padding: 0.5rem 1rem;
@@ -36,7 +41,7 @@
             color: white;
         }
         .main-content {
-            padding: 15px;
+            padding: 30px;
         }
 
         .content {
