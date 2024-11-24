@@ -1,3 +1,35 @@
+<?php
+include('../conn/conn.php');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['foodName'];
+    $price = $_POST['price'];
+    $category = $_POST['category'];
+    $description = $_POST['description'];
+
+    $imageName = $_FILES['image']['name'];
+    $imageTmpName = $_FILES['image']['tmp_name'];
+    $imagePath = "../uploads/" . $imageName;
+
+    if (move_uploaded_file($imageTmpName, $imagePath)) {
+        $stmt = $conn->prepare("INSERT INTO tbl_food (name, price, description, category, image) VALUES (:name, :price, :description, :category, :image)");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':image', $imageName);
+
+        if ($stmt->execute()) {
+            echo "Food item added successfully!";
+        } else {
+            echo "Failed to add food item.";
+        }
+    } else {
+        echo "Failed to upload image.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

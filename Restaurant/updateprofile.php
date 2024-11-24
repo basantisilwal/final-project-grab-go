@@ -6,12 +6,8 @@
   <link rel="stylesheet" href="rstyle.css">
   <title>Restaurant Management System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -19,7 +15,7 @@
       display: flex;
     }
 
-    /* Sidebar Styles */
+  /* Sidebar Styles */
     .sidebar {
       width: 250px;
       background-color: #000; /* Black background */
@@ -48,13 +44,6 @@
     .sidebar a:hover {
       background-color: #ff6700;
       color: #fff;
-    }
-
-    /* Main Content */
-    .main-content {
-      flex-grow: 1;
-      padding: 20px;
-      background-color: #f8f8f8;
     }
     .main-content {
       flex-grow: 1;
@@ -97,6 +86,110 @@
     <a href="updateprofile.php">Profile</a>
     <a href="#">Logout</a>
     </aside>
+    <style>
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f8f8f8;
+  }
+
+  .main-content h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .update-profile-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .profile-pic-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 2px solid #ddd;
+  }
+
+  .profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .btn {
+    margin-top: 10px;
+    padding: 8px 15px;
+  }
+
+  h2 {
+    text-align: center;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group label {
+    margin-bottom: 5px;
+    color: #666;
+  }
+
+  .form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #ff6700;
+  }
+
+  .update-button {
+    background-color: #ff6700;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .update-button:hover {
+    background-color: #e65c00;
+  }
+
+  .message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    color: green;
+    display: none;
+  }
+</style>
 
     <!-- Main Content -->
     <div class="main-content">
@@ -135,122 +228,8 @@
     </form>
     <div class="message" id="successMessage">Profile updated successfully!</div>
   </div>
+  
  </div>
   </div>
   <style>
-    /* Reset and Basic Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 20px;
-    }
-
-    .update-profile-container {
-      background-color: white;
-      max-width: 500px;
-      width: 100%;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-
-    .profile-pic-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid #ff6699;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .profile-pic img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .update-profile-container h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      display: block;
-      color: #555;
-    }
-
-    .form-group input {
-      width: 100%;
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .form-group input[type="file"] {
-      padding: 5px;
-    }
-
-    .update-button {
-      width: 100%;
-      background-color: #ff6699;
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.3s;
-    }
-
-    .update-button:hover {
-      background-color: #ff4d80;
-    }
-
-    .message {
-      text-align: center;
-      margin-top: 10px;
-      color: green;
-      display: none;
-    }
-  </style>
-  <script>
-    const toggleButton = document.getElementById('toggleSidebar');
-    const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
-
-    toggleButton.addEventListener('click', () => {
-      sidebar.classList.toggle('collapsed');
-      mainContent.classList.toggle('expanded');
-    });
-  </script>
-</body>
-</html>
+   

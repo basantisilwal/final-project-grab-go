@@ -15,6 +15,12 @@
       padding: 0;
       display: flex;
     }
+{
+    font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+  }
 
     /* Sidebar Styles */
     .sidebar {
@@ -46,14 +52,6 @@
       background-color: #ff6700;
       color: #fff;
     }
-
-    /* Main Content */
-    .main-content {
-      flex-grow: 1;
-      padding: 20px;
-      background-color: #f8f8f8;
-    }
-
         .container {
       text-align: center;
       max-width: 600px;
