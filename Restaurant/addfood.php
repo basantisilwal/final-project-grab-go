@@ -1,3 +1,35 @@
+<?php
+include('../conn/conn.php');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['foodName'];
+    $price = $_POST['price'];
+    $category = $_POST['category'];
+    $description = $_POST['description'];
+
+    $imageName = $_FILES['image']['name'];
+    $imageTmpName = $_FILES['image']['tmp_name'];
+    $imagePath = "../uploads/" . $imageName;
+
+    if (move_uploaded_file($imageTmpName, $imagePath)) {
+        $stmt = $conn->prepare("INSERT INTO tbl_food (name, price, description, category, image) VALUES (:name, :price, :description, :category, :image)");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':image', $imageName);
+
+        if ($stmt->execute()) {
+            echo "Food item added successfully!";
+        } else {
+            echo "Failed to add food item.";
+        }
+    } else {
+        echo "Failed to upload image.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +44,45 @@
       background-color: #f9f9f9;
       color: #333;
     }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+
     .container {
       max-width: 500px;
       margin: 50px auto;
@@ -74,77 +145,38 @@
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
+    </aside>
+
   <div class="container">
     <h1>Add Food Item</h1>
-    
-    <?php
-    include ('../conn/conn.php');
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $foodName = $_POST['foodName'];
-        $category = $_POST['category'];
-        $description = $_POST['description'];
-
-        // Handle file upload
-        $imageURL = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $imageTmpPath = $_FILES['image']['tmp_name'];
-            $imageName = basename($_FILES['image']['name']);
-            $uploadDir = "uploads/";
-            $uploadFilePath = $uploadDir . $imageName;
-
-            // Create uploads directory if it doesn't exist
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            if (move_uploaded_file($imageTmpPath, $uploadFilePath)) {
-                $imageURL = $uploadFilePath;
-            } else {
-                echo "<p style='color: red;'>Error uploading file.</p>";
-            }
-        }
-
-        $price = 0; // Placeholder for price functionality
-
-        // Insert data into the database
-        $sql = "INSERT INTO tbl_addfood (food_name, description, price, category, image) 
-        VALUES (:food_name, :description, :price, :category, :image)";
-
-try {
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':food_name', $foodName);
-    $stmt->bindParam(':description', $description);
-    $stmt->bindParam(':price', $price);
-    $stmt->bindParam(':category', $category);
-    $stmt->bindParam(':image', $imageURL);
-
-    if ($stmt->execute()) {
-        echo "<p style='color: green;'></p>";
-    } else {
-        echo "<p style='color: red;'>Error adding food item.</p>";
-    }
-} catch (PDOException $e) {
-    echo "<p style='color: red;'>Error: " . $e->getMessage() . "</p>";
-}
-}
-
-    // Close the connection
-    $conn = null;
-    ?>
-
-    <form id="addFoodForm" action="" method="POST" enctype="multipart/form-data">
+    <form id="addFoodForm">
       <div class="form-group">
         <label for="foodName">Food Name</label>
         <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
       </div>
       <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" id="price" name="price" placeholder="Enter price" required>
+      </div>
+      <div class="form-group">
         <label for="category">Category</label>
         <select id="category" name="category" required>
-          <option value="" disabled selected>Select category</option>
-          <option value="appetizer">Appetizer</option>
-          <option value="main-course">Main Course</option>
+          <option value="">Select category</option>
+          <option value="appetizer">Dinner</option>
+          <option value="main-course">Breakfast</option>
           <option value="dessert">Dessert</option>
+          <option value="beverage">lunch</option>
         </select>
       </div>
       <div class="form-group">
@@ -159,23 +191,29 @@ try {
       <button type="submit">Add Food</button>
     </form>
   </div>
-
   <script>
     const imageInput = document.getElementById("image");
     const imagePreview = document.getElementById("imagePreview");
+    const addFoodForm = document.getElementById("addFoodForm");
 
-    // Preview uploaded image
     imageInput.addEventListener("change", function () {
       const file = this.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function (e) {
-          imagePreview.innerHTML = `<img src="${e.target.result}" alt="Food Image">`;
+          imagePreview.innerHTML = <img src="${e.target.result}" alt="Food Image">;
         };
         reader.readAsDataURL(file);
       } else {
         imagePreview.innerHTML = "";
       }
+    });
+
+    addFoodForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert("Food item added successfully!");
+      addFoodForm.reset();
+      imagePreview.innerHTML = "";
     });
   </script>
 </body>

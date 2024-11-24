@@ -8,25 +8,44 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body {
-            font-size: 0.9rem;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #e9ecef;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
+         body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
+
         .main-content {
             padding: 15px;
         }
@@ -93,20 +112,18 @@ button:nth-child(3) {
 }
 </style>
 <body>
-<div class="main-container">
-         <!-- Sidebar -->
-  <aside class="sidebar">
+<aside class="sidebar">
     <h2>Restaurant Dashboard</h2>
-    <a href="#">Dashboard</a>
-    <a href="#">My Project</a>
-    <a href="#">Data</a>
-    <a href="#">Statistics</a>
-    <a href="#">Team</a>
-    <a href="#">Saved</a>
-    <a href="#">Draft</a>
-    <a href="#">Trash</a>
-  </aside>
-    </div>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
+    </aside>
+
 
     <div class="gallery">
         <!-- Card 1 -->

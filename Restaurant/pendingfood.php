@@ -5,27 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pending Food Orders</title>
     <style>
-        /* General styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background-color: #f4f4f9; color: #333; line-height: 1.6; }
-        .container { max-width: 900px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-        header { text-align: center; margin-bottom: 20px; }
-        header h1 { font-size: 2.5rem; color: #444; }
-        .order-section { margin-bottom: 20px; }
-        .order-section h2 { font-size: 1.8rem; margin-bottom: 10px; }
-        ul { list-style: none; padding: 0; }
-        ul li { background: #f8f9fa; padding: 15px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd; }
-        ul li strong { display: block; font-size: 1.1rem; margin-bottom: 5px; }
-        ul li .details { font-size: 0.9rem; margin: 5px 0; color: #555; }
-        ul li button { margin: 5px; padding: 8px 12px; font-size: 0.9rem; border: none; border-radius: 4px; cursor: pointer; }
-        ul li .complete { background-color: #28a745; color: white; }
-        ul li .cancel { background-color: #dc3545; color: white; }
-        ul li button:hover { opacity: 0.9; }
-        .add-order { padding: 15px; background: #f4f9ff; border: 1px solid #ddd; border-radius: 8px; margin-top: 20px; }
-        .add-order input, .add-order button { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        .add-order button { background: #007bff; color: white; border: none; cursor: pointer; }
-        .add-order button:hover { background: #0056b3; }
-        footer { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #888; }
+        body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
+
     </style>
 </head>
 <body>

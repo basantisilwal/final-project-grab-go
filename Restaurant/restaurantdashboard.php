@@ -77,22 +77,18 @@
   </style>
 </head>
 <body>
-<div class="main-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Restaurant Dashboard</h2>
-            </div>
-            <ul class="sidebar-menu">
-            <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
-      <a href="addfood.php" class="nav-link"> Add Food</a>
-      <a href="updateprofile.php" class="nav-link">Update profile</a>
-      <a href="viewfood.php" class="nav-link">View Food </a>
-      <a href="account.php" class="nav-link"> Accounts</a>
-      <a href="index.php" class="nav-link">  Logout </a>
-            </ul>
-        </aside>
-    </div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
+    </aside>
 
   <!-- Main Content -->
   <main class="main-content">
