@@ -1,8 +1,9 @@
 <?php
-include ('../conn/conn.php');
+include('../conn/conn.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    // Sanitize user input
+    $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
 
     // Start session
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Function to handle redirects
     function redirectTo($location) {
-        header("Location: http://localhost/Grabandgo/final-project-grab-go$location");
+        header("Location: $location");
         exit;
     }
 
@@ -25,13 +26,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_role = $row['role']; // Fetch the role (customer or dispatcher)
 
         if (password_verify($password, $stored_password)) {
+            // Regenerate session ID to prevent session fixation attacks
+            session_regenerate_id(true);
+
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $user_role;
 
             // Redirect based on the role
             $dashboards = [
-                'customer' => '/Customer/customerdashboard.php',
-                'dispatcher' => '/Dispatcher/dispatcherdashboard.php'
+                'customer' => '/final-project-grab-go/Customer/customerdashboard.php',
+                'dispatcher' => '/final-project-grab-go/Dispatcher/dispatcherdashboard.php'
             ];
 
             if (array_key_exists($user_role, $dashboards)) {
@@ -50,8 +54,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stored_password_admin = $rowAdmin['password'];
 
         if (password_verify($password, $stored_password_admin)) {
+            // Regenerate session ID for security
+            session_regenerate_id(true);
+
             $_SESSION['username'] = $username;
-            redirectTo('/Admin/admindashboard.php');
+            $_SESSION['role'] = 'admin';  // Manually set the role for admin
+            redirectTo('/final-project-grab-go/Admin/admindashboard.php');
         }
     }
 
@@ -65,12 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stored_password_restaurant = $rowRestaurant['password'];
 
         if (password_verify($password, $stored_password_restaurant)) {
+            // Regenerate session ID for security
+            session_regenerate_id(true);
+
             $_SESSION['username'] = $username;
-            redirectTo('/Restaurant/restaurantdashboard.php');
+            $_SESSION['role'] = 'restaurant';  // Add role if needed
+            redirectTo('/final-project-grab-go/Restaurant/restaurantdashboard.php');
         }
     }
 
     // User not found or incorrect password
-    redirectTo('/login.php?error=Invalid username or password');
+    redirectTo('/final-project-grab-go/login.php?error=Invalid username or password');
 }
 ?>

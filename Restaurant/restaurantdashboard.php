@@ -14,44 +14,37 @@
       padding: 0;
       display: flex;
     }
+        .sidebar {
+            height: 100vh;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .main-container {
+    display: flex;
+}
 
-    /* Sidebar Styles */
-    .sidebar {
-      width: 250px;
-      background-color: #000; /* Black background */
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 15px;
-    }
+.sidebar {
+    flex: 0 0 250px; /* Sidebar width */
+}
 
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Align the panel to the right */
+    padding: 1px; /* Add padding for spacing */
+}
 
-    .sidebar a {
-      color: #ff6700; /* Orange text */
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      display: block;
-      transition: background 0.3s;
-    }
-
-    .sidebar a:hover {
-      background-color: #ff6700;
-      color: #fff;
-    }
-
-    /* Main Content */
-    .main-content {
-      flex-grow: 1;
-      padding: 20px;
-      background-color: #f8f8f8;
-    }
 
     .dashboard-buttons {
       display: grid;
@@ -84,18 +77,22 @@
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>Restaurant Dashboard</h2>
-    <a href="das.php">Dashboard</a>
-    <a href="myproject.php">My Project</a>
-    <a href="#">Data</a>
-    <a href="#">Statistics</a>
-    <a href="#">Team</a>
-    <a href="#">Saved</a>
-    <a href="#">Draft</a>
-    <a href="#">Trash</a>
-    </aside>
+<div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Restaurant Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+            <a href="restaurantdashboard.php" class="nav-link active">Dashboard</a>
+      <a href="addfood.php" class="nav-link"> Add Food</a>
+      <a href="updateprofile.php" class="nav-link">Update profile</a>
+      <a href="viewfood.php" class="nav-link">View Food </a>
+      <a href="account.php" class="nav-link"> Accounts</a>
+      <a href="index.php" class="nav-link">  Logout </a>
+            </ul>
+        </aside>
+    </div>
 
   <!-- Main Content -->
   <main class="main-content">
