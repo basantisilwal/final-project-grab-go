@@ -1,35 +1,3 @@
-<?php
-include('../conn/conn.php');
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['foodName'];
-    $price = $_POST['price'];
-    $category = $_POST['category'];
-    $description = $_POST['description'];
-
-    $imageName = $_FILES['image']['name'];
-    $imageTmpName = $_FILES['image']['tmp_name'];
-    $imagePath = "../uploads/" . $imageName;
-
-    if (move_uploaded_file($imageTmpName, $imagePath)) {
-        $stmt = $conn->prepare("INSERT INTO tbl_food (name, price, description, category, image) VALUES (:name, :price, :description, :category, :image)");
-        $stmt->bindParam(':name', $name);
-        $stmt->bindParam(':price', $price);
-        $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':category', $category);
-        $stmt->bindParam(':image', $imageName);
-
-        if ($stmt->execute()) {
-            echo "Food item added successfully!";
-        } else {
-            echo "Failed to add food item.";
-        }
-    } else {
-        echo "Failed to upload image.";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,49 +12,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       background-color: #f9f9f9;
       color: #333;
     }
+    header {
+            background-color: #555;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
 
-    /* Sidebar Styles */
-    .sidebar {
-      width: 250px;
-      background-color: #000; /* Black background */
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 15px;
-    }
+        /* Main Layout: Sidebar and Content */
+        .main-layout {
+            display: flex;
+            height: 100vh; /* Full viewport height */
+        }
 
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #000; /* Black background */
+            color: #fff;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+        }
 
-    .sidebar a {
-      color: #ff6700; /* Orange text */
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      display: block;
-      transition: background 0.3s;
-    }
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
 
-    .sidebar a:hover {
-      background-color: #ff6700;
-      color: #fff;
-    }
+        .sidebar a {
+            color: #ff6700; /* Orange text */
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+            transition: background 0.3s;
+        }
 
-    /* Main Content */
-    .main-content {
-      flex-grow: 1;
-      padding: 20px;
-      background-color: #f8f8f8;
-    }
-
+        .sidebar a:hover {
+            background-color: #ff6700;
+            color: #fff;
+        }
     .container {
-      max-width: 500px;
+      max-width: 800px;
       margin: 50px auto;
-      padding: 20px;
+      padding: 50px;
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -142,11 +114,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     button:hover {
       background: #218838;
     }
+    .add-category-link {
+      margin-top: 10px;
+      color: #007bff;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: right;
+    }
+    .add-category-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar">
+<div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
     <h2>Restaurant Dashboard</h2>
     <a href="das.php">Dashboard</a>
     <a href="myproject.php">My Project</a>
@@ -166,18 +149,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
       </div>
       <div class="form-group">
-        <label for="price">Price</label>
-        <input type="number" id="price" name="price" placeholder="Enter price" required>
-      </div>
-      <div class="form-group">
         <label for="category">Category</label>
         <select id="category" name="category" required>
-          <option value="">Select category</option>
-          <option value="appetizer">Dinner</option>
-          <option value="main-course">Breakfast</option>
-          <option value="dessert">Dessert</option>
-          <option value="beverage">lunch</option>
+          <option value="" disabled selected>Select category</option>
         </select>
+        <span class="add-category-link" id="addCategoryLink">+ Add New Category</span>
+      </div>
+      <div class="form-group" id="newCategoryGroup" style="display: none;">
+        <label for="newCategory">New Category</label>
+        <input type="text" id="newCategory" placeholder="Enter new category">
+        <button type="button" id="saveCategoryButton">Save Category</button>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
@@ -194,14 +175,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script>
     const imageInput = document.getElementById("image");
     const imagePreview = document.getElementById("imagePreview");
-    const addFoodForm = document.getElementById("addFoodForm");
+    const addCategoryLink = document.getElementById("addCategoryLink");
+    const newCategoryGroup = document.getElementById("newCategoryGroup");
+    const saveCategoryButton = document.getElementById("saveCategoryButton");
+    const categorySelect = document.getElementById("category");
+    const newCategoryInput = document.getElementById("newCategory");
 
+    // Show the "Add New Category" input
+    addCategoryLink.addEventListener("click", function () {
+      newCategoryGroup.style.display = "block";
+    });
+
+    // Save the new category
+    saveCategoryButton.addEventListener("click", function () {
+      const newCategory = newCategoryInput.value.trim();
+      if (newCategory) {
+        const option = document.createElement("option");
+        option.value = newCategory.toLowerCase().replace(/\s+/g, "-");
+        option.textContent = newCategory;
+        categorySelect.appendChild(option);
+        categorySelect.value = option.value; // Automatically select the new category
+        newCategoryGroup.style.display = "none";
+        newCategoryInput.value = "";
+        alert("New category added!");
+      } else {
+        alert("Please enter a valid category name.");
+      }
+    });
+
+    // Preview uploaded image
     imageInput.addEventListener("change", function () {
       const file = this.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = function (e) {
-          imagePreview.innerHTML = <img src="${e.target.result}" alt="Food Image">;
+          imagePreview.innerHTML = `<img src="${e.target.result}" alt="Food Image">`;
         };
         reader.readAsDataURL(file);
       } else {
@@ -209,10 +217,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
-    addFoodForm.addEventListener("submit", function (e) {
+    // Form submission (placeholder functionality)
+    document.getElementById("addFoodForm").addEventListener("submit", function (e) {
       e.preventDefault();
       alert("Food item added successfully!");
-      addFoodForm.reset();
+      this.reset();
       imagePreview.innerHTML = "";
     });
   </script>

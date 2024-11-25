@@ -1,88 +1,45 @@
 <?php
 include('../conn/conn.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize user input
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
     $password = $_POST['password'];
+    $user_type = $_POST['user_type'];
 
     // Start session
     session_start();
 
-    // Function to handle redirects
-    function redirectTo($location) {
-        header("Location: $location");
-        exit;
-    }
+    // Define redirection URLs
+    $dashboards = [
+        'customer' => 'http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php',
+        'admin' => 'http://localhost/Grabandgo/final-project-grab-go/Admin/admindashboard.php',
+        'restaurant' => 'http://localhost/Grabandgo/final-project-grab-go/Restaurant/restaurantdashboard.php',
+        'dispatcher' => 'http://localhost/Grabandgo/final-project-grab-go/Dispatcher/dispatcherdashboard.php'
+    ];
 
-    // First check in tbl_otp for Customer and Dispatcher
-    $stmt = $conn->prepare("SELECT `password`, `role` FROM `tbl_otp` WHERE `username` = :username");
+    // Query appropriate table based on user type
+    $table = '';
+    if ($user_type === 'admin') $table = 'tbl_admin';
+    elseif ($user_type === 'customer') $table = 'tbl_otp';
+    elseif ($user_type === 'dispatcher') $table = 'tbl_otp';
+    elseif ($user_type === 'restaurant') $table = 'tbl_restaurant';
+
+    $query = "SELECT `password` FROM `$table` WHERE `username` = :username";
+    $stmt = $conn->prepare($query);
     $stmt->bindParam(':username', $username);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $row = $stmt->fetch();
-        $stored_password = $row['password'];
-        $user_role = $row['role']; // Fetch the role (customer or dispatcher)
-
-        if (password_verify($password, $stored_password)) {
-            // Regenerate session ID to prevent session fixation attacks
-            session_regenerate_id(true);
-
+        if ($password === $row['password']) { // Match passwords
             $_SESSION['username'] = $username;
-            $_SESSION['role'] = $user_role;
-
-            // Redirect based on the role
-            $dashboards = [
-                'customer' => '/final-project-grab-go/Customer/customerdashboard.php',
-                'dispatcher' => '/final-project-grab-go/Dispatcher/dispatcherdashboard.php'
-            ];
-
-            if (array_key_exists($user_role, $dashboards)) {
-                redirectTo($dashboards[$user_role]);
-            }
+            $_SESSION['role'] = $user_type;
+            header('Location: ' . $dashboards[$user_type]);
+        } else {
+            header('Location: /index.php?error=Incorrect Password');
         }
+    } else {
+        header('Location: /index.php?error=User Not Found');
     }
-
-    // Check tbl_admin for Admin
-    $stmtAdmin = $conn->prepare("SELECT `password` FROM `tbl_admin` WHERE `username` = :username");
-    $stmtAdmin->bindParam(':username', $username);
-    $stmtAdmin->execute();
-
-    if ($stmtAdmin->rowCount() > 0) {
-        $rowAdmin = $stmtAdmin->fetch();
-        $stored_password_admin = $rowAdmin['password'];
-
-        if (password_verify($password, $stored_password_admin)) {
-            // Regenerate session ID for security
-            session_regenerate_id(true);
-
-            $_SESSION['username'] = $username;
-            $_SESSION['role'] = 'admin';  // Manually set the role for admin
-            redirectTo('/final-project-grab-go/Admin/admindashboard.php');
-        }
-    }
-
-    // Check tbl_restaurant for Restaurant
-    $stmtRestaurant = $conn->prepare("SELECT `password` FROM `tbl_restaurant` WHERE `username` = :username");
-    $stmtRestaurant->bindParam(':username', $username);
-    $stmtRestaurant->execute();
-
-    if ($stmtRestaurant->rowCount() > 0) {
-        $rowRestaurant = $stmtRestaurant->fetch();
-        $stored_password_restaurant = $rowRestaurant['password'];
-
-        if (password_verify($password, $stored_password_restaurant)) {
-            // Regenerate session ID for security
-            session_regenerate_id(true);
-
-            $_SESSION['username'] = $username;
-            $_SESSION['role'] = 'restaurant';  // Add role if needed
-            redirectTo('/final-project-grab-go/Restaurant/restaurantdashboard.php');
-        }
-    }
-
-    // User not found or incorrect password
-    redirectTo('/final-project-grab-go/login.php?error=Invalid username or password');
 }
 ?>

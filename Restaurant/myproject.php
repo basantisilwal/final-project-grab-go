@@ -154,16 +154,16 @@
     <div class="main-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h2>Restaurant Dashboard</h2>
-            <a href="das.php">Dashboard</a>
-            <a href="myproject.php">My Project</a>
-            <a href="addfood.php">Add Food</a>
-            <a href="viewfood.php">View Food</a>
-            <a href="managepayment.php">View Payment</a>
-            <a href="#">Saved</a>
-            <a href="#">Draft</a>
-            <a href="#">Trash</a>
-        </aside>
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
+    </aside>
 
         <!-- Main Content -->
         <div class="main-content">
