@@ -11,27 +11,36 @@
         body {
             font-size: 0.9rem;
         }
-        .sidebar {
-            height: 100vh;
-            background-color: #f8f9fa;
-            padding-top: 20px;
-        }
-        .sidebar-header h2 {
-    font-size: 1.25rem; /* Smaller font size for the title */
-    font-weight: bold;  /* Optional: Make it bold */
-    margin-bottom: 50px; /* Optional: Adjust the space below the title */
-}
-        .sidebar .nav-link {
-            color: #333;
-            padding: 0.5rem 1rem;
-        }
-        .sidebar .nav-link:hover {
-            background-color: #e9ecef;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
+        /* Sidebar Styles */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* Black background */
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      color: #ff6700; /* Orange text */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
         .main-content {
             padding: 15px;
         }
@@ -58,21 +67,17 @@
     </style>
 </head>
 <body>
-<div class="main-container">
+
     <!-- Sidebar -->
     <aside class="sidebar">
-        <div class="sidebar-header">
-            <h2>Admin Dashboard</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <a href="admindashboard.php" class="nav-link active">Dashboard</a>
-            <a href="manage.php" class="nav-link">Manage Restaurants</a>
-            <a href="customer.php" class="nav-link">View Customers</a>
-            <a href="setting.php" class="nav-link">Settings</a>
-            <a href="logout.php" class="nav-link">Logout</a> <!-- Updated Logout Link -->
-        </ul>
+    <h2>Admin Dashboard</h2>
+    <a href="admindashboard.php">Dashboard</a>
+    <a href="manage.php">Manage Restaurants</a>
+    <a href="customer.php">View Customers</a>
+    <a href="setting.php">Settings</a>
+    <a href="logout.php">Logout</a>
     </aside>
-</div>
+
 
 <!-- Main content -->
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
