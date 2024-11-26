@@ -19,6 +19,27 @@
   body {
     background-color: beige; 
   }
+  
+#home {
+    margin-top: 50px; /* Pushes the section further down */
+    padding-top: 20px; /* Adds spacing within the section */
+    text-align: center;
+    background-color: #f9f9f9; /* Optional background color */
+}
+.home-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+.home-button:hover {
+    background-color: #0056b3;
+}
+
 
   .contact-img img {
     border-radius: 10px; /* Optional: for rounded corners */
@@ -98,7 +119,7 @@
 
     <!-- FOR IMAGE SLIDE  -->
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
+  <div class="carouseforl-indicators">
     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="active" aria-current="true" aria-label="Slide 2"></button>
     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" class="active" aria-current="true" aria-label="Slide 3"></button>

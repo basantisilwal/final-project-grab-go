@@ -7,21 +7,22 @@
   <title>Restaurant Management System</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
     }
-    .main-layout {
+    header {
+            background-color: #555;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Main Layout: Sidebar and Content */
+        .main-layout {
             display: flex;
             height: 100vh; /* Full viewport height */
         }
@@ -34,7 +35,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            padding: 10px 5px;
+            padding: 20px 15px;
         }
 
         .sidebar h2 {
@@ -42,14 +43,14 @@
             margin-bottom: 20px;
         }
 
-        .sidebar a {
-            color: #ff6700; /* Orange text */
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: block;
-            transition: background 0.3s;
+        ..sidebar a {
+      color: #ff6700;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
         }
 
         .sidebar a:hover {
@@ -57,14 +58,14 @@
             color: #fff;
         }
     .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 50px;
+      background: #fff;
+      border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
     }
+    
     .profile-pic {
       width: 120px;
       height: 120px;
