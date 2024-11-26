@@ -1,4 +1,4 @@
-<?php include ('../conn/conn.php') ?>
+<?php include('../conn/conn.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <title>Restaurant Management</title>
+    <title>Admin Panel</title>
     <style>
         body {
             font-size: 0.9rem;
@@ -20,45 +20,38 @@
             height: 100vh;
         }
         .sidebar {
-      width: 250px;
-      background-color: #000; /* Black background */
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 15px;
-    }
-
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-
-    .sidebar a {
-      color: #ff6700; /* Orange text */
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      display: block;
-      transition: background 0.3s;
-    }
-
-    .sidebar a:hover {
-      background-color: #ff6700;
-      color: #fff;
-    }
-        .main-content {
-            padding: 30px;
+            width: 250px;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
         }
 
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: #ff6700;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #ff6700;
+            color: #fff;
+        }
         .content {
-            backdrop-filter: blur(100px);
-            color: rgb(26, 22, 22);
-            padding: 100px;
-            border: 2px solid;
-            border-radius: 10px;
-            margin-top: 100px;
+            padding: 30px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
         }
 
         .table {
@@ -72,189 +65,132 @@
     </style>
 </head>
 <body>
-    
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary" style="width: 100%;">
-        <a class="navbar-brand ml-5" href="home.php">User Registration and Login System</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="./index.php">Log Out</a>
-                </li>
-            </ul>
-        </div>
+        <a class="navbar-brand ml-5" href="#">Admin Panel</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="./logout.php">Log Out</a>
+            </li>
+        </ul>
     </nav>
 
-    <div class="main-container d-flex">
-        <!-- Sidebar -->
-         <!-- Sidebar -->
+    <!-- Sidebar -->
     <aside class="sidebar">
-    <h2>Admin Dashboard</h2>
-    <a href="admindashboard.php">Dashboard</a>
-    <a href="manage.php">Manage Restaurants</a>
-    <a href="customer.php">View Customers</a>
-    <a href="setting.php">Settings</a>
-    <a href="logout.php">Logout</a>
+        <h2>Admin Dashboard</h2>
+        <a href="admindashboard.php">Dashboard</a>
+        <a href="manage.php">Manage Restaurants</a>
+        <a href="customer.php">View Customers</a>
+        <a href="setting.php">Settings</a>
+        <a href="logout.php">Logout</a>
     </aside>
 
-    <!-- Update Modal -->
-    <div class="modal fade mt-5" id="updateUserModal" tabindex="-1" aria-labelledby="updateUser" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateUserModal">Update User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="./endpoint/update-user.php" method="POST">
-                        <div class="form-group row">
-                            <div class="col-6">
-                                <input type="text" name="tbl_user_id" id="updateUserID" hidden>
-                                <label for="updateFirstName">First Name:</label>
-                                <input type="text" class="form-control" id="updateFirstName" name="first_name">
-                            </div>
-                            <div class="col-6">
-                                <label for="updateLastName">Last Name:</label>
-                                <input type="text" class="form-control" id="updateLastName" name="last_name">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                                <label for="updateLastName">Address:</label>
-                                <input type="text" class="form-control" id="updateAddress" name="address">
-                            </div>
-                        <div class="form-group row">
-                            <div class="col-5">
-                                <label for="updateContactNumber">Contact Number:</label>
-                                <input type="number" class="form-control" id="updateContactNumber" name="contact_number" maxlength="11">
-                            </div>
-                            <div class="col-7">
-                                <label for="updateEmail">Email:</label>
-                                <input type="text" class="form-control" id="updateEmail" name="email">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateUsername">Username:</label>
-                            <input type="text" class="form-control" id="updateUsername" name="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="updatePassword">Password:</label>
-                            <input type="text" class="form-control" id="updatePassword" name="password">
-                        </div>
-                        <button type="submit" class="btn btn-dark login-register form-control">Update</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <!-- Main Content -->
     <div class="content">
-        <h4>List of users</h4>
+        <h4>List of Users</h4>
         <hr>
-        <table class="table table-hover table-collapse">
+        <table class="table table-hover">
             <thead>
                 <tr>
-                <th scope="col">User ID</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Address</th>
-                <th scope="col">Contact Number</th>
-                <th scope="col">Email</th>
-                <th scope="col">Username</th>
-                <th scope="col">Password</th>
-                <th scope="col">Action</th>
+                    <th scope="col">User ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
+                <?php
+                $stmt = $conn->prepare("SELECT * FROM tbl_otp");
+                $stmt->execute();
+                $users = $stmt->fetchAll();
 
-                <?php 
-                
-                    $stmt = $conn->prepare("SELECT * FROM `tbl_otp`");
-                    $stmt->execute();
-
-                    $result = $stmt->fetchAll();
-
-                    foreach ($result as $row) {
-                        $userID = $row['tbl_user_id'];
-                        $firstName = $row['first_name'];
-                        $lastName = $row['last_name'];
-                        $address = $row['address'];
-                        $contactNumber = $row['contact_number'];
-                        $email = $row['email'];
-                        $username = $row['username'];
-                        $password = $row['password'];
-
-                    ?>
-
+                foreach ($users as $user) { ?>
                     <tr>
-                        <td id="userID-<?= $userID ?>"><?php echo $userID ?></td>
-                        <td id="firstName-<?= $userID ?>"><?php echo $firstName ?></td>
-                        <td id="lastName-<?= $userID ?>"><?php echo $lastName ?></td>
-                        <td id="address-<?= $userID ?>"><?php echo $address ?></td>
-                        <td id="contactNumber-<?= $userID ?>"><?php echo $contactNumber ?></td>
-                        <td id="email-<?= $userID ?>"><?php echo $email ?></td>
-                        <td id="username-<?= $userID ?>"><?php echo $username ?></td>
-                        <td id="password-<?= $userID ?>"><?php echo $password ?></td>
+                        <td><?= htmlspecialchars($user['tbl_user_id']); ?></td>
+                        <td><?= htmlspecialchars($user['first_name']); ?></td>
+                        <td><?= htmlspecialchars($user['last_name']); ?></td>
+                        <td><?= htmlspecialchars($user['address']); ?></td>
+                        <td><?= htmlspecialchars($user['contact_number']); ?></td>
+                        <td><?= htmlspecialchars($user['email']); ?></td>
+                        <td><?= htmlspecialchars($user['username']); ?></td>
                         <td>
-                            <button id="editBtn" onclick="update_user(<?php echo $userID ?>)" title="Edit">&#9998;</button>
-                            <button id="deleteBtn" onclick="delete_user(<?php echo $userID ?>)">&#128465;</button>
+                            <button onclick="updateUser(<?= $user['tbl_user_id']; ?>)" class="btn btn-primary btn-sm">Edit</button>
+                            <button onclick="deleteUser(<?= $user['tbl_user_id']; ?>)" class="btn btn-danger btn-sm">Delete</button>
                         </td>
-                    </tr>    
-
-                    <?php
-                    }
-
-                ?>
+                    </tr>
+                <?php } ?>
             </tbody>
         </table>
     </div>
 
+    <!-- Modal for Update -->
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="updateUserForm" method="POST" action="update_user.php">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="tbl_user_id" id="updateUserId">
+                        <div class="mb-3">
+                            <label for="updateFirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" name="first_name" id="updateFirstName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateLastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" name="last_name" id="updateLastName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateAddress" class="form-label">Address</label>
+                            <input type="text" class="form-control" name="address" id="updateAddress" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateContact" class="form-label">Contact</label>
+                            <input type="text" class="form-control" name="contact_number" id="updateContact" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="updateEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" id="updateUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updatePassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" id="updatePassword" placeholder="Leave blank to keep existing">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script>
-        // Update user
-        function update_user(id) {
-            $("#updateUserModal").modal("show");
-
-            let updateUserID = $("#userID-" + id).text();
-            let updateFirstName = $("#firstName-" + id).text();
-            let updateLastName = $("#lastName-" + id).text();
-            let updateAddress = $("#address-" + id).text();
-            let updateContactNumber = $("#contactNumber-" + id).text();
-            let updateEmail = $("#email-" + id).text();
-            let updateUsername = $("#username-" + id).text();
-            let updatePassword = $("#password-" + id).text();
-
-            console.log(updateFirstName);
-            console.log(updateLastName);
-
-            $("#updateUserID").val(updateUserID);
-            $("#updateFirstName").val(updateFirstName);
-            $("#updateLastName").val(updateLastName);
-            $("#updateAddress").val(updateAddress);
-            $("#updateContactNumber").val(updateContactNumber);
-            $("#updateEmail").val(updateEmail);
-            $("#updateUsername").val(updateUsername);
-            $("#updatePassword").val(updatePassword);
-
+        function updateUser(id) {
+            const row = document.querySelector(`tr[data-id='${id}']`);
+            document.getElementById('updateUserId').value = id;
+            document.getElementById('updateFirstName').value = row.querySelector('.first_name').innerText;
+            document.getElementById('updateLastName').value = row.querySelector('.last_name').innerText;
+            // Continue filling the modal...
+            new bootstrap.Modal(document.getElementById('updateModal')).show();
         }
 
-        // Delete user
-        function delete_user(id) {
-            if (confirm("Do you want to delete this user?")) {
-                window.location = "./endpoint/delete-user.php?user=" + id;
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                window.location.href = `delete_user.php?id=${id}`;
             }
         }
-
-
     </script>
-
-    <!-- Bootstrap Js -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
-
 </body>
 </html>
