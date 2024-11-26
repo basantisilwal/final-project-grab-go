@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,80 +13,193 @@
     <link rel="stylesheet" href="style.css">
     
     <style>
+    /* Existing styles */
+    body {
+        background-color: beige; 
+    }
+    
+    #home {
+        margin-top: 50px;
+        padding-top: 20px;
+        text-align: center;
+        background-color: #f9f9f9;
+    }
+    .home-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+    .home-button:hover {
+        background-color: #0056b3;
+    }
 
-  body {
-    background-color: beige; 
-  }
-  
-#home {
-    margin-top: 50px; /* Pushes the section further down */
-    padding-top: 20px; /* Adds spacing within the section */
-    text-align: center;
-    background-color: #f9f9f9; /* Optional background color */
-}
-.home-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
-}
-.home-button:hover {
-    background-color: #0056b3;
-}
+    .contact-img img {
+        border-radius: 10px;
+        width: 100%;
+        height: auto;
+    }
 
+    .contact-form {
+        background-color: #F6BE00;
+        color: #333;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-  .contact-img img {
-    border-radius: 10px; /* Optional: for rounded corners */
-    width: 100%; /* Ensure it scales with the container */
-    height: auto; /* Maintain aspect ratio */
-}
+    .contact-form input, 
+    .contact-form textarea {
+        background-color: #ffffff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        color: #333;
+        width: 100%;
+        margin-bottom: 15px;
+    }
 
-  /* Contact Form Background and Text Color */
-  .contact-form {
-    background-color: #F6BE00; /* Light grayish blue background */
-    color: #333; /* Text color */
-    border-radius: 10px; /* Rounded corners */
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+        color: #888;
+    }
 
-  /* Customize Input Fields */
-  .contact-form input, 
-  .contact-form textarea {
-    background-color: #ffffff; /* White background for inputs */
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 5px;
-    padding: 10px;
-    color: #333; /* Text color */
-    width: 100%;
-    margin-bottom: 15px;
-  }
+    .contact-form button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-  /* Change Placeholder Color */
-  .contact-form input::placeholder,
-  .contact-form textarea::placeholder {
-    color: #888; /* Light gray placeholder text */
-  }
+    .contact-form button:hover {
+        background-color: #0056b3;
+    }
 
-  /* Customize Submit Button */
-  .contact-form button {
-    background-color: #007bff; /* Blue background for button */
-    color: white; /* White text */
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+    /* New styles for enhanced design */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
 
-  /* Hover Effect for Submit Button */
-  .contact-form button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-</style>
+    .navbar {
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        color: #F6BE00;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        color: #333;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #F6BE00;
+    }
+
+    #carouselExampleCaptions {
+        margin-top: 76px;
+    }
+
+    .carousel-item img {
+        object-fit: cover;
+        height: 60vh;
+    }
+
+    #home {
+        background-color: #ffffff;
+        padding: 60px 0;
+    }
+
+    #home h1 {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .home-button {
+        background-color: #F6BE00;
+        border: none;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .home-button:hover {
+        background-color: #e5b000;
+    }
+
+    #about {
+        background-color: #f8f9fa;
+        padding: 60px 0;
+    }
+
+    .about-text h1 {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .about-paragraph {
+        line-height: 1.8;
+        color: #555;
+    }
+
+    #contact {
+        background-color: #ffffff;
+        padding: 60px 0;
+    }
+
+    #contact h2 {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 40px;
+    }
+
+    .contact-form {
+        background-color: #F6BE00;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+
+    .contact-form button {
+        background-color: #blue;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .contact-form button:hover {
+        background-color: #555;
+    }
+
+    .container-fluid.bg-white {
+        background-color: #333 !important;
+        color: #fff;
+    }
+
+    .container-fluid.bg-white a {
+        color: #F6BE00;
+        transition: color 0.3s ease;
+    }
+
+    .container-fluid.bg-white a:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+    </style>
 
 </head>
 <body>
@@ -128,7 +239,7 @@
 
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="images/index 1.jpg" class="d-block w-100" alt="...">
+      <img src="images/image1.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
       </div>
     </div>
@@ -142,11 +253,11 @@
       <img src="images/index 3.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
   
-        <p>Some representative placeholder content for the second slide.</p>
+        <p>Some representative placeholder content for the second slide</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="images/index 4.jpg class="d-block w-100" alt="...">
+      <img src="images/index 4.jpg" class="d-block w-100" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <p>Some representative placeholder content for the second slide.</p>
       </div>
@@ -160,7 +271,8 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
-</div>  
+
+
      <!-- HOME SECTION -->  
     <div id="content"></div>
         <section id="home" class="page active">  
@@ -244,19 +356,19 @@
 </div>
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Links</h5>
-<a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a> <br>
-<a href="" class="d-inline-block mb-2 text-dark text-decoration-none">About Us</a> <br>
-<a href="" class="d-inline-block mb-2 text-dark text-decoration-none">Contact Us</a> <br>
+<a href="" class="d-inline-block mb-2 text-white text-decoration-none">Home</a> <br>
+<a href="" class="d-inline-block mb-2 text-white text-decoration-none">About Us</a> <br>
+<a href="" class="d-inline-block mb-2 text-white text-decoration-none">Contact Us</a> <br>
 </div>
 
 
 <div class="col-lg-4 p-4">
 <h5 class="mb-3">Follow us</h5>
-<a href="#" class="d-inline-block text-dark text-decoration-none mb-2"> <i class="bi bi-twitter me-1"></i> Twitter
+<a href="#" class="d-inline-block text-white text-decoration-none mb-2"> <i class="bi bi-twitter me-1"></i> Twitter
 </a><br>
-<a href="#" class="d-inline-block text-dark text-decoration-none mb-2"> <i class="bi bi-facebook me-1"></i> Facebook
+<a href="#" class="d-inline-block text-white text-decoration-none mb-2"> <i class="bi bi-facebook me-1"></i> Facebook
 </a><br>
-<a href="#" class="d-inline-block text-dark text-decoration-none mb-2"> <i class="bi bi-instagram ne-1"></i> instagram
+<a href="#" class="d-inline-block text-white text-decoration-none mb-2"> <i class="bi bi-instagram ne-1"></i> instagram
 </a><br>
 </div>
 </div>

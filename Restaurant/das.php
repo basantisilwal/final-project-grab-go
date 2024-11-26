@@ -28,6 +28,48 @@ restrunt dashboard
             background-color: #0d6efd;
             color: white;
         }
+        font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    
+    header {
+      background-color: #555;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .main-layout {
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #000;
+      color: #fff;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+    }
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      color: #ff6700;
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background-color: #ff6700;
+      color: #fff;
+    }
         .main-content {
             padding: 20px;
             margin: 20px auto;
@@ -100,7 +142,17 @@ restrunt dashboard
     </style>
 </head>
 <body>
-
+<div class="main-layout">
+  <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php">Dashboard</a>
+    <a href="myproject.php">My Project</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View Food</a>
+    <a href="managepayment.php">View Payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
 
   <div class="main-content">
     <div class="header">
