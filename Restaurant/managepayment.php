@@ -191,7 +191,7 @@
                 </table>
             </div>
         </main>
-    </div>
+        </div>
     <script>
         function updateStatus(button, status) {
             // Locate the row of the clicked button
