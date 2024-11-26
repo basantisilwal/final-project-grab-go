@@ -43,14 +43,14 @@
             margin-bottom: 20px;
         }
 
-        ..sidebar a {
-      color: #ff6700;
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      display: block;
-      transition: background 0.3s;
+        .sidebar a {
+            color: #ff6700; /* Orange text */
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+            transition: background 0.3s;
         }
 
         .sidebar a:hover {
