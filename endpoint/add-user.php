@@ -18,13 +18,10 @@ if (isset($_POST['register'])) {
         $contactNumber = $_POST['contact_number'];
         $email = $_POST['email'];
         $username = $_POST['username'];
-        $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Secure password hashing
-        $role = 'customer'; // Default role
-        $verificationCode = rand(100000, 999999); // Generate random verification code
+        $password = $_POST['password'];
 
         $conn->beginTransaction();
 
-        // Check if the user already exists
         $stmt = $conn->prepare("SELECT `first_name`, `last_name` FROM `tbl_otp` WHERE `first_name` = :first_name AND `last_name` = :last_name");
         $stmt->execute([
             'first_name' => $firstName,
@@ -33,9 +30,9 @@ if (isset($_POST['register'])) {
         $nameExist = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (empty($nameExist)) {
-            // Insert new user into the database
-            $insertStmt = $conn->prepare("INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`, `address`, `contact_number`, `email`, `username`, `password`, `verification_code`, `role`) 
-                                          VALUES (NULL, :first_name, :last_name, :address, :contact_number, :email, :username, :password, :verification_code, :role)");
+            $verificationCode = rand(100000, 999999);
+
+            $insertStmt = $conn->prepare("INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`, `address`, `contact_number`, `email`, `username`, `password`, `verification_code`) VALUES (NULL, :first_name, :last_name, :address, :contact_number, :email, :username, :password, :verification_code)");
             $insertStmt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
             $insertStmt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
             $insertStmt->bindParam(':address', $address, PDO::PARAM_STR);
@@ -47,37 +44,38 @@ if (isset($_POST['register'])) {
             $insertStmt->bindParam(':role', $role, PDO::PARAM_STR);
             $insertStmt->execute();
 
-            // Configure email settings
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'lorem.ipsum.sample.email@gmail.com'; // Update with your email
-            $mail->Password   = 'novtycchbrhfyddx'; // Update with your app password
+            // Server settings for email
+            $mail->isSMTP(); 
+            $mail->Host       = 'smtp.gmail.com'; 
+            $mail->SMTPAuth   = true; 
+            $mail->Username   = 'lorem.ipsum.sample.email@gmail.com';
+            $mail->Password   = 'novtycchbrhfyddx';
             $mail->SMTPSecure = 'ssl';
-            $mail->Port       = 465;
+            $mail->Port       = 465; 
 
-            // Email content
-            $mail->setFrom('lorem.ipsum.sample.email@gmail.com', 'Grab & Go');
-            $mail->addAddress($email);
-            $mail->addReplyTo('lorem.ipsum.sample.email@gmail.com', 'Grab & Go');
-            $mail->isHTML(true);
+            // Recipients
+            $mail->setFrom('lorem.ipsum.sample.email@gmail.com', 'Grab &Go');
+            $mail->addAddress($email);   
+            $mail->addReplyTo('lorem.ipsum.sample.email@gmail.com', 'Grab &Go'); 
+
+            // Content
+            $mail->isHTML(true);  
             $mail->Subject = 'Verification Code';
-            $mail->Body    = 'Your verification code is: ' . $verificationCode;
+            $mail->Body    = 'Your verification code is: ' . $verificationCode; 
 
             $mail->send();
 
             // Start session and redirect
             session_start();
+
             $userVerificationID = $conn->lastInsertId();
             $_SESSION['user_verification_id'] = $userVerificationID;
 
-            $conn->commit();
-
-            // Redirect to the verification page
+            // Redirect to verification page
             header('Location: http://localhost/Grabandgo/final-project-grab-go/verification.php');
             exit;
         } else {
-            // Redirect to the registration page if user already exists
+            // Redirect to registration page if user already exists
             header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php');
             exit;
         }
@@ -103,16 +101,14 @@ if (isset($_POST['verify'])) {
             // Verification successful, destroy session
             session_destroy();
 
-            // Redirect to the registration page or a success page
+            // Redirect to registration page after successful registration
             header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php');
             exit;
         } else {
-            // Delete the record if verification fails
-            $conn->prepare("DELETE FROM `tbl_otp` WHERE `tbl_user_id` = :user_verification_id")->execute([
-                'user_verification_id' => $userVerificationID
-            ]);
+            $deleteStmt = $conn->prepare("DELETE FROM `tbl_otp` WHERE `tbl_user_id` = :user_verification_id");
+            $deleteStmt->execute(['user_verification_id' => $userVerificationID]);
 
-            // Redirect to the registration page on failure
+            // Redirect to registration page on failure
             header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php');
             exit;
         }

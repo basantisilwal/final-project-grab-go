@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'dispatcher' => 'http://localhost/Grabandgo/final-project-grab-go/Dispatcher/dispatcherdashboard.php'
     ];
 
-    // Query appropriate table based on user type
+    // Determine table to query based on role
     $table = '';
     if ($user_type === 'admin') $table = 'tbl_admin';
     elseif ($user_type === 'customer') $table = 'tbl_otp';
@@ -31,15 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->rowCount() > 0) {
         $row = $stmt->fetch();
-        if ($password === $row['password']) { // Match passwords
+        if (password_verify($password, $row['password'])) { // Match hashed passwords
             $_SESSION['username'] = $username;
             $_SESSION['role'] = $user_type;
             header('Location: ' . $dashboards[$user_type]);
+            exit();
         } else {
-            header('Location: /index.php?error=Incorrect Password');
+            header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=Incorrect Password');
+            exit();
         }
     } else {
-        header('Location: /index.php?error=User Not Found');
+        header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=User Not Found');
+        exit();
     }
 }
 ?>
