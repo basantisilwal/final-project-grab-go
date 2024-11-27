@@ -1,4 +1,53 @@
-<?php include('../conn/conn.php'); ?>
+<?php include('../conn/conn.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize and validate input
+    $foodName = $_POST['foodName'];
+    $category = $_POST['category'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
+
+    // Handle image upload
+    $targetDir = "uploads/"; // Directory to store uploaded images
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0777, true); // Create the directory if it doesn't exist
+    }
+    $imageName = basename($_FILES["image"]["name"]);
+    $targetFilePath = $targetDir . $imageName;
+    $imageType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+    // Allowed file types
+    $allowedTypes = array("jpg", "jpeg", "png", "gif");
+
+    if (in_array($imageType, $allowedTypes)) {
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath)) {
+            // Prepare SQL statement to insert into the database
+            $sql = "INSERT INTO tbl_addfood (food_name, category, description, price, image) 
+                    VALUES (:foodName, :category, :description, :price, :imageName)";
+            $stmt = $conn->prepare($sql);
+            
+            // Bind parameters
+            $stmt->bindParam(':foodName', $foodName);
+            $stmt->bindParam(':category', $category);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':imageName', $imageName);
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                echo "<script>alert('Food item added successfully!');</script>";
+            } else {
+                echo "<script>alert('Error: Could not add the food item.');</script>";
+            }
+        } else {
+            echo "<script>alert('Error uploading the image.');</script>";
+        }
+    } else {
+        echo "<script>alert('Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.');</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,14 +105,15 @@
             background-color: #ff6700;
             color: #fff;
         }
-    .container {
-      max-width: 900px;
-      margin: 50px auto;
-      padding: 50px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+        .container {
+          max-width: 1100px;
+    position: relative;
+    top: -10px; /* Move the form upward by 20px */
+    padding: 70px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
     h1 {
       text-align: center;
       color: #333;
@@ -143,36 +193,38 @@
     </aside>
 
   <div class="container">
-    <h1>Add Food Item</h1>
-    <form id="addFoodForm">
-      <div class="form-group">
-        <label for="foodName">Food Name</label>
-        <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
-      </div>
-      <div class="form-group">
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="" disabled selected>Select category</option>
-        </select>
-        <span class="add-category-link" id="addCategoryLink">+ Add New Category</span>
-      </div>
-      <div class="form-group" id="newCategoryGroup" style="display: none;">
-        <label for="newCategory">New Category</label>
-        <input type="text" id="newCategory" placeholder="Enter new category">
-        <button type="button" id="saveCategoryButton">Save Category</button>
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" name="description" rows="3" placeholder="Enter description" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="image">Upload Image</label>
-        <input type="file" id="image" name="image" accept="image/*" required>
-        <div id="imagePreview"></div>
-      </div>
-      <button type="submit">Add Food</button>
-    </form>
-  </div>
+  <h1>Add Food Item</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="foodName">Food Name</label>
+                <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="" disabled selected>Select category</option>
+                    <option value="starter">Starter</option>
+                    <option value="main-course">Main Course</option>
+                    <option value="dessert">Dessert</option>
+                    <option value="beverage">Beverage</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" step="0.01" id="price" name="price" placeholder="Enter price" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3" placeholder="Enter description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Upload Image</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+                <div id="imagePreview"></div>
+            </div>
+            <button type="submit">Add Food</button>
+        </form>
+    </div>
   <script>
     const imageInput = document.getElementById("image");
     const imagePreview = document.getElementById("imagePreview");
