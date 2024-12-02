@@ -88,33 +88,21 @@
             object-fit: cover;
         }
 
-        .action-buttons a {
+        .action-buttons button {
             margin: 0 5px;
-            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
         }
 
         .btn-edit {
-            color: #fff;
             background-color: #28a745;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
         }
 
         .btn-delete {
-            color: #fff;
             background-color: #dc3545;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
-        }
-
-        .btn-update {
-            color: #fff;
-            background-color: #007bff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            display: inline-block;
         }
     </style>
 </head>
@@ -146,7 +134,7 @@
             $stmt->execute();
 
             // Start the HTML table
-            echo "<table border='1' cellspacing='0' cellpadding='10' style='width:100%; border-collapse:collapse; text-align:center;'>";
+            echo "<table>";
             echo "<thead>";
             echo "<tr>";
             echo "<th>ID</th>";
@@ -155,7 +143,7 @@
             echo "<th>Price</th>";
             echo "<th>Category</th>";
             echo "<th>Image</th>";
-            echo "<th>Actions</th>"; // Add Actions column
+            echo "<th>Actions</th>";
             echo "</tr>";
             echo "</thead>";
             echo "<tbody>";
@@ -168,11 +156,10 @@
                 echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['price']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                echo "<td><img src='" . htmlspecialchars($row['image']) . "' alt='" . htmlspecialchars($row['food_name']) . "' style='width:100px; height:80px; object-fit:cover;'></td>";
+                echo "<td><img src='" . htmlspecialchars($row['image']) . "' alt='" . htmlspecialchars($row['food_name']) . "'></td>";
                 echo "<td class='action-buttons'>";
-                echo "<a href='edit_food.php?id=" . $row['f_id'] . "' class='btn-edit'>Edit</a>";
-                echo "<a href='delete_food.php?id=" . $row['f_id'] . "' class='btn-delete'>Delete</a>";
-                echo "<a href='update_food.php?id=" . $row['f_id'] . "' class='btn-update'>Update</a>";
+                echo "<button onclick=\"updateFood(" . htmlspecialchars($row['f_id']) . ")\" class='btn-edit'>Edit</button>";
+                echo "<button onclick=\"deleteFood(" . htmlspecialchars($row['f_id']) . ")\" class='btn-delete'>Delete</button>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -186,5 +173,19 @@
         $conn = null; // Close the database connection
         ?>
     </div>
+
+    <script>
+        function updateFood(id) {
+            // Navigate to the edit page with the ID
+            window.location.href = `http://localhost/Grabandgo/final-project-grab-go/Restaurant/editfood.php?id=${id}`;
+        }
+
+        function deleteFood(id) {
+            // Confirm before deleting
+            if (confirm("Are you sure you want to delete this food item?")) {
+                window.location.href = `http://localhost/Grabandgo/final-project-grab-go/Restaurant/deletefood.php?id=${id}`;
+            }
+        }
+    </script>
 </body>
 </html>

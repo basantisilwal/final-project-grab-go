@@ -9,37 +9,39 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <title>Admin Panel</title>
     <style>
+        /* General body styling */
         body {
-            font-size: 0.9rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Flex layout for sidebar and content */
+            height: 100vh; /* Full viewport height */
+            font-family: Arial, sans-serif;
         }
+
+        /* Sidebar styling */
         .sidebar {
             width: 250px;
-            background-color: #000;
+            background-color: #000; /* Black background */
             color: #fff;
-            height: 100vh;
+            height: 100%; /* Full height of the viewport */
             display: flex;
             flex-direction: column;
-            padding: 20px 15px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .sidebar h2 {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         .sidebar a {
-            color: #ff6700;
+            color: #ff6700; /* Orange links */
             text-decoration: none;
+            margin-bottom: 15px;
             padding: 10px 15px;
             border-radius: 5px;
-            margin-bottom: 10px;
             display: block;
             transition: background 0.3s;
         }
@@ -48,33 +50,44 @@
             background-color: #ff6700;
             color: #fff;
         }
+
+        /* Main content styling */
         .content {
-            padding: 30px;
-            margin-left: 250px;
-            width: calc(100% - 250px);
+            flex-grow: 1; /* Content takes remaining space */
+            padding: 20px;
+            background-color: #f9f9f9; /* Light background */
+            overflow-y: auto; /* Scroll if content overflows */
         }
 
-        .table {
-            color: rgb(26, 22, 22) !important;
+        h4 {
+            margin-bottom: 20px;
         }
 
-        td button {
-            font-size: 20px;
-            width: 31px;
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-primary, .btn-danger {
+            font-size: 0.85rem;
+            padding: 5px 10px;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary" style="width: 100%;">
-        <a class="navbar-brand ml-5" href="#">Admin Panel</a>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="./logout.php">Log Out</a>
-            </li>
-        </ul>
-    </nav>
-
     <!-- Sidebar -->
     <aside class="sidebar">
         <h2>Admin Dashboard</h2>
@@ -178,11 +191,7 @@
     <!-- Scripts -->
     <script>
         function updateUser(id) {
-            const row = document.querySelector(`tr[data-id='${id}']`);
             document.getElementById('updateUserId').value = id;
-            document.getElementById('updateFirstName').value = row.querySelector('.first_name').innerText;
-            document.getElementById('updateLastName').value = row.querySelector('.last_name').innerText;
-            // Continue filling the modal...
             new bootstrap.Modal(document.getElementById('updateModal')).show();
         }
 
