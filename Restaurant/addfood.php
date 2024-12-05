@@ -239,29 +239,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         const addCategoryLink = document.getElementById("addCategoryLink");
         const newCategoryGroup = document.getElementById("newCategoryGroup");
 
-        // Show new category input field
         addCategoryLink.addEventListener("click", function () {
             newCategoryGroup.style.display = "block";
         });
 
-        // Preview uploaded image
         imageInput.addEventListener("change", function () {
             const file = this.files[0];
             if (file) {
-                if (file.size > 2000000) {
-                    alert("File size exceeds 2MB. Please upload a smaller image.");
-                    this.value = "";
-                    imagePreview.innerHTML = "";
-                    return;
-                }
-
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Food Image">`;
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview">`;
                 };
                 reader.readAsDataURL(file);
-            } else {
-                imagePreview.innerHTML = "";
             }
         });
     </script>

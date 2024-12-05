@@ -3,32 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="rstyle.css">
     <title>Restaurant Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        
         /* Base styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex; /* Enables side-by-side layout */
+            display: flex;
             height: 100vh;
         }
 
         /* Sidebar Styles */
         .sidebar {
             width: 250px;
-            background-color: #000; /* Black background */
+            background-color: #000;
             color: #fff;
             height: 100vh;
             display: flex;
             flex-direction: column;
             padding: 20px 15px;
-            box-sizing: border-box;
-            position: fixed; /* Keeps it fixed on the left side */
+            position: fixed;
             top: 0;
             left: 0;
         }
@@ -39,7 +36,7 @@
         }
 
         .sidebar a {
-            color: #ff6700; /* Orange text */
+            color: #ff6700;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
@@ -55,11 +52,11 @@
 
         /* Main Content Styles */
         .main-content {
-            margin-left: 250px; /* Push content to the right by the sidebar's width */
-            flex-grow: 1; /* Allows the content to fill the remaining space */
+            margin-left: 250px;
+            flex-grow: 1;
             padding: 20px;
-            overflow-y: auto; /* Scrollable content */
-            background-color: #f8f9fa; /* Light background for better contrast */
+            overflow-y: auto;
+            background-color: #f8f9fa;
         }
 
         .main-content h1 {
@@ -151,13 +148,16 @@
 
             // Loop through each row and display it in the table
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Check if image column has a valid value
+                $imagePath = !empty($row['image']) ? "uploads/" . htmlspecialchars($row['image']) : "default.png";
+
                 echo "<tr>";
                 echo "<td>" . htmlspecialchars($row['f_id']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['food_name']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['description']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['price']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                echo "<td><img src='" . htmlspecialchars($row['image']) . "' alt='" . htmlspecialchars($row['food_name']) . "'></td>";
+                echo "<td><img src='$imagePath' alt='" . htmlspecialchars($row['food_name']) . "'></td>";
                 echo "<td class='action-buttons'>";
                 echo "<button onclick=\"updateFood(" . htmlspecialchars($row['f_id']) . ")\" class='btn-edit'>Edit</button>";
                 echo "<button onclick=\"deleteFood(" . htmlspecialchars($row['f_id']) . ")\" class='btn-delete'>Delete</button>";

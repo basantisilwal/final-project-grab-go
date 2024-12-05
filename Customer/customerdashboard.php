@@ -4,8 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grab & Go</title>
-    <link rel="stylesheet" href="cstyle.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f7e4a3;
+            padding: 10px 20px;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff5722;
+        }
+
+        .location {
+            font-size: 1em;
+            color: #333;
+        }
+
+        .search input {
+            padding: 5px;
+            font-size: 1em;
+            width: 250px;
+        }
+
+        .search button {
+            padding: 5px 10px;
+            font-size: 1em;
+        }
+
+        section.restaurants {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .restaurant-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .restaurant {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin: 10px;
+            padding: 15px;
+            width: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .restaurant:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .circle-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .restaurant-info h3 {
+            margin: 10px 0 5px;
+            font-size: 1.2em;
+        }
+
+        .restaurant-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .restaurant-info .price {
+            color: #ff5722;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f7e4a3;
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -22,31 +114,11 @@ include('../conn/conn.php'); // Database connection
     </div>
 </header>
 
-<section class="inspiration">
-    <h2>Inspiration for Your First Order</h2>
-    <div class="categories">
-        <!-- Static Categories -->
-        <div class="category">
-            <img src="../images/pizza.jpg" alt="Pizza" class="circle-img">
-            <p>Pizza</p>
-        </div>
-        <div class="category">
-            <img src="../images/burger.webp" alt="Burger" class="circle-img">
-            <p>Burger</p>
-        </div>
-        <div class="category">
-            <img src="../images/hole chicken.jpg" alt="Chicken" class="circle-img">
-            <p>Chicken</p>
-        </div>
-        <div class="category">
-            <img src="../images/image.png" alt="Mutton" class="circle-img">
-            <p>Mutton</p>
-        </div>
-    </div>
-</section>
-
 <section class="restaurants">
+
     <h2>Order Food Online Near You</h2>
+
+
     <div class="restaurant-list">
         <?php
         // Query to fetch food items from the database
@@ -56,14 +128,20 @@ include('../conn/conn.php'); // Database connection
 
         if ($stmt->rowCount() > 0) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Handle missing images by providing a default one
+                $imagePath = "uploads/" . htmlspecialchars($row['image']);
+                if (!file_exists($imagePath) || empty($row['image'])) {
+                    $imagePath = "default.png"; // Path to default image
+                }
                 ?>
                 <div class="restaurant" data-toggle="modal" data-target="#foodModal" 
                      data-name="<?php echo htmlspecialchars($row['food_name']); ?>" 
                      data-category="<?php echo htmlspecialchars($row['category']); ?>" 
                      data-description="<?php echo htmlspecialchars($row['description']); ?>" 
                      data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
-                     data-image="uploads/<?php echo htmlspecialchars($row['image']); ?>">
-                    <img src="uploads/<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
+                     data-image="<?php echo $imagePath; ?>">
+<img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
+
                     <div class="restaurant-info">
                         <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
                         <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
