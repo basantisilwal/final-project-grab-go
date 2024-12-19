@@ -118,7 +118,6 @@ include('../conn/conn.php'); // Database connection
 
     <h2>Order Food Online Near You</h2>
 
-
     <div class="restaurant-list">
         <?php
         // Query to fetch food items from the database
@@ -128,7 +127,6 @@ include('../conn/conn.php'); // Database connection
 
         if ($stmt->rowCount() > 0) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // Handle missing images by providing a default one
                 $imagePath = "uploads/" . htmlspecialchars($row['image']);
                 if (!file_exists($imagePath) || empty($row['image'])) {
                     $imagePath = "default.png"; // Path to default image
@@ -140,8 +138,7 @@ include('../conn/conn.php'); // Database connection
                      data-description="<?php echo htmlspecialchars($row['description']); ?>" 
                      data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
                      data-image="<?php echo $imagePath; ?>">
-<img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
-
+                    <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
                     <div class="restaurant-info">
                         <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
                         <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
@@ -211,4 +208,3 @@ include('../conn/conn.php'); // Database connection
 </script>
 </body>
 </html>
-
