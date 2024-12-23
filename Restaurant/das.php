@@ -1,4 +1,3 @@
-restrunt dashboard
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,69 +152,48 @@ restrunt dashboard
     <a href="account.php">Account</a>
     <a href="updateprofile.php">Profile</a>
     <a href="#">Logout</a>
+    </aside>
 
-  <div class="main-content">
-    <div class="header">
-      <h1>Welcome, Diamon Restro</h1>
-      <button onclick="updateProfile()">Update Profile</button>
+    <header>
+    <h1>Restaurant Dashboard</h1>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h3>Orders Today</h3>
+        <p>Completed: <span id="orders-completed">50</span></p>
+        <p>Pending: <span id="orders-pending">12</span></p>
+        <button onclick="updateOrders()">Refresh</button>
     </div>
-    <div class="dashboard-cards">
-      <div class="card">
-        <h2>0</h2>
-        <p>Unread Messages</p>
-        <button onclick="showMessages()">See Messages</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Product Added</p>
-        <button onclick="showMessages()">Add new Food</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Active Food</p>
-        <button onclick="showMessages()">See Food</button>
-      </div>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Deactive Food</p>
-        <button onclick="showMessages()">See Food</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>User Account</p>
-        <button onclick="showMessages()">See Users</button>
-      </div>
-      <div class="card">
-        <h2>0</h2>
-        <p>Admin Account</p>
-        <button onclick="showMessages()">See Admin</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total canceled orders</p>
-        <button onclick="showMessages()">Canceled Orders</button>
-      </div>
-     
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Confirm Orders</p>
-        <button onclick="showMessages()">Confirm orders</button>
-      </div><br>
-      <div class="card">
-        <h2>0</h2>
-        <p>Total Orders</p>
-        <button onclick="showMessages()">All orders</button>
-      </div>
-      </div>
-  </div>
+    <div class="card">
+        <h3>Reservations</h3>
+        <p>Upcoming: <span id="reservations">24</span></p>
+        <button onclick="refreshReservations()">View All</button>
+    </div>
+    <div class="card">
+        <h3>Revenue</h3>
+        <p>Today: <span id="revenue">$1,245</span></p>
+        <button onclick="refreshRevenue()">Update</button>
+    </div>
+</div>
 
-  <script>
-    function showMessages() {
-        alert("Feature under construction!");
+<script>
+    function updateOrders() {
+        document.getElementById('orders-completed').innerText = Math.floor(Math.random() * 100);
+        document.getElementById('orders-pending').innerText = Math.floor(Math.random() * 20);
+        alert('Order data updated!');
     }
-    function updateProfile() {
-        alert("Redirecting to Update Profile page!");
+
+    function refreshReservations() {
+        document.getElementById('reservations').innerText = Math.floor(Math.random() * 50);
+        alert('Reservation data refreshed!');
     }
-  </script>
+
+    function refreshRevenue() {
+        document.getElementById('revenue').innerText = '$' + (Math.random() * 2000).toFixed(2);
+        alert('Revenue updated!');
+    }
+</script>
+
 </body>
 </html>

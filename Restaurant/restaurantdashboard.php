@@ -118,57 +118,42 @@
     </aside>
 
   <!-- Main Content -->
-  <main class="main-content">
-    <div class="dashboard-header">
-      <h1>Restaurant Dashboard</h1>
-      <p>Manage your restaurant activities here.</p>
+  <div class="container">
+    <div class="card">
+        <h3>Orders Today</h3>
+        <p>Completed: <span id="orders-completed">50</span></p>
+        <p>Pending: <span id="orders-pending">12</span></p>
+        <button onclick="updateOrders()">Refresh</button>
     </div>
-    <div class="dashboard-buttons">
-    <button id="pendingOrders">Pending food orders</button>
-      <button id="manageMenu">Manage food menu</button>
-      <button id="View food">View food</button>
-      <button id="managePayment">Manage payment</button>
-      <button id="giveToken">Give Token ID</button>
+    <div class="card">
+        <h3>Reservations</h3>
+        <p>Upcoming: <span id="reservations">24</span></p>
+        <button onclick="refreshReservations()">View All</button>
     </div>
-    <div class="footer">
-      <p>Settings</p>
+    <div class="card">
+        <h3>Revenue</h3>
+        <p>Today: <span id="revenue">$1,245</span></p>
+        <button onclick="refreshRevenue()">Update</button>
     </div>
-  </main>
-                     <script>
-    // Add click event listeners to the buttons
-    document.getElementById('pendingOrders').addEventListener('click', () => {
-      window.location.href = 'pendingOrders.html'; // Replace with your file path
-    });
+</div>
 
-    document.getElementById('manageMenu').addEventListener('click', () => {
-      window.location.href = 'addfood.php'; // Replace with your file path
-    });
-    document.getElementById('viewfood').addEventListener('click', () => {
-      window.location.href = 'viewfood.php'; // Replace with your file path
-    });
+<script>
+    function updateOrders() {
+        document.getElementById('orders-completed').innerText = Math.floor(Math.random() * 100);
+        document.getElementById('orders-pending').innerText = Math.floor(Math.random() * 20);
+        alert('Order data updated!');
+    }
 
-    document.getElementById('managePayment').addEventListener('click', () => {
-      window.location.href = 'managePayment.html'; // Replace with your file path
-    });
+    function refreshReservations() {
+        document.getElementById('reservations').innerText = Math.floor(Math.random() * 50);
+        alert('Reservation data refreshed!');
+    }
 
-    document.getElementById('giveToken').addEventListener('click', () => {
-      window.location.href = 'giveToken.html'; // Replace with your file path
-    });
-
-    document.getElementById('giveToken').addEventListener('click', () => {
-      alert('Navigating to Give Token ID Page...');
-      // Add navigation or actions here, e.g., window.location.href = 'giveToken.html';
-    });
-  </script>
-<script>  fetch('/api/endpoint', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ action: 'pendingOrders' })
-}).then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));
-  </script>
-  
+    function refreshRevenue() {
+        document.getElementById('revenue').innerText = '$' + (Math.random() * 2000).toFixed(2);
+        alert('Revenue updated!');
+    }
+</script>
 
 </body>
 </html>
