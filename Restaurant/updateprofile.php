@@ -9,33 +9,25 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    header {
-            background-color: #555;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* Main Layout: Sidebar and Content */
-        .main-layout {
+            margin: 0;
+            padding: 0;
             display: flex;
-            height: 100vh; /* Full viewport height */
-        }
+            height: 100vh;
+    }
+    
 
         /* Sidebar Styles */
         .sidebar {
             width: 250px;
-            background-color: #000; /* Black background */
+            background-color: #000;
             color: #fff;
-            height: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             padding: 20px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
         .sidebar h2 {
@@ -44,7 +36,7 @@
         }
 
         .sidebar a {
-            color: #ff6700; /* Orange text */
+          color: #ff6700;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
@@ -57,67 +49,53 @@
             background-color: #ff6700;
             color: #fff;
         }
-    .container {
-      max-width: 900px;
-      margin: 50px auto;
-      padding: 50px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin: 0 auto 15px;
-      border: 3px solid #007bff;
-    }
-    .profile-pic img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .form-group {
-      margin-bottom: 15px;
-      text-align: left;
-    }
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .form-group input[type="file"] {
-      padding: 0;
-    }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    .message {
-      color: green;
-      margin-top: 15px;
-      display: none;
-    }
+        .main-content h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        table img {
+            max-width: 100px;
+            max-height: 80px;
+            object-fit: cover;
+        }
+
+        .action-buttons button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .btn-edit {
+            background-color: #28a745;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+        }
   </style>
 </head>
 <body>
-<div class="main-layout">
-        <!-- Sidebar -->
+       <!-- Sidebar -->
         <aside class="sidebar">
     <h2>Restaurant Dashboard</h2>
     <a href="das.php">Dashboard</a>
@@ -130,70 +108,54 @@
     <a href="#">Logout</a>
     </aside>
 
-  <div class="container">
-    <div class="profile-pic">
-      <img id="profilePicPreview" src="default-profile.png" alt="Profile Picture">
+    <!-- Main Content -->
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f9f9f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); max-width: 400px; width: 100%; }
+        h1 { text-align: center; font-size: 24px; margin-bottom: 20px; }
+        form { display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-weight: bold; }
+        input, textarea, button { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #28a745; color: white; font-size: 16px; cursor: pointer; border: none; }
+        button:hover { background: #218838; }
+        #responseMessage { text-align: center; color: green; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Profile</h1>
+        <form id="updateProfileForm">
+            <label for="restaurantName">Restaurant Name:</label>
+            <input type="text" id="restaurantName" required>
+            <label for="ownerName">Owner's Name:</label>
+            <input type="text" id="ownerName" required>
+            <label for="contactNumber">Contact Number:</label>
+            <input type="tel" id="contactNumber" required>
+            <label for="address">Address:</label>
+            <textarea id="address" rows="3" required></textarea>
+            <button type="submit">Update Profile</button>
+        </form>
+        <div id="responseMessage"></div>
     </div>
-    <form id="profileForm" enctype="multipart/form-data" method="POST">
-      <div class="form-group">
-        <label for="profilePicInput">Change Profile Picture</label>
-        <input type="file" id="profilePicInput" name="profilePicture" accept="image/*">
-      </div>
-      <div class="form-group">
-        <label for="name">Your Name</label>
-        <input type="text" id="name" name="name" value="John Doe" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Your Email</label>
-        <input type="email" id="email" name="email" value="johndoe@gmail.com" required>
-      </div>
-      <button type="submit">Update Profile</button>
-    </form>
-    <div class="message" id="successMessage">Profile updated successfully!</div>
-  </div>
-
-  <script>
-    const profilePicInput = document.getElementById('profilePicInput');
-    const profilePicPreview = document.getElementById('profilePicPreview');
-    const successMessage = document.getElementById('successMessage');
-
-    // Preview selected profile picture
-    profilePicInput.addEventListener('change', () => {
-      const file = profilePicInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          profilePicPreview.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Display success message on form submission
-    document.getElementById('profileForm').onsubmit = () => {
-      successMessage.style.display = 'block';
-    };
-  </script>
-
-  <?php
-  // PHP Backend
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $uploadDir = 'uploads/';
-    $uploadFile = $uploadDir . basename($_FILES['profilePicture']['name']);
-
-    // Ensure the uploads directory exists
-    if (!is_dir($uploadDir)) {
-      mkdir($uploadDir, 0755, true);
-    }
-
-    // Save uploaded file
-    if (move_uploaded_file($_FILES['profilePicture']['tmp_name'], $uploadFile)) {
-      // Here you would normally update the database
-      echo "<script>document.getElementById('successMessage').innerText = 'Profile picture updated successfully!';</script>";
-    } else {
-      echo "<script>alert('Failed to upload profile picture');</script>";
-    }
-  }
-  ?>
+    <script>
+        document.getElementById('updateProfileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('responseMessage').textContent = "Profile updated successfully!";
+            console.log("Form Data:", {
+                restaurantName: document.getElementById('restaurantName').value,
+                ownerName: document.getElementById('ownerName').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                address: document.getElementById('address').value
+            });
+            this.reset();
+        });
+    </script>
 </body>
 </html>
