@@ -165,7 +165,7 @@
     <section id="home">
         <h1>Welcome to Grab&Go</h1>
         <p>Your favorite meals, delivered fast!</p>
-        <a href="login.html" class="btn">Order Now</a>
+        <a href="register.php" class="btn">Order Now</a>
     </section>
 
     <!-- About Section -->

@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($verificationID) && !empty($verificationCode)) {
             try {
                 // Query to verify OTP
-                $query = "SELECT * FROM tbl_otp WHERE user_verification_id = :verificationID AND otp = :verificationCode";
+                $query = "SELECT * FROM tbl_otp WHERE tbl_user_id = :verificationID AND verification_code = :verificationCode";
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(':verificationID', $verificationID);
                 $stmt->bindParam(':verificationCode', $verificationCode);
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // OTP verification successful
                     $_SESSION['verified'] = true; // Set session for successful verification
                     echo "<script>alert('Verification Successful. Redirecting to Dashboard...');</script>";
-                    header("Location: ./dashboard.php"); // Redirect to dashboard
+                    header("Location: index.php"); // Redirect to dashboard
                     exit();
                 } else {
                     // OTP mismatch
