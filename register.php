@@ -104,7 +104,8 @@
                 <div class="form-group registration row">
                     <div class="col-5">
                         <label for="contactNumber">Contact Number:</label>
-                        <input type="number" class="form-control" id="contactNumber" name="contact_number" maxlength="11">
+                        <input type="text" class="form-control" id="contactNumber" name="contact_number" maxlength="10" pattern="\d*" title="Only numbers are allowed">
+
                     </div>
                     <div class="col-7">
                         <label for="email">Email:</label>
