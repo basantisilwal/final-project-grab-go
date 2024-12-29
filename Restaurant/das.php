@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="rstyle.css">
     <title>Restaurant Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
@@ -17,19 +16,13 @@
             background-color: #f8f9fa;
         }
 
-        /* Sidebar with integrated content */
         .sidebar {
-            width: 350px;
+            width: 300px;
             background-color: #000;
             color: #fff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            height: 100%;
             padding: 20px 15px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-y: auto;
+            box-sizing: border-box;
         }
 
         .sidebar h2 {
@@ -52,11 +45,16 @@
             color: #fff;
         }
 
+        .content-container {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
         .content {
-            margin-top: 20px;
-            padding: 10px;
-            background: #1a1a1a;
+            background-color: #1a1a1a;
             border-radius: 5px;
+            padding: 20px;
             color: #fff;
         }
 
@@ -83,7 +81,6 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar with integrated main content -->
     <aside class="sidebar">
         <h2>Restaurant Dashboard</h2>
         <a href="das.php">Dashboard</a>
@@ -94,8 +91,9 @@
         <a href="account.php">Account</a>
         <a href="updateprofile.php">Profile</a>
         <a href="#">Logout</a>
+    </aside>
 
-        <!-- Integrated Main Content -->
+    <div class="content-container">
         <div class="content">
             <h3>Orders Today</h3>
             <p>Completed: <span id="orders-completed">50</span></p>
@@ -110,7 +108,7 @@
             <p>Today: <span id="revenue">$1,245</span></p>
             <button onclick="refreshRevenue()">Update</button>
         </div>
-    </aside>
+    </div>
 
     <script>
         function updateOrders() {
