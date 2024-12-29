@@ -99,7 +99,6 @@
         <aside class="sidebar">
     <h2>Restaurant Dashboard</h2>
     <a href="das.php">Dashboard</a>
-    <a href="myproject.php">My Project</a>
     <a href="addfood.php">Add Food</a>
     <a href="viewfood.php">View food</a>
     <a href="managepayment.php">View payment</a>

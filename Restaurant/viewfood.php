@@ -36,7 +36,7 @@
         }
 
         .sidebar a {
-            color: #ff6700;
+          color: #ff6700;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
@@ -107,15 +107,13 @@
 <body>
     <!-- Sidebar -->
     <aside class="sidebar">
-        <h2>Restaurant Dashboard</h2>
-        <a href="das.php">Dashboard</a>
-        <a href="myproject.php">My Project</a>
-        <a href="addfood.php">Add Food</a>
-        <a href="viewfood.php">View Food</a>
-        <a href="managepayment.php">View Payment</a>
-        <a href="account.php">Account</a>
-        <a href="updateprofile.php">Profile</a>
-        <a href="#">Logout</a>
+    <a href="das.php">Dashboard</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
     </aside>
 
     <!-- Main Content -->

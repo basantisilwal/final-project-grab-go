@@ -17,12 +17,16 @@
         }
 
         .sidebar {
-            width: 300px;
+            width: 250px;
             background-color: #000;
             color: #fff;
-            height: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
             padding: 20px 15px;
-            box-sizing: border-box;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
         .sidebar h2 {
@@ -31,7 +35,7 @@
         }
 
         .sidebar a {
-            color: #ff6700;
+          color: #ff6700;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
@@ -46,51 +50,59 @@
         }
 
         .content-container {
-            flex: 1;
-            padding: 20px;
-            background-color: #f8f9fa;
-        }
+        flex: 1;
+        padding: 20px;
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center; /* Centers content horizontally */
+        align-items: center;   /* Centers content vertically */
+    }
 
-        .content {
-            background-color: #1a1a1a;
-            border-radius: 5px;
-            padding: 20px;
-            color: #fff;
-        }
+    .content {
+        background-color: #1a1a1a;
+        border-radius: 5px;
+        padding: 15px;
+        color: #fff;
+        width: 60%; /* Decrease the size */
+        max-width: 600px; /* Limit the maximum size */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better aesthetics */
+    }
 
-        .content h3 {
-            margin-bottom: 15px;
-        }
+    .content h3 {
+        margin-bottom: 15px;
+        font-size: 1.2rem; /* Adjust font size */
+    }
 
-        .content p {
-            margin-bottom: 10px;
-        }
+    .content p {
+        margin-bottom: 10px;
+        font-size: 1rem; /* Adjust font size */
+    }
 
-        .content button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            cursor: pointer;
-        }
+    .content button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 0.9rem; /* Adjust button size */
+    }
 
-        .content button:hover {
-            background-color: #0056b3;
-        }
+    .content button:hover {
+        background-color: #0056b3;
+    }
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <h2>Restaurant Dashboard</h2>
         <a href="das.php">Dashboard</a>
-        <a href="myproject.php">My Project</a>
-        <a href="addfood.php">Add Food</a>
-        <a href="viewfood.php">View Food</a>
-        <a href="managepayment.php">View Payment</a>
-        <a href="account.php">Account</a>
-        <a href="updateprofile.php">Profile</a>
-        <a href="#">Logout</a>
+    <a href="addfood.php">Add Food</a>
+    <a href="viewfood.php">View food</a>
+    <a href="managepayment.php">View payment</a>
+    <a href="account.php">Account</a>
+    <a href="updateprofile.php">Profile</a>
+    <a href="#">Logout</a>
     </aside>
 
     <div class="content-container">

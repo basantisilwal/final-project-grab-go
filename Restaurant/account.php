@@ -24,34 +24,37 @@
 
     /* Sidebar Styles */
     .sidebar {
-      width: 250px;
-      background-color: #000; /* Black background */
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 15px;
-    }
+            width: 250px;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
 
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
+        .sidebar h2 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
 
-    .sidebar a {
-      color: #ff6700; /* Orange text */
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      display: block;
-      transition: background 0.3s;
-    }
+        .sidebar a {
+          color: #ff6700;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: block;
+            transition: background 0.3s;
+        }
 
-    .sidebar a:hover {
-      background-color: #ff6700;
-      color: #fff;
-    }
+        .sidebar a:hover {
+            background-color: #ff6700;
+            color: #fff;
+        }
         .container {
       text-align: center;
       max-width: 600px;
@@ -117,7 +120,6 @@
 <aside class="sidebar">
     <h2>Restaurant Dashboard</h2>
     <a href="das.php">Dashboard</a>
-    <a href="myproject.php">My Project</a>
     <a href="addfood.php">Add Food</a>
     <a href="viewfood.php">View food</a>
     <a href="managepayment.php">View payment</a>

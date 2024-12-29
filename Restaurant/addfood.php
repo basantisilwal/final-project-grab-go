@@ -48,21 +48,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Food Item</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    header {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Food Item</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
             background-color: #555;
             color: white;
             text-align: center;
@@ -71,19 +75,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         /* Main Layout: Sidebar and Content */
         .main-layout {
-            display: flex;
+            display: flex; /* Horizontal layout */
             height: 100vh; /* Full viewport height */
         }
 
         /* Sidebar Styles */
         .sidebar {
             width: 250px;
-            background-color: #000; /* Black background */
+            background-color: #000;
             color: #fff;
-            height: 100%;
             display: flex;
             flex-direction: column;
             padding: 20px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
         }
 
         .sidebar h2 {
@@ -92,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .sidebar a {
-            color: #ff6700; /* Orange text */
+            color: #ff6700;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
@@ -105,94 +112,103 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #ff6700;
             color: #fff;
         }
+
+        /* Content Styles */
         .container {
-          max-width: 1100px;
-    position: relative;
-    top: -10px; /* Move the form upward by 20px */
-    padding: 70px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+            margin-left: 250px; /* Offset for fixed sidebar */
+            max-width: 600px; /* Limit the width of the content */
+            margin: auto; /* Center the content */
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Scroll if content overflows */
         }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      display: block;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    textarea {
-      resize: none;
-    }
-    .form-group #imagePreview {
-      margin-top: 10px;
-      max-height: 150px;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .form-group #imagePreview img {
-      max-height: 100%;
-    }
-    button {
-      background: #28a745;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #218838;
-    }
-    .add-category-link {
-      margin-top: 10px;
-      color: #007bff;
-      cursor: pointer;
-      font-size: 14px;
-      text-align: right;
-    }
-    .add-category-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .form-group #imagePreview {
+            margin-top: 10px;
+            max-height: 100px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .form-group #imagePreview img {
+            max-height: 100%;
+        }
+
+        button {
+            background: #28a745;
+            color: #fff;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+    </style>
 </head>
 <body>
-<div class="main-layout">
+    <div class="main-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-    <h2>Restaurant Dashboard</h2>
-    <a href="das.php">Dashboard</a>
-    <a href="myproject.php">My Project</a>
-    <a href="addfood.php">Add Food</a>
-    <a href="viewfood.php">View food</a>
-    <a href="managepayment.php">View payment</a>
-    <a href="account.php">Account</a>
-    <a href="updateprofile.php">Profile</a>
-    <a href="#">Logout</a>
-    </aside>
+            <h2>Restaurant Dashboard</h2>
+            <a href="das.php">Dashboard</a>
+            <a href="addfood.php">Add Food</a>
+            <a href="viewfood.php">View Food</a>
+            <a href="managepayment.php">View Payment</a>
+            <a href="account.php">Account</a>
+            <a href="updateprofile.php">Profile</a>
+            <a href="#">Logout</a>
+        </aside>
 
-  <div class="container">
+        <!-- Content -->
+        <div class="container">
   <h1>Add Food Item</h1>
         <form action="" method="post" enctype="multipart/form-data">
             <div class="form-group">
