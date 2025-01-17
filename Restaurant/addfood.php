@@ -224,6 +224,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="dessert">Dessert</option>
                     <option value="beverage">Beverage</option>
                 </select>
+                <a href="#" id="addCategoryLink">+ Add New Category</a>
+                </div>
+                <div class="form-group" id="newCategoryGroup" style="display: none;">
+                    <label for="newCategory">New Category Name</label>
+                    <input type="text" id="newCategory" placeholder="Enter new category name">
+                    <button type="button" id="saveCategoryButton">Save Category</button>
             </div>
             <div class="form-group">
                 <label for="price">Price</label>
