@@ -93,57 +93,43 @@
         }
 
         .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    max-width: 500px; /* Decrease max width */
+    padding: 50px; /* Further reduced padding */
+}
 
-        .form-container h1 {
+.form-group {
+    margin-bottom: 8px; /* Smaller spacing between fields */
+}
+
+.form-group label {
+    font-size: 12px; /* Smaller font for labels */
+    margin-bottom: 3px; /* Reduced margin below labels */
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 6px; /* Smaller padding for input fields */
+    font-size: 12px; /* Smaller font size for input fields */
+}
+
+.form-group textarea {
+    height: 15px; /* Reduced height for textareas */
+}
+
+.form-group button {
+    padding: 8px; /* Reduced padding for buttons */
+    font-size: 12px; /* Smaller button font size */
+}
+#qrCodeContainer {
+            display: none;
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            height: 80px;
-        }
-
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            border: none;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .form-group button:hover {
-            background-color: #0056b3;
+        #qrCodeImage {
+            width: 200px;
+            height: 200px;
         }
 
         footer {
@@ -231,67 +217,64 @@
 
 <!-- Order Form Modal -->
 <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="form-container">
-                <h1>Food Order Form</h1>
-                <form id="orderForm" method="POST" action="submit_order.php">
-                    <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number:</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email (optional):</label>
-                        <input type="email" id="email" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="foodItems">Food Items:</label>
-                        <textarea id="foodItems" name="foodItems" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="instructions">Special Instructions:</label>
-                        <textarea id="instructions" name="instructions"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="orderType">Order Type:</label>
-                        <select id="orderType" name="orderType" required>
-                            <option value="pickup">Pickup</option>
-                            <option value="delivery">Delivery</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="addressGroup" style="display: none;">
-                        <label for="address">Delivery Address:</label>
-                        <textarea id="address" name="address"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="time">Preferred Time:</label>
-                        <input type="time" id="time" name="time">
-                    </div>
-                    <div class="form-group">
-                        <label>Payment Method:</label>
-                        <select id="paymentMethod" name="paymentMethod" required>
-                            <option value="cash">Cash on Delivery</option>
-                            <option value="card">Card</option>
-                            <option value="online">Online Payment</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Receive Updates and Offers:</label>
-                        <input type="checkbox" id="updates" name="updates"> Yes
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">Submit Order</button>
-                    </div>
-                </form>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="form-container">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h1>Food Order</h1>
+                    <form id="orderForm" method="POST" action="submit_order.php">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number:</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="foodItems">Food Items:</label>
+                            <label for="quantity">Quantity:</label>
+                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="1" placeholder="Enter food item details"></textarea>
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="orderType">Order Type:</label>
+                            <select id="orderType" name="orderType" class="form-control" required>
+                                <option value="pickup">Pickup</option>
+                                <option value="delivery">Delivery</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="addressGroup" style="display: none;">
+                            <label for="address">Delivery Address:</label>
+                            <textarea id="address" name="address" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Preferred Time:</label>
+                            <input type="time" id="time" name="time" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Method:</label>
+                            <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+                                <option value="online">Online Payment</option>
+                                <option value="cash">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="qrCodeContainer">
+                            <label>Scan the QR Code to Pay:</label>
+                            <img id="qrCodeImage" src="images/download.png" alt="QR Code">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit Order</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+        
 <footer>
     <p>&copy; 2024 Grab & Go</p>
 </footer>
@@ -324,6 +307,25 @@
                 alert('Please fill in all required fields.');
                 e.preventDefault();
             }
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const paymentMethod = document.getElementById("paymentMethod");
+            const qrCodeContainer = document.getElementById("qrCodeContainer");
+
+            paymentMethod.addEventListener("change", function () {
+                if (paymentMethod.value === "online") {
+                    qrCodeContainer.style.display = "block"; // Show QR Code
+                } else {
+                    qrCodeContainer.style.display = "none"; // Hide QR Code
+                }
+            });
+
+            const orderType = document.getElementById("orderType");
+            const addressGroup = document.getElementById("addressGroup");
+
+            orderType.addEventListener("change", function () {
+                addressGroup.style.display = this.value === "delivery" ? "block" : "none";
+            });
         });
     });
 </script>
