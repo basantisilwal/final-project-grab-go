@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grab & Go</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,6 +92,60 @@
             font-weight: bold;
         }
 
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
         footer {
             text-align: center;
             padding: 10px 0;
@@ -100,9 +154,6 @@
     </style>
 </head>
 <body>
-<?php
-include('../conn/conn.php'); // Database connection
-?>
 <header>
     <div class="logo">GRAB & GO</div>
     <div class="location">Damauli, Tanahun</div>
@@ -115,12 +166,10 @@ include('../conn/conn.php'); // Database connection
 </header>
 
 <section class="restaurants">
-
     <h2>Order Food Online Near You</h2>
-
     <div class="restaurant-list">
         <?php
-        // Query to fetch food items from the database
+        include('../conn/conn.php');
         $query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
         $stmt = $conn->prepare($query);
         $stmt->execute();
@@ -129,7 +178,7 @@ include('../conn/conn.php'); // Database connection
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $imagePath = "uploads/" . htmlspecialchars($row['image']);
                 if (!file_exists($imagePath) || empty($row['image'])) {
-                    $imagePath = "default.png"; // Path to default image
+                    $imagePath = "https://via.placeholder.com/150";
                 }
                 ?>
                 <div class="restaurant" data-toggle="modal" data-target="#foodModal" 
@@ -155,7 +204,7 @@ include('../conn/conn.php'); // Database connection
     </div>
 </section>
 
-<!-- Modal for Food Details -->
+<!-- Food Details Modal -->
 <div class="modal fade" id="foodModal" tabindex="-1" role="dialog" aria-labelledby="foodModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -174,7 +223,70 @@ include('../conn/conn.php'); // Database connection
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#orderModal">Order</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Form Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="form-container">
+                <h1>Food Order Form</h1>
+                <form id="orderForm" method="POST" action="submit_order.php">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email (optional):</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="foodItems">Food Items:</label>
+                        <textarea id="foodItems" name="foodItems" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Special Instructions:</label>
+                        <textarea id="instructions" name="instructions"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderType">Order Type:</label>
+                        <select id="orderType" name="orderType" required>
+                            <option value="pickup">Pickup</option>
+                            <option value="delivery">Delivery</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="addressGroup" style="display: none;">
+                        <label for="address">Delivery Address:</label>
+                        <textarea id="address" name="address"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Preferred Time:</label>
+                        <input type="time" id="time" name="time">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method:</label>
+                        <select id="paymentMethod" name="paymentMethod" required>
+                            <option value="cash">Cash on Delivery</option>
+                            <option value="card">Card</option>
+                            <option value="online">Online Payment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Receive Updates and Offers:</label>
+                        <input type="checkbox" id="updates" name="updates"> Yes
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Submit Order</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -184,26 +296,34 @@ include('../conn/conn.php'); // Database connection
     <p>&copy; 2024 Grab & Go</p>
 </footer>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    // Script to handle modal population
     document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById('foodModal');
-        const modalFoodName = document.getElementById('modalFoodName');
-        const modalFoodCategory = document.getElementById('modalFoodCategory');
-        const modalFoodDescription = document.getElementById('modalFoodDescription');
-        const modalFoodPrice = document.getElementById('modalFoodPrice');
-        const modalFoodImage = document.getElementById('modalFoodImage');
-
         $('#foodModal').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
-            modalFoodName.textContent = button.data('name');
-            modalFoodCategory.textContent = button.data('category');
-            modalFoodDescription.textContent = button.data('description');
-            modalFoodPrice.textContent = button.data('price');
-            modalFoodImage.src = button.data('image');
+            document.getElementById('modalFoodName').textContent = button.data('name');
+            document.getElementById('modalFoodCategory').textContent = button.data('category');
+            document.getElementById('modalFoodDescription').textContent = button.data('description');
+            document.getElementById('modalFoodPrice').textContent = button.data('price');
+            document.getElementById('modalFoodImage').src = button.data('image');
+        });
+
+        document.getElementById('orderType').addEventListener('change', function () {
+            const addressGroup = document.getElementById('addressGroup');
+            addressGroup.style.display = this.value === 'delivery' ? 'block' : 'none';
+        });
+
+        document.getElementById('orderForm').addEventListener('submit', function (e) {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            if (!name || !phone) {
+                alert('Please fill in all required fields.');
+                e.preventDefault();
+            }
         });
     });
 </script>
