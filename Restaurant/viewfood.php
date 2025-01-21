@@ -208,7 +208,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="managepayment.php">View Payment</a>
             <a href="account.php">Account</a>
             <a href="updateprofile.php">Profile</a>
-            <a href="#">Logout</a>
+            <a href="logout.php">Logout</a>
         </aside>
 
 <body>

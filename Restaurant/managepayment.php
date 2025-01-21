@@ -147,7 +147,7 @@
     <a href="managepayment.php">View payment</a>
     <a href="account.php">Account</a>
     <a href="updateprofile.php">Profile</a>
-    <a href="#">Logout</a>
+    <a href="logout.php">Logout</a>
 </aside>
     <div class="container">
         <header>
