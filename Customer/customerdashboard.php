@@ -1,3 +1,4 @@
+<?php include('../conn/conn.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,45 +93,7 @@
             font-weight: bold;
         }
 
-        .form-container {
-    max-width: 500px; /* Decrease max width */
-    padding: 50px; /* Further reduced padding */
-}
-
-.form-group {
-    margin-bottom: 8px; /* Smaller spacing between fields */
-}
-
-.form-group label {
-    font-size: 12px; /* Smaller font for labels */
-    margin-bottom: 3px; /* Reduced margin below labels */
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 6px; /* Smaller padding for input fields */
-    font-size: 12px; /* Smaller font size for input fields */
-}
-
-.form-group textarea {
-    height: 15px; /* Reduced height for textareas */
-}
-
-.form-group button {
-    padding: 8px; /* Reduced padding for buttons */
-    font-size: 12px; /* Smaller button font size */
-}
-#qrCodeContainer {
-            display: none;
-            text-align: center;
-        }
-
-        #qrCodeImage {
-            width: 200px;
-            height: 200px;
-        }
+       
 
         footer {
             text-align: center;
@@ -150,6 +113,9 @@
         </form>
     </div>
 </header>
+<?php
+include('../conn/conn.php'); // Database connection
+?>
 
 <section class="restaurants">
     <h2>Order Food Online Near You</h2>
@@ -209,72 +175,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#orderModal">Order</button>
+                <button type="button" class="btn btn-primary" id="openOrderForm">Order</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Order Form Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="form-container">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h1>Food Order</h1>
-                    <form id="orderForm" method="POST" action="submit_order.php">
-                        <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number:</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="foodItems">Food Items:</label>
-                            <label for="quantity">Quantity:</label>
-                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="1" placeholder="Enter food item details"></textarea>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="orderType">Order Type:</label>
-                            <select id="orderType" name="orderType" class="form-control" required>
-                                <option value="pickup">Pickup</option>
-                                <option value="delivery">Delivery</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="addressGroup" style="display: none;">
-                            <label for="address">Delivery Address:</label>
-                            <textarea id="address" name="address" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="time">Preferred Time:</label>
-                            <input type="time" id="time" name="time" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Method:</label>
-                            <select id="paymentMethod" name="paymentMethod" class="form-control" required>
-                                <option value="online">Online Payment</option>
-                                <option value="cash">Cash on Delivery</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="qrCodeContainer">
-                            <label>Scan the QR Code to Pay:</label>
-                            <img id="qrCodeImage" src="images/download.png" alt="QR Code">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit Order</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-        
+
 <footer>
     <p>&copy; 2024 Grab & Go</p>
 </footer>
@@ -320,11 +227,17 @@
                 }
             });
 
-            const orderType = document.getElementById("orderType");
-            const addressGroup = document.getElementById("addressGroup");
+        });
+        const openOrderFormButton = document.getElementById('openOrderForm');
 
-            orderType.addEventListener("change", function () {
-                addressGroup.style.display = this.value === "delivery" ? "block" : "none";
+        // Add click event listener
+        openOrderFormButton.addEventListener('click', () => {
+            // Hide the current modal (#foodModal)
+            $('#foodModal').modal('hide');
+
+            // Wait for the current modal to close, then show the order modal (#orderModal)
+            $('#foodModal').on('hidden.bs.modal', () => {
+                $('#orderModal').modal('show');
             });
         });
     });
