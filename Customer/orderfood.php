@@ -1,38 +1,5 @@
 <?php
-include('../conn/conn.php'); 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = htmlspecialchars($_POST['name']);
-    $phone = htmlspecialchars($_POST['phone']);
-    $foodDescription = htmlspecialchars($_POST['foodDescription']);
-    $quantity = (int) $_POST['quantity'];
-    $orderType = htmlspecialchars($_POST['orderType']);
-    $address = htmlspecialchars($_POST['address']);
-    $preferredTime = $_POST['time'];
-    $paymentMethod = htmlspecialchars($_POST['paymentMethod']);
-
-    try {
-        $query = "INSERT INTO tbl_order (name, phone, food_description, quantity, order_type, address, preferred_time, payment_method) 
-                  VALUES (:name, :phone, :foodDescription, :quantity, :orderType, :address, :preferredTime, :paymentMethod)";
-        $stmt = $conn->prepare($query);
-
-        $stmt->execute([
-            ':name' => $name,
-            ':phone' => $phone,
-            ':foodDescription' => $foodDescription,
-            ':quantity' => $quantity,
-            ':orderType' => $orderType,
-            ':address' => $orderType === 'delivery' ? $address : '',
-            ':preferredTime' => $preferredTime,
-            ':paymentMethod' => $paymentMethod
-        ]);
-
-        echo "<script>alert('Order submitted successfully!');</script>";
-    } catch (PDOException $e) {
-        echo "<script>alert('Error submitting order: " . $e->getMessage() . "');</script>";
-    }
-}
-?>
+include('../conn/conn.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="form-group">
                             <label for="foodDescription">Food Items:</label>
-                            <textarea id="foodDescription" name="foodDescription" placeholder="Enter food item details" required></textarea>
+                            <textarea id="foodDescription" name="foodDescription" class="form-control" placeholder="Enter food item details" required></textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="quantity">Quantity:</label>
                             <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" required>
                         </div>
@@ -109,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="form-group" id="addressGroup" style="display: none;">
                             <label for="address">Delivery Address:</label>
-                            <textarea id="address" name="address" class="form-control"></textarea>
+                            <textarea id="address" name="address" class="form-control" placeholder="Enter your address"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="time">Preferred Time:</label>

@@ -1,3 +1,4 @@
+<?php include('../conn/conn.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,58 +80,62 @@
         <div class="content">
             <h1>View Orders</h1>
             <div class="table-container">
-            <?php include('../conn/conn.php'); 
+                <?php
+                try {
+                    // Query to fetch orders
+                    $sql = "SELECT id, name, phone, food_description, quantity, order_type, address, preferred_time, payment_method, created_at 
+                            FROM tbl_order";
+                    $stmt = $conn->query($sql);
 
-                // Check connection
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
-
-                // Query to fetch orders
-                $sql = "SELECT id, name, phone, food_description, quantity, order_type, address, preferred_time, payment_method, created_at 
-                        FROM tbl_order";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    echo '<table class="table table-striped">';
-                    echo '<thead>';
-                    echo '<tr>';
-                    echo '<th>ID</th>';
-                    echo '<th>Name</th>';
-                    echo '<th>Phone</th>';
-                    echo '<th>Food Description</th>';
-                    echo '<th>Quantity</th>';
-                    echo '<th>Order Type</th>';
-                    echo '<th>Address</th>';
-                    echo '<th>Preferred Time</th>';
-                    echo '<th>Payment Method</th>';
-                    echo '<th>Order Date</th>';
-                    echo '</tr>';
-                    echo '</thead>';
-                    echo '<tbody>';
-                    // Output data of each row
-                    while ($row = $result->fetch_assoc()) {
+                    // Check if there are any orders
+                    if ($stmt->rowCount() > 0) {
+                        echo '<table class="table table-striped">';
+                        echo '<thead>';
                         echo '<tr>';
-                        echo '<td>' . $row["id"] . '</td>';
-                        echo '<td>' . $row["name"] . '</td>';
-                        echo '<td>' . $row["phone"] . '</td>';
-                        echo '<td>' . $row["food_description"] . '</td>';
-                        echo '<td>' . $row["quantity"] . '</td>';
-                        echo '<td>' . $row["order_type"] . '</td>';
-                        echo '<td>' . $row["address"] . '</td>';
-                        echo '<td>' . $row["preferred_time"] . '</td>';
-                        echo '<td>' . $row["payment_method"] . '</td>';
-                        echo '<td>' . $row["created_at"] . '</td>';
+                        echo '<th>ID</th>';
+                        echo '<th>Name</th>';
+                        echo '<th>Phone</th>';
+                        echo '<th>Food Description</th>';
+                        echo '<th>Quantity</th>';
+                        echo '<th>Order Type</th>';
+                        echo '<th>Address</th>';
+                        echo '<th>Preferred Time</th>';
+                        echo '<th>Payment Method</th>';
+                        echo '<th>Order Date</th>';
+                        echo '<th>Actions</th>';
                         echo '</tr>';
+                        echo '</thead>';
+                        echo '<tbody>';
+                        // Output data of each row
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            echo '<tr>';
+                            echo '<td>' . htmlspecialchars($row["id"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["name"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["phone"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["food_description"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["quantity"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["order_type"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["address"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["preferred_time"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["payment_method"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["created_at"]) . '</td>';
+                            echo '<td>';
+                            echo '<a href="confirm_order.php?id=' . htmlspecialchars($row["id"]) . '" class="btn btn-success btn-sm">Confirm</a> ';
+                            echo '<a href="cancel_order.php?id=' . htmlspecialchars($row["id"]) . '" class="btn btn-danger btn-sm">Cancel</a>';
+                            echo '</td>';
+                            echo '</tr>';
+                        }
+                        echo '</tbody>';
+                        echo '</table>';
+                    } else {
+                        echo "<p>No orders found.</p>";
                     }
-                    echo '</tbody>';
-                    echo '</table>';
-                } else {
-                    echo "<p>No orders found.</p>";
+                } catch (PDOException $e) {
+                    echo "Error: " . $e->getMessage();
                 }
 
-                // Close connection
-                $conn->close();
+                // Release the PDO connection
+                $conn = null;
                 ?>
             </div>
         </div>
