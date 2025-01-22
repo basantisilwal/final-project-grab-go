@@ -201,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="das.php">Dashboard</a>
             <a href="addfood.php">Add Food</a>
             <a href="viewfood.php">View Food</a>
-            <a href="#">View Order</a>
+            <a href="vieworder.php">View Order</a>
             <a href="managepayment.php">View Payment</a>
             <a href="account.php">Account</a>
             <a href="updateprofile.php">Profile</a>

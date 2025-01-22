@@ -122,7 +122,7 @@
     <a href="das.php">Dashboard</a>
     <a href="addfood.php">Add Food</a>
     <a href="viewfood.php">View food</a>
-    <a href="#">View Order</a>
+    <a href="vieworder.php">View Order</a>
     <a href="managepayment.php">View payment</a>
     <a href="account.php">Account</a>
     <a href="updateprofile.php">Profile</a>

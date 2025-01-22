@@ -1,3 +1,4 @@
+<?php include('../conn/conn.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,46 +92,37 @@
             color: #ff5722;
             font-weight: bold;
         }
-
         .form-container {
-    max-width: 500px; /* Decrease max width */
-    padding: 50px; /* Further reduced padding */
-}
-
-.form-group {
-    margin-bottom: 8px; /* Smaller spacing between fields */
-}
-
-.form-group label {
-    font-size: 12px; /* Smaller font for labels */
-    margin-bottom: 3px; /* Reduced margin below labels */
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 6px; /* Smaller padding for input fields */
-    font-size: 12px; /* Smaller font size for input fields */
-}
-
-.form-group textarea {
-    height: 15px; /* Reduced height for textareas */
-}
-
-.form-group button {
-    padding: 8px; /* Reduced padding for buttons */
-    font-size: 12px; /* Smaller button font size */
-}
-#qrCodeContainer {
+            max-width: 500px;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+        }
+        .form-group button {
+            padding: 10px;
+            font-size: 14px;
+        }
+        #qrCodeContainer {
             display: none;
             text-align: center;
         }
-
         #qrCodeImage {
             width: 200px;
             height: 200px;
         }
+
+       
 
         footer {
             text-align: center;
@@ -150,6 +142,9 @@
         </form>
     </div>
 </header>
+<?php
+include('../conn/conn.php'); // Database connection
+?>
 
 <section class="restaurants">
     <h2>Order Food Online Near You</h2>
@@ -214,8 +209,54 @@
         </div>
     </div>
 </div>
-
 <!-- Order Form Modal -->
+
+<?php
+// Include the database connection file
+include('../conn/conn.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try {
+        // Retrieve form inputs
+        $name = $_POST['name'];
+        $phone = $_POST['phone'];
+        $foodDescription = $_POST['foodDescription'];
+        $quantity = intval($_POST['quantity']);
+        $orderType = $_POST['orderType'];
+        $address = $orderType === 'delivery' ? $_POST['address'] : null;
+        $time = !empty($_POST['time']) ? $_POST['time'] : null;
+        $paymentMethod = $_POST['paymentMethod'];
+
+        // Prepare the SQL query
+        $sql = "INSERT INTO tbl_order (name, phone, food_description, quantity, order_type, address, preferred_time, payment_method)
+                VALUES (:name, :phone, :foodDescription, :quantity, :orderType, :address, :time, :paymentMethod)";
+        
+        // Prepare the statement
+        $stmt = $conn->prepare($sql);
+
+        // Bind parameters to the statement
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':foodDescription', $foodDescription);
+        $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+        $stmt->bindParam(':orderType', $orderType);
+        $stmt->bindParam(':address', $address);
+        $stmt->bindParam(':time', $time);
+        $stmt->bindParam(':paymentMethod', $paymentMethod);
+
+        // Execute the statement
+        $stmt->execute();
+
+        echo "Order successfully placed!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+} else {
+    echo "Invalid request method.";
+}
+?>
+
+
 <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -224,7 +265,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h1>Food Order</h1>
-                    <form id="orderForm" method="POST" action="submit_order.php">
+                    <form id="orderForm" method="POST" action="">
                         <div class="form-group">
                             <label for="name">Name:</label>
                             <input type="text" id="name" name="name" class="form-control" required>
@@ -234,10 +275,12 @@
                             <input type="tel" id="phone" name="phone" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="foodItems">Food Items:</label>
+                            <label for="foodDescription">Food Items:</label>
+                            <textarea id="foodDescription" name="foodDescription" class="form-control" placeholder="Enter food item details" required></textarea>
+                        </div>
+                        <div class="form-group">
                             <label for="quantity">Quantity:</label>
-                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="1" placeholder="Enter food item details"></textarea>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1">
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" required>
                         </div>
                         <div class="form-group">
                             <label for="orderType">Order Type:</label>
@@ -248,14 +291,14 @@
                         </div>
                         <div class="form-group" id="addressGroup" style="display: none;">
                             <label for="address">Delivery Address:</label>
-                            <textarea id="address" name="address" class="form-control"></textarea>
+                            <textarea id="address" name="address" class="form-control" placeholder="Enter your address"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="time">Preferred Time:</label>
                             <input type="time" id="time" name="time" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Payment Method:</label>
+                            <label for="paymentMethod">Payment Method:</label>
                             <select id="paymentMethod" name="paymentMethod" class="form-control" required>
                                 <option value="online">Online Payment</option>
                                 <option value="cash">Cash on Delivery</option>
@@ -274,7 +317,7 @@
             </div>
         </div>
     </div>
-        
+
 <footer>
     <p>&copy; 2024 Grab & Go</p>
 </footer>
@@ -320,13 +363,91 @@
                 }
             });
 
-            const orderType = document.getElementById("orderType");
-            const addressGroup = document.getElementById("addressGroup");
+        });
+        const openOrderFormButton = document.getElementById('openOrderForm');
 
-            orderType.addEventListener("change", function () {
-                addressGroup.style.display = this.value === "delivery" ? "block" : "none";
+        // Add click event listener
+        openOrderFormButton.addEventListener('click', () => {
+            // Hide the current modal (#foodModal)
+            $('#foodModal').modal('hide');
+
+            // Wait for the current modal to close, then show the order modal (#orderModal)
+            $('#foodModal').on('hidden.bs.modal', () => {
+                $('#orderModal').modal('show');
             });
         });
+        const orderType = document.getElementById('orderType');
+            const addressGroup = document.getElementById('addressGroup');
+            const paymentMethod = document.getElementById('paymentMethod');
+            const qrCodeContainer = document.getElementById('qrCodeContainer');
+
+            // Show/hide delivery address field based on initial order type
+            if (orderType.value === 'delivery') {
+                addressGroup.style.display = 'block';
+            }
+
+            // Show/hide delivery address field when order type changes
+            orderType.addEventListener('change', () => {
+                addressGroup.style.display = orderType.value === 'delivery' ? 'block' : 'none';
+            });
+
+            // Show/hide QR code for online payment
+            paymentMethod.addEventListener('change', () => {
+                qrCodeContainer.style.display = paymentMethod.value === 'online' ? 'block' : 'none';
+            });
+            const orderForm = document.getElementById("orderForm");
+
+    });
+    document.getElementById('orderType').addEventListener('change', function () {
+        const addressGroup = document.getElementById('addressGroup');
+        addressGroup.style.display = this.value === 'delivery' ? 'block' : 'none';
+    });
+
+    // Handle form submission with AJAX
+    const orderForm = document.getElementById("orderForm");
+    orderForm.addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        const formData = new FormData(orderForm);
+
+        fetch(orderForm.action, {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                if (data.includes("Order successfully placed!")) {
+                    alert("Order successfully placed!");
+                    const orderModal = new bootstrap.Modal(document.getElementById("orderModal"));
+                    orderModal.hide();
+                    orderForm.reset();
+                } else {
+                    alert("An error occurred: " + data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("An unexpected error occurred. Please try again.");
+            });
+    });
+
+    // Show/hide QR Code container based on payment method
+    document.getElementById('paymentMethod').addEventListener('change', function () {
+        const qrCodeContainer = document.getElementById('qrCodeContainer');
+        qrCodeContainer.style.display = this.value === 'online' ? 'block' : 'none';
+    });
+
+    // Show or hide address field based on order type
+    const orderTypeField = document.getElementById("orderType");
+    const addressGroup = document.getElementById("addressGroup");
+
+    orderTypeField.addEventListener("change", function () {
+        if (orderTypeField.value === "delivery") {
+            addressGroup.style.display = "block";
+        } else {
+            addressGroup.style.display = "none";
+        }
+    });
     });
 </script>
 </body>
