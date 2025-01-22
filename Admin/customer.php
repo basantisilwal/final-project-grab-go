@@ -130,6 +130,7 @@
                         <td><?= htmlspecialchars($user['contact_number']); ?></td>
                         <td><?= htmlspecialchars($user['email']); ?></td>
                         <td><?= htmlspecialchars($user['username']); ?></td>
+                        
                         <td>
                             <button onclick="updateUser(<?= $user['tbl_user_id']; ?>)" class="btn btn-primary btn-sm">Edit</button>
                             <button onclick="deleteUser(<?= $user['tbl_user_id']; ?>)" class="btn btn-danger btn-sm">Delete</button>
