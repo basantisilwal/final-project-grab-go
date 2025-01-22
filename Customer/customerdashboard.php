@@ -130,7 +130,7 @@ include('../conn/conn.php'); // Database connection
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $imagePath = "uploads/" . htmlspecialchars($row['image']);
                 if (!file_exists($imagePath) || empty($row['image'])) {
-                    $imagePath = "https://via.placeholder.com/150";
+                    $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);   
                 }
                 ?>
                 <div class="restaurant" data-toggle="modal" data-target="#foodModal" 
@@ -192,7 +192,7 @@ include('../conn/conn.php'); // Database connection
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById('foodModal');
-        $('#foodModal').on('show.bs.modal', function (event) {
+         $('#foodModal').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
             document.getElementById('modalFoodName').textContent = button.data('name');
             document.getElementById('modalFoodCategory').textContent = button.data('category');
