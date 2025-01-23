@@ -136,12 +136,20 @@
     <div class="logo">GRAB & GO</div>
     <div class="location">Damauli, Tanahun</div>
     <div class="search">
+        <!-- Notification Icon -->
+        <div class="notification">
+            <button id="notificationButton">
+                <img src="path-to-notification-icon.png" alt="Notifications">
+            </button>
+        </div>
+         <!-- Search Form -->
         <form method="GET" action="search.php">
             <input type="text" name="search" placeholder="Search for restaurant, cuisine or dish" id="searchBar">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
     </div>
 </header>
+
 <?php
 include('../conn/conn.php'); // Database connection
 ?>
