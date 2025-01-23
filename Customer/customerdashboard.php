@@ -10,7 +10,42 @@
         body {
             font-family: Arial, sans-serif;
         }
+        .navbar {
+        background-color: #f7e4a3; 
+        color: #000; /* Text color */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
+    .navbar .navbar-brand {
+        color: #000/* Brand text color */
+    }
+
+    .navbar .navbar-brand:hover {
+        color: #000;; /* Slightly lighter color on hover */
+    }
+
+    .navbar .form-control {
+        background-color: #fff; /* White search bar */
+        color: #000; /* Black text in search bar */
+    }
+
+    .btn-outline-primary {
+        color: #000; /* White button text */
+        border-color: #000; /* White border */
+    }
+
+    .btn-outline-primary:hover {
+        background-color: white; /* White background on hover */
+        color: #000; 
+    }
+
+    .navbar-toggler {
+        border: 1px solid white; /* White border for toggler */
+    }
+
+    .navbar-toggler-icon {
+        background-color: white; /* White toggler icon */
+    }
         #bell {
             width: 25px;
             height: 25px;
@@ -106,6 +141,7 @@
     </style>
 </head>
 <body>
+     <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <!-- Logo Section -->
@@ -194,9 +230,21 @@ include('../conn/conn.php'); // Database connection
 <?php
 // Include the database connection file
 include('../conn/conn.php');
+session_start();
 
-$response = "";
+// Generate CSRF Token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Handle form submission
+$response = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // CSRF Token Validation
+    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("Invalid CSRF token.");
+    }
+
     try {
         // Retrieve form inputs
         $name = $_POST['name'];
@@ -204,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $foodDescription = $_POST['foodDescription'];
         $quantity = intval($_POST['quantity']);
         $orderType = $_POST['orderType'];
-        $address = $orderType === 'delivery' ? $_POST['address'] : null;
+        $address = $orderType === 'delivery' && !empty($_POST['address']) ? $_POST['address'] : null;
         $time = !empty($_POST['time']) ? $_POST['time'] : null;
         $paymentMethod = $_POST['paymentMethod'];
 
@@ -212,7 +260,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO tbl_order (name, phone, food_description, quantity, order_type, address, preferred_time, payment_method)
                 VALUES (:name, :phone, :foodDescription, :quantity, :orderType, :address, :time, :paymentMethod)";
         
-        // Prepare the statement
         $stmt = $conn->prepare($sql);
 
         // Bind parameters to the statement
@@ -226,75 +273,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':paymentMethod', $paymentMethod);
 
         // Execute the statement
-        try {
-            // Your database insertion code remains the same.
-            $response = "Order successfully placed!";
-        } catch (PDOException $e) {
-            $response = "Error: " . $e->getMessage();
-        }
+        $stmt->execute();
+        $response = "Order successfully placed!";
+    } catch (PDOException $e) {
+        $response = "Error: " . $e->getMessage();
+    }
 }
 ?>
 
 
         <!-- Order Form Modal -->
-        <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <?php if (!empty($response)): ?>
+        <div class="alert alert-info"><?php echo htmlspecialchars($response); ?></div>
+    <?php endif; ?>
+
+    <!-- Order Form Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="form-container">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h1>Food Order</h1>
-                    <form id="orderForm" method="POST" action="submit_order.php">
-                        <div class="form-group">
-                            <label for="name">Name:</label>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Place Your Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="orderForm" method="POST" action="">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name:</label>
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number:</label>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone Number:</label>
                             <input type="tel" id="phone" name="phone" class="form-control" required>
                         </div>
-                        <div class="form-group">
-                            <label for="foodItems">Food Items:</label>
-                            <label for="quantity">Quantity:</label>
-                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="1" placeholder="Enter food item details"></textarea>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1">
+                        <div class="mb-3">
+                            <label for="foodDescription" class="form-label">Food Description:</label>
+                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="2" required></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="orderType">Order Type:</label>
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orderType" class="form-label">Order Type:</label>
                             <select id="orderType" name="orderType" class="form-control" required>
                                 <option value="pickup">Pickup</option>
                                 <option value="delivery">Delivery</option>
                             </select>
                         </div>
-                        <div class="form-group" id="addressGroup" style="display: none;">
-                            <label for="address">Delivery Address:</label>
+                        <div class="mb-3" id="addressGroup" style="display: none;">
+                            <label for="address" class="form-label">Delivery Address:</label>
                             <textarea id="address" name="address" class="form-control"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="time">Preferred Time:</label>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Preferred Time:</label>
                             <input type="time" id="time" name="time" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label>Payment Method:</label>
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method:</label>
                             <select id="paymentMethod" name="paymentMethod" class="form-control" required>
                                 <option value="online">Online Payment</option>
                                 <option value="cash">Cash on Delivery</option>
                             </select>
                         </div>
-                        <div class="form-group" id="qrCodeContainer">
+                        <div class="mb-3" id="qrCodeContainer" style="display: none;">
                             <label>Scan the QR Code to Pay:</label>
                             <img id="qrCodeImage" src="images/download.png" alt="QR Code">
                         </div>
-                        <div class="form-group">
+                        <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Submit Order</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
 
@@ -427,6 +482,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }, 3000);
             });
         });
+        document.getElementById('orderType').addEventListener('change', function () {
+        const addressGroup = document.getElementById('addressGroup');
+        addressGroup.style.display = this.value === 'delivery' ? 'block' : 'none';
+    });
         
 </script>
 </body>
