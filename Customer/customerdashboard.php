@@ -11,41 +11,15 @@
             font-family: Arial, sans-serif;
         }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f7e4a3;
-            padding: 10px 20px;
+        #bell {
+            width: 25px;
+            height: 25px;
+            margin-left: 10px;
+            cursor: pointer;
         }
-
-        .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ff5722;
+        .search-container input {
+            width: 300px;
         }
-
-        .location {
-            font-size: 1em;
-            color: #333;
-        }
-
-        .search input {
-            padding: 5px;
-            font-size: 1em;
-            width: 250px;
-        }
-
-        .search button {
-            padding: 5px 10px;
-            font-size: 1em;
-        }
-
-        section.restaurants {
-            padding: 20px;
-            text-align: center;
-        }
-
         .restaurant-list {
             display: flex;
             flex-wrap: wrap;
@@ -132,24 +106,22 @@
     </style>
 </head>
 <body>
-<header>
-    <div class="logo">GRAB & GO</div>
-    <div class="location">Damauli, Tanahun</div>
-    <div class="search">
-        <!-- Notification Icon -->
-        <div class="notification">
-            <button id="notificationButton">
-                <img src="path-to-notification-icon.png" alt="Notifications">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <!-- Logo Section -->
+            <a class="navbar-brand logo" href="#">GRAB & GO</a>
+            
+            <!-- Toggler for small screens -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
-         <!-- Search Form -->
-        <form method="GET" action="search.php">
-            <input type="text" name="search" placeholder="Search for restaurant, cuisine or dish" id="searchBar">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-    </div>
-</header>
-
+            <form class="d-flex search-container" method="GET" action="search.php">
+                    <input class="form-control me-2" type="text" name="search" placeholder="Search for restaurant, cuisine or dish" id="searchBar">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                    <img id="bell" src="../images/bell.png" alt="Notification Bell">
+                </form>
+            </div>
+    </nav>
 <?php
 include('../conn/conn.php'); // Database connection
 ?>
@@ -223,6 +195,7 @@ include('../conn/conn.php'); // Database connection
 // Include the database connection file
 include('../conn/conn.php');
 
+$response = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Retrieve form inputs
@@ -253,19 +226,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':paymentMethod', $paymentMethod);
 
         // Execute the statement
-        $stmt->execute();
-
-        echo "Order successfully placed!";
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
-} else {
-    echo "Invalid request method.";
+        try {
+            // Your database insertion code remains the same.
+            $response = "Order successfully placed!";
+        } catch (PDOException $e) {
+            $response = "Error: " . $e->getMessage();
+        }
 }
 ?>
 
 
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+        <!-- Order Form Modal -->
+        <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="form-container">
@@ -273,7 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h1>Food Order</h1>
-                    <form id="orderForm" method="POST" action="">
+                    <form id="orderForm" method="POST" action="submit_order.php">
                         <div class="form-group">
                             <label for="name">Name:</label>
                             <input type="text" id="name" name="name" class="form-control" required>
@@ -283,12 +255,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="tel" id="phone" name="phone" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="foodDescription">Food Items:</label>
-                            <textarea id="foodDescription" name="foodDescription" class="form-control" placeholder="Enter food item details" required></textarea>
-                        </div>
-                        <div class="form-group">
+                            <label for="foodItems">Food Items:</label>
                             <label for="quantity">Quantity:</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" required>
+                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="1" placeholder="Enter food item details"></textarea>
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1">
                         </div>
                         <div class="form-group">
                             <label for="orderType">Order Type:</label>
@@ -299,14 +269,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="form-group" id="addressGroup" style="display: none;">
                             <label for="address">Delivery Address:</label>
-                            <textarea id="address" name="address" class="form-control" placeholder="Enter your address"></textarea>
+                            <textarea id="address" name="address" class="form-control"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="time">Preferred Time:</label>
                             <input type="time" id="time" name="time" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="paymentMethod">Payment Method:</label>
+                            <label>Payment Method:</label>
                             <select id="paymentMethod" name="paymentMethod" class="form-control" required>
                                 <option value="online">Online Payment</option>
                                 <option value="cash">Cash on Delivery</option>
@@ -325,6 +295,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
+
+
 
 <footer>
     <p>&copy; 2024 Grab & Go</p>
@@ -406,57 +378,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const orderForm = document.getElementById("orderForm");
 
     });
-    document.getElementById('orderType').addEventListener('change', function () {
-        const addressGroup = document.getElementById('addressGroup');
-        addressGroup.style.display = this.value === 'delivery' ? 'block' : 'none';
-    });
+    $(document).ready(function () {
+            // Handle form submission
+            $('#orderForm').on('submit', function (e) {
+                e.preventDefault(); // Prevent default form submission
 
-    // Handle form submission with AJAX
-    const orderForm = document.getElementById("orderForm");
-    orderForm.addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent the default form submission
+                const formData = $(this).serialize(); // Serialize form data
 
-        const formData = new FormData(orderForm);
-
-        fetch(orderForm.action, {
-            method: "POST",
-            body: formData,
-        })
-            .then((response) => response.text())
-            .then((data) => {
-                if (data.includes("Order successfully placed!")) {
-                    alert("Order successfully placed!");
-                    const orderModal = new bootstrap.Modal(document.getElementById("orderModal"));
-                    orderModal.hide();
-                    orderForm.reset();
-                } else {
-                    alert("An error occurred: " + data);
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("An unexpected error occurred. Please try again.");
+                // Send AJAX request
+                $.ajax({
+                    url: '', // Submit to the same file
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        try {
+                            const data = JSON.parse(response);
+                            if (data.success) {
+                                $('#successMessage').show();
+                                $('#errorMessage').hide();
+                                $('#orderForm')[0].reset(); // Reset form
+                            } else {
+                                $('#successMessage').hide();
+                                $('#errorMessage').text(data.message).show();
+                            }
+                        } catch (e) {
+                            $('#successMessage').hide();
+                            $('#errorMessage').text("Error processing the request.").show();
+                        }
+                    },
+                    error: function () {
+                        $('#successMessage').hide();
+                        $('#errorMessage').text("Error sending the request.").show();
+                    }
+                });
             });
-    });
 
-    // Show/hide QR Code container based on payment method
-    document.getElementById('paymentMethod').addEventListener('change', function () {
-        const qrCodeContainer = document.getElementById('qrCodeContainer');
-        qrCodeContainer.style.display = this.value === 'online' ? 'block' : 'none';
-    });
-
-    // Show or hide address field based on order type
-    const orderTypeField = document.getElementById("orderType");
-    const addressGroup = document.getElementById("addressGroup");
-
-    orderTypeField.addEventListener("change", function () {
-        if (orderTypeField.value === "delivery") {
-            addressGroup.style.display = "block";
-        } else {
-            addressGroup.style.display = "none";
-        }
-    });
-    });
+            // Toggle address field
+            $('#orderType').on('change', function () {
+                const addressGroup = $('#addressGroup');
+                if ($(this).val() === 'delivery') {
+                    addressGroup.show();
+                } else {
+                    addressGroup.hide();
+                }
+                 // Hide the response message after 3 seconds
+            setTimeout(function () {
+                $('#responseMessage').fadeOut('slow');
+            }, 3000);
+            });
+        });
+        
 </script>
 </body>
 </html>
