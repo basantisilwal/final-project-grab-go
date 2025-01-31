@@ -12,123 +12,128 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         /* General Styles */
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grab&Go - Food Delivery</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* General Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: #f7e4a3;
+            color: #5a3e2b;
         }
 
         .navbar {
-            background-color: #1e293b;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #603813;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
             font-family: 'Lora', serif;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #fbbf24;
+            color: #f7e4a3;
         }
 
         .nav-link {
-            color: white !important;
-            margin-right: 15px;
+            color: #f7e4a3 !important;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
 
         .nav-link:hover {
-            color: #fbbf24 !important;
+            color: #c69c6d !important;
         }
 
-        .carousel-item img {
-            object-fit: cover;
-            height: 70vh;
-        }
-
-        /* Hero Section */
         #home {
-            background: linear-gradient(135deg, #1e293b, #fbbf24);
-            color: white;
-            padding: 100px 0;
+            background: linear-gradient(135deg, #f7e4a3, #e8dbc5);
+            color: #5a3e2b;
+            padding: 120px 0;
             text-align: center;
         }
 
         #home h1 {
             font-family: 'Lora', serif;
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: bold;
         }
 
         #home .btn {
-            background-color: #fbbf24;
+            background-color: #603813;
             border: none;
-            font-weight: 600;
-            padding: 15px 30px;
+            font-weight: 700;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            color: white;
+            border-radius: 30px;
+            transition: background 0.3s;
         }
 
         #home .btn:hover {
-            background-color: #d19d1e;
+            background-color: #3b3a36;
         }
 
-        /* About Section */
-        #about {
-            padding: 60px 0;
-        }
-
-        #about h1 {
-            font-family: 'Lora', serif;
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        #about p {
-            line-height: 1.8;
-        }
-
-        /* Contact Section */
-        #contact {
-            background-color: #1e293b;
-            color: white;
-            padding: 60px 0;
-        }
-
-        #contact h2 {
-            font-family: 'Lora', serif;
-            font-size: 2.5rem;
-            font-weight: bold;
+        #about, #contact {
+            padding: 80px 0;
+            background-color: #fffaf0;
             text-align: center;
-            margin-bottom: 30px;
+        }
+
+        #about h1, #contact h2 {
+            font-family: 'Lora', serif;
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #5a3e2b;
+        }
+
+        #contact {
+            background-color: #c69c6d;
+            color: white;
         }
 
         #contact .form-control {
-            border: none;
-            border-radius: 5px;
+            border: 2px solid #603813;
+            border-radius: 10px;
             padding: 15px;
         }
 
         #contact .btn {
-            background-color: #fbbf24;
+            background-color: #603813;
             border: none;
             font-weight: bold;
-            padding: 10px 20px;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            color: white;
         }
 
         #contact .btn:hover {
-            background-color: #d19d1e;
+            background-color: #3b3a36;
         }
 
-        /* Footer */
         footer {
-            background-color: #1e293b;
+            background-color: #603813;
             color: white;
-            padding: 20px 0;
+            padding: 25px 0;
             text-align: center;
+            font-size: 1.1rem;
         }
 
         footer a {
-            color: #fbbf24;
+            color: #f7e4a3;
             text-decoration: none;
-            margin: 0 10px;
+            font-weight: 600;
+            transition: color 0.3s;
         }
 
         footer a:hover {

@@ -82,15 +82,15 @@
             <div class="table-container">
                 <?php
                 try {
-                    // Query to fetch orders
+                    // Prepare SQL query to fetch orders
                     $sql = "SELECT id, name, phone, food_description, quantity, order_type, address, preferred_time, payment_method, created_at 
                             FROM tbl_order";
                     $stmt = $conn->query($sql);
 
-                    // Check if there are any orders
+                    // Check if there are orders
                     if ($stmt->rowCount() > 0) {
                         echo '<table class="table table-striped">';
-                        echo '<thead>';
+                        echo '<thead class="table-dark">';
                         echo '<tr>';
                         echo '<th>ID</th>';
                         echo '<th>Name</th>';
@@ -106,7 +106,7 @@
                         echo '</tr>';
                         echo '</thead>';
                         echo '<tbody>';
-                        // Output data of each row
+                        // Fetch and display orders
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo '<tr>';
                             echo '<td>' . htmlspecialchars($row["id"]) . '</td>';
@@ -131,10 +131,10 @@
                         echo "<p>No orders found.</p>";
                     }
                 } catch (PDOException $e) {
-                    echo "Error: " . $e->getMessage();
+                    echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
                 }
 
-                // Release the PDO connection
+                // Close the database connection
                 $conn = null;
                 ?>
             </div>
