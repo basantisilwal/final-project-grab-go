@@ -104,7 +104,7 @@ include('../conn/conn.php'); ?>
             </div>
         </div>
     </div>
-    <script>
+     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const orderType = document.getElementById('orderType');
             const addressGroup = document.getElementById('addressGroup');
