@@ -85,7 +85,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         /* Sidebar Styles */
         .sidebar {
             width: 250px;
-            background-color: #000;
+            background-color: #f7e4a3;
             color: #fff;
             display: flex;
             flex-direction: column;

@@ -18,7 +18,7 @@
 
         .sidebar {
             width: 250px;
-            background-color: #000;
+            background-color:  #f7e4a3;
             color: #fff;
             height: 100vh;
             display: flex;
@@ -35,7 +35,7 @@
         }
 
         .sidebar a {
-          color: #ff6700;
+          color: #000;
             text-decoration: none;
             padding: 10px 15px;
             border-radius: 5px;
@@ -45,7 +45,7 @@
         }
 
         .sidebar a:hover {
-            background-color: #ff6700;
+            background: color #000;;
             color: #fff;
         }
 
