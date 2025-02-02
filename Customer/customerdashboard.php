@@ -307,26 +307,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="mb-3">
                             <label for="foodDescription" class="form-label">Food Description:</label>
-                            <input type="foodDescription" id="foodDescription" name="foodDescription" class="form-control" required>
+                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="2" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="quantity" class="form-label">Quantity:</label>
                             <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1" required>
                         </div>
                         <div class="mb-3">
-                            <label for="payment" class="form-label">Payment Method:</label>
-                            <select id="payment" name="payment" class="form-control" required>
-                                <option value="cash">Hand Cash</option>
-                                <option value="online">Online Payment</option>
+                            <label for="orderType" class="form-label">Order Type:</label>
+                            <select id="orderType" name="orderType" class="form-control" required>
+                                <option value="pickup">Pickup</option>
+                                <option value="delivery">Delivery</option>
                             </select>
                         </div>
-                        <div class="mb-3" id="qrCodeContainer" style="display: none;">
-                        <label>Scan the QR Code to Pay:</label>
-                        <img id="qrCodeImage" src="/images/download.png" alt="QR Code">
+                        <div class="mb-3" id="addressGroup" style="display: none;">
+                            <label for="address" class="form-label">Delivery Address:</label>
+                            <textarea id="address" name="address" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="time" class="form-label">Preferred Time:</label>
                             <input type="time" id="time" name="time" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method:</label>
+                            <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+                                <option value="online">Online Payment</option>
+                                <option value="cash">Cash on Delivery</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="qrCodeContainer" style="display: none;">
+                            <label>Scan the QR Code to Pay:</label>
+                            <img id="qrCodeImage" src="images/download.png" alt="QR Code">
                         </div>
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Submit Order</button>
@@ -456,20 +467,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 });
             });
 
+            // Toggle address field
+            $('#orderType').on('change', function () {
+                const addressGroup = $('#addressGroup');
+                if ($(this).val() === 'delivery') {
+                    addressGroup.show();
+                } else {
+                    addressGroup.hide();
+                }
+                 // Hide the response message after 3 seconds
+            setTimeout(function () {
+                $('#responseMessage').fadeOut('slow');
+            }, 3000);
+            });
         });
-        document.addEventListener("DOMContentLoaded", function () {
-        const payment = document.getElementById("payment");
-        const qrCodeContainer = document.getElementById("qrCodeContainer");
-        const qrCodeImage = document.getElementById("qrCodeImage");
-
-        payment.addEventListener("change", function () {
-            if (payment.value === "online") {
-                qrCodeContainer.style.display = "block";
-                qrCodeImage.src = "images/download.png"; // Ensure this path is correct
-            } else {
-                qrCodeContainer.style.display = "none";
-            }
-        });
+        document.getElementById('orderType').addEventListener('change', function () {
+        const addressGroup = document.getElementById('addressGroup');
+        addressGroup.style.display = this.value === 'delivery' ? 'block' : 'none';
     });
         
 </script>
