@@ -28,35 +28,37 @@
         /* General Styles */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7e4a3;
-            color: #5a3e2b;
+            background-color: #FFDD57;
+            color: black;
         }
 
         .navbar {
-            background-color: #603813;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color:#f7e4a3;
+            box-shadow: 0 4px 6px black;
         }
 
         .navbar-brand {
             font-family: 'Lora', serif;
+            font-color:black;
             font-size: 1.8rem;
             font-weight: bold;
-            color: #f7e4a3;
+            
         }
 
         .nav-link {
-            color: #f7e4a3 !important;
-            font-weight: 600;
+            color:black !important;
+            
+            font-size: 1.1rem;
             transition: color 0.3s ease;
         }
 
         .nav-link:hover {
-            color: #c69c6d !important;
+            color:black !important;
         }
 
         #home {
-            background: linear-gradient(135deg, #f7e4a3, #e8dbc5);
-            color: #5a3e2b;
+            background: linear-gradient(135deg,rgba(0, 0, 0, 0.1), #FFDD57);
+            color:rgb(9, 4, 0);
             padding: 120px 0;
             text-align: center;
         }
@@ -68,7 +70,7 @@
         }
 
         #home .btn {
-            background-color: #603813;
+            background-color:rgb(12, 10, 0);
             border: none;
             font-weight: 700;
             padding: 15px 35px;
@@ -84,7 +86,7 @@
 
         #about, #contact {
             padding: 80px 0;
-            background-color: #fffaf0;
+            background-color:white;
             text-align: center;
         }
 
@@ -93,22 +95,22 @@
             font-size: 2.8rem;
             font-weight: bold;
             margin-bottom: 25px;
-            color: #5a3e2b;
+            color: black;
         }
 
         #contact {
-            background-color: #c69c6d;
+            background-color:#FFDD57;
             color: white;
         }
 
         #contact .form-control {
-            border: 2px solid #603813;
+            border: 2px solid black;
             border-radius: 10px;
             padding: 15px;
         }
 
         #contact .btn {
-            background-color: #603813;
+            background-color:rgb(5, 3, 0);
             border: none;
             font-weight: bold;
             padding: 12px 25px;
@@ -118,26 +120,26 @@
         }
 
         #contact .btn:hover {
-            background-color: #3b3a36;
+            background-color:rgb(12, 10, 0);
         }
 
         footer {
-            background-color: #603813;
-            color: white;
+            background-color:#f7e4a3;
+            color: black;
             padding: 25px 0;
             text-align: center;
             font-size: 1.1rem;
         }
 
         footer a {
-            color: #f7e4a3;
+            color: black;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s;
         }
 
         footer a:hover {
-            color: white;
+            color: black;
         }
     </style>
 </head>
@@ -145,7 +147,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
-    <a class="navbar-brand me-6 fq-bold fs-3" href="index.html">Grab and Go</a>
+    <a class="navbar-brand me-6 fq-bold fs-3">Grab and Go</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         

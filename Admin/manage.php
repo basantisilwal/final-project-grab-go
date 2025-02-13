@@ -64,34 +64,69 @@ if (isset($_GET['delete_id'])) {
             font-size: 0.9rem;
         }
         .sidebar {
-      width: 250px;
-      background-color: #000; /* Black background */
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 15px;
-    }
+            width: 250px;
+            background-color: #f7e4a3;
+            color: black;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-right: 2px solid #d4b870;
+            position: fixed;
+        }
 
-    .sidebar h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
+        /* Logo Styling */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    .sidebar a {
-      color: #ff6700; /* Orange text */
-      text-decoration: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      display: block;
-      transition: background 0.3s;
-    }
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
+        }
 
-    .sidebar a:hover {
-      background-color: #ff6700;
-      color: #fff;
-    }
+        /* Sidebar Header */
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d4b870;
+        }
+
+        /* Sidebar Links */
+        .sidebar a {
+            color: black;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s, padding-left 0.3s;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #d4b870;
+        }
+
+        /* Icons in Links */
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Hover Effects */
+        .sidebar a:hover {
+            background-color: black;
+            color: #fff;
+            padding-left: 20px;
+        }
+
+        .sidebar a:last-child {
+            border-bottom: none;
+        }
         .main-content {
             padding: 15px;
         }
@@ -99,15 +134,19 @@ if (isset($_GET['delete_id'])) {
 </head>
 <body>
     <div class="main-container d-flex">
-        <!-- Sidebar -->
-         <!-- Sidebar -->
-    <aside class="sidebar">
-    <h2>Admin Dashboard</h2>
-    <a href="admindashboard.php">Dashboard</a>
-    <a href="manage.php">Manage Restaurants</a>
-    <a href="customer.php">View Customers</a>
-    <a href="setting.php">Settings</a>
-    <a href="logout.php">Logout</a>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+        <div class="logo-container">
+            <img src="logo.png" alt="Admin Logo"> <!-- Replace with actual logo -->
+        </div>
+
+        <h2>Admin Dashboard</h2>
+
+        <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
+        <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
+        <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+        <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </aside>
 
         <!-- Main Content -->

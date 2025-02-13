@@ -23,7 +23,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: beige; 
+            background-color: #f7e4a3; 
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -32,7 +32,7 @@
 
         .login-form, .registration-form {
             backdrop-filter: blur(100px);
-            color: rgb(8, 7, 7);
+            color: rgb(7, 0, 0);
             padding: 40px;
             width: 500px;
             border: 2px solid;
@@ -41,8 +41,57 @@
         .switch-form-link {
             text-decoration: underline;
             cursor: pointer;
-            color: rgb(100, 100, 200);
+            color: rgb(1, 1, 11);
         }
+
+        /* Custom Dropdown Styling */
+        select {
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+            appearance: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        select option {
+            background-color: white;
+            color: black;
+        }
+
+        select option:checked,
+        select option:hover {
+            background-color: black;
+            color: white;
+        }
+        .login-btn {
+    background-color: black !important;
+    color: white !important;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #333 !important; /* Darker black on hover */
+}
+.register-btn {
+    background-color: black !important;
+    color: white !important;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.register-btn:hover {
+    background-color: #333 !important; /* Darker black on hover */
+}
     </style>
 </head>
 <body>

@@ -21,40 +21,73 @@
         /* Sidebar styling */
         .sidebar {
             width: 250px;
-            background-color: #000; /* Black background */
-            color: #fff;
-            height: 100%; /* Full height of the viewport */
+            background-color: #f7e4a3;
+            color: black;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             padding: 20px;
-            box-sizing: border-box;
+            border-right: 2px solid #d4b870;
+            position: fixed;
         }
 
-        .sidebar h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+        /* Logo Styling */
+        .logo-container {
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        .sidebar a {
-            color: #ff6700; /* Orange links */
-            text-decoration: none;
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
+        }
+
+        /* Sidebar Header */
+        .sidebar h2 {
+            font-size: 1.4rem;
             margin-bottom: 15px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: block;
-            transition: background 0.3s;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d4b870;
         }
 
+        /* Sidebar Links */
+        .sidebar a {
+            color: black;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s, padding-left 0.3s;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #d4b870;
+        }
+
+        /* Icons in Links */
+        .sidebar a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Hover Effects */
         .sidebar a:hover {
-            background-color: #ff6700;
+            background-color: black;
             color: #fff;
+            padding-left: 20px;
+        }
+
+        .sidebar a:last-child {
+            border-bottom: none;
         }
 
         /* Main content styling */
         .content {
             flex-grow: 1; /* Content takes remaining space */
-            padding: 20px;
+            padding: 50px;
             background-color: #f9f9f9; /* Light background */
             overflow-y: auto; /* Scroll if content overflows */
         }
@@ -65,19 +98,19 @@
 
         /* Table styling */
         table {
-            width: 100%;
+            width: 70%;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
         table th, table td {
-            padding: 10px;
+            padding: 20px;
             text-align: center;
             border: 1px solid #ddd;
         }
 
         table th {
-            background-color: #007bff;
+            background-color:rgb(1, 7, 13);
             color: #fff;
         }
 
@@ -88,14 +121,19 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar">
+   <!-- Sidebar -->
+   <aside class="sidebar">
+        <div class="logo-container">
+            <img src="logo.png" alt="Admin Logo"> <!-- Replace with actual logo -->
+        </div>
+
         <h2>Admin Dashboard</h2>
-        <a href="admindashboard.php">Dashboard</a>
-        <a href="manage.php">Manage Restaurants</a>
-        <a href="customer.php">View Customers</a>
-        <a href="setting.php">Settings</a>
-        <a href="logout.php">Logout</a>
+
+        <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
+        <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
+        <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+        <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
     </aside>
 
     <!-- Main Content -->
@@ -132,7 +170,6 @@
                         <td><?= htmlspecialchars($user['username']); ?></td>
                         
                         <td>
-                            <button onclick="updateUser(<?= $user['tbl_user_id']; ?>)" class="btn btn-primary btn-sm">Edit</button>
                             <button onclick="deleteUser(<?= $user['tbl_user_id']; ?>)" class="btn btn-danger btn-sm">Delete</button>
                         </td>
                     </tr>
