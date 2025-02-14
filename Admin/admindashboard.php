@@ -13,21 +13,23 @@
         /* General Styles */
         body {
             font-size: 0.9rem;
-            background-color: #f7e4a3;
+            background-color: #FFE0B2;
             display: flex;
         }
 
         /* Sidebar Styles */
         .sidebar {
             width: 250px;
-            background-color: #f7e4a3;
-            color: black;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            border-right: 2px solid #d4b870;
-            position: fixed;
+    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
         }
 
         /* Logo Styling */

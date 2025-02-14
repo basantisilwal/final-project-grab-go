@@ -66,13 +66,17 @@ if ($row = mysqli_fetch_assoc($result)) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         .sidebar {
-      width: 250px;
-      background-color: #000; /* Black background */
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 15px;
+            width: 250px;
+    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
     }
 
     .sidebar h2 {

@@ -65,7 +65,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #FFE0B2;
             color: #333;
         }
 
@@ -84,43 +84,58 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         /* Sidebar Styles */
         .sidebar {
-            width: 250px;
-            background-color: #f7e4a3;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 15px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-        }
+    width: 250px;
+    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+}
 
-        .sidebar h2 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
+.sidebar h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1px;
+}
 
-        .sidebar a {
-            color: #ff6700;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: block;
-            transition: background 0.3s;
-        }
+.sidebar a {
+    color: #000;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: all 0.3s ease-in-out;
+    font-weight: 500;
+}
 
-        .sidebar a:hover {
-            background-color: #ff6700;
-            color: #fff;
-        }
+.sidebar a:hover {
+    background: #000; /* Semi-transparent hover effect */
+    color: #fff;
+    transform: translateX(5px); /* Subtle movement effect */
+}
+
+/* Optional: Add icons next to menu items */
+.sidebar a i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
 
         /* Content Styles */
         .container {
             flex-grow: 1;
             margin-left: 250px; /* Offset for fixed sidebar */
-            max-width: 600px; /* Limit the width of the content */
+            max-width: 800px; /* Limit the width of the content */
             margin: auto; /* Center the content */
             padding: 15px;
             background: #fff;
@@ -131,7 +146,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         h1 {
             text-align: center;
-            color: #333;
+            color: #000;
             font-size: 1.5rem;
         }
 
@@ -156,7 +171,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .form-group textarea {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #000;
             border-radius: 4px;
             font-size: 0.9rem;
         }
@@ -168,7 +183,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .form-group #imagePreview {
             margin-top: 10px;
             max-height: 100px;
-            border: 1px dashed #ccc;
+            border: 1px dashed #000;
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -181,7 +196,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         button {
-            background: #28a745;
+            background: #000;
             color: #fff;
             padding: 8px;
             border: none;
@@ -192,7 +207,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         button:hover {
-            background: #218838;
+            background: #000;
         }
     </style>
 </head>
@@ -200,16 +215,16 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="main-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h2>Restaurant Dashboard</h2>
-            <a href="das.php">Dashboard</a>
-            <a href="addfood.php">Add Food</a>
-            <a href="viewfood.php">View Food</a>
-            <a href="#">View Order</a>
-            <a href="managepayment.php">View Payment</a>
-            <a href="account.php">Account</a>
-            <a href="updateprofile.php">Profile</a>
-            <a href="logout.php">Logout</a>
-        </aside>
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+<a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
+<a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
+<a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+<a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
+<a href="account.php"><i class="fas fa-user"></i> Account</a>
+<a href="updateprofile.php"><i class="fas fa-cog"></i> Profile</a>
+<a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</aside>
 
 <body>
     <div class="container mt-4">

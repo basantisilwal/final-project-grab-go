@@ -83,35 +83,75 @@ function sendSMS($to, $message, $sid, $token, $from) {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color:#FFE0B2;
             color: #333;
         }
         .main-layout { display: flex; height: 100vh; }
         .sidebar {
-            width: 250px; background-color: #f7e4a3; color: #333;
-            padding: 20px 15px; position: fixed; height: 100%;
-        }
-        .sidebar a {
-            color: #ff6700; text-decoration: none; padding: 10px 15px; display: block; margin-bottom: 10px;
-        }
-        .sidebar a:hover { background-color: #ff6700; color: #fff; }
+    width: 250px;
+    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #000;
+}
+
+.sidebar a {
+    color: #000;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: all 0.3s ease-in-out;
+    font-weight: 500;
+}
+
+.sidebar a:hover {
+    background: #000; /* Semi-transparent hover effect */
+    color: #fff;
+    transform: translateX(5px); /* Subtle movement effect */
+}
+
+/* Optional: Add icons next to menu items */
+.sidebar a i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
         .content { margin-left: 270px; padding: 20px; }
         .table-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
     </style>
 </head>
 <body>
     <div class="main-layout">
-        <aside class="sidebar">
-            <h2>Restaurant Dashboard</h2>
-            <a href="das.php">Dashboard</a>
-            <a href="addfood.php">Add Food</a>
-            <a href="viewfood.php">View Food</a>
-            <a href="vieworder.php">View Order</a>
-            <a href="managepayment.php">View Payment</a>
-            <a href="account.php">Account</a>
-            <a href="updateprofile.php">Profile</a>
-            <a href="#">Logout</a>
-        </aside>
+    <aside class="sidebar">
+    <h2>Restaurant Dashboard</h2>
+    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+<a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
+<a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
+<a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+<a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
+<a href="account.php"><i class="fas fa-user"></i> Account</a>
+<a href="updateprofile.php"><i class="fas fa-cog"></i> Profile</a>
+<a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</aside>
         <div class="content">
             <h1>View Orders</h1>
             <div class="table-container">
