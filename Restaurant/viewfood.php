@@ -90,7 +90,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 20px 15px;
+    padding: 20px;
     position: fixed;
     top: 0;
     left: 0;
@@ -98,7 +98,7 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 .sidebar h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
     margin-bottom: 20px;
     text-transform: uppercase;
