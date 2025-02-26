@@ -16,38 +16,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Update Restaurant
         $id = intval($_POST['id']);
         $stmt = $conn->prepare("UPDATE tbl_restaurantname SET name=?, address=?, date=?, time=?, email=?, contact_number=? WHERE r_id=?");
-        if ($stmt->execute([$name, $address, $date, $time, $email, $contact, $id])) {
-            header("Location: manage.php");
-            exit;
-        } else {
-            error_log("Failed to update restaurant with ID: $id");
-        }
+        $stmt->execute([$name, $address, $date, $time, $email, $contact, $id]);
     } else {
         // Add New Restaurant
         $stmt = $conn->prepare("INSERT INTO tbl_restaurantname (name, address, date, time, email, contact_number) VALUES (?, ?, ?, ?, ?, ?)");
-        if ($stmt->execute([$name, $address, $date, $time, $email, $contact])) {
-            header("Location: manage.php");
-            exit;
-        } else {
-            error_log("Failed to add restaurant: " . implode(" ", $stmt->errorInfo()));
-        }
+        $stmt->execute([$name, $address, $date, $time, $email, $contact]);
     }
+    header("Location: manage.php");
+    exit;
 }
 
 // Handle Delete Request
 if (isset($_GET['delete_id'])) {
-    $id = intval($_GET['delete_id']); // Convert delete_id to an integer
-    if ($id > 0) {
-        $stmt = $conn->prepare("DELETE FROM tbl_restaurantname WHERE r_id=?");
-        if ($stmt->execute([$id])) {
-            header("Location: manage.php");
-            exit;
-        } else {
-            error_log("Failed to delete restaurant with ID: $id");
-        }
-    } else {
-        error_log("Invalid delete_id: $id");
-    }
+    $id = intval($_GET['delete_id']);
+    $stmt = $conn->prepare("DELETE FROM tbl_restaurantname WHERE r_id=?");
+    $stmt->execute([$id]);
+    header("Location: manage.php");
+    exit;
 }
 ?>
 
@@ -62,22 +47,50 @@ if (isset($_GET['delete_id'])) {
     <style>
         body {
             font-size: 0.9rem;
+            background-color: #FFE0B2;
         }
-        .sidebar {
-            width: 250px;
-    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 15px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+        .container {
+    padding: 8px; /* Reduce padding */
+    margin: auto;  /* Center align */
+    max-width: 720px; /* Reduce width */
+}
+
+        /* Text fields with black borders */
+        .form-control {
+            border: 2px solid black !important;
+            padding: 5px;
+            font-size: 14px;
         }
 
-        /* Logo Styling */
+        /* Button with black background */
+        .btn-primary {
+            background-color: black !important;
+            border: 2px solid black !important;
+            color: white;
+        }
+
+        /* Table with black borders */
+        .table {
+            border: 2px solid black !important;
+        }
+        .table th, .table td {
+            border: 2px solid black !important;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(135deg, #f7b733, #fc4a1a);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
+        }
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
@@ -88,73 +101,51 @@ if (isset($_GET['delete_id'])) {
             border-radius: 50%;
             border: 2px solid black;
         }
-
-        /* Sidebar Header */
+        .sidebar a {
+            color: black;
+            text-decoration: none;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
         .sidebar h2 {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             margin-bottom: 15px;
+            color: #000;
             font-weight: bold;
             text-align: center;
             padding-bottom: 10px;
             border-bottom: 2px solid #d4b870;
         }
-
-        /* Sidebar Links */
-        .sidebar a {
-            color: black;
-            text-decoration: none;
-            padding: 12px 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            transition: background 0.3s, padding-left 0.3s;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #d4b870;
-        }
-
-        /* Icons in Links */
-        .sidebar a i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        /* Hover Effects */
+        
         .sidebar a:hover {
             background-color: black;
             color: #fff;
-            padding-left: 20px;
         }
 
-        .sidebar a:last-child {
-            border-bottom: none;
-        }
-        .main-content {
-            padding: 15px;
-        }
     </style>
 </head>
 <body>
     <div class="main-container d-flex">
-  <!-- Sidebar -->
-  <aside class="sidebar">
+        <!-- Sidebar -->
+        <aside class="sidebar">
         <div class="logo-container">
             <img src="logo.png" alt="Admin Logo"> <!-- Replace with actual logo -->
         </div>
-
-        <h2>Admin Dashboard</h2>
-
-        <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
-        <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
-        <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
-        <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
-        <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
-    </aside>
+            <h2>Admin Dashboard</h2>
+            <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
+            <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
+            <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        </aside>
 
         <!-- Main Content -->
-        <div class="container mt-4">
+        <div class="main-content container mt-4">
             <h2>Add / Edit Restaurant</h2>
-            <form method="POST" id="restaurantForm">
+            <form method="POST">
                 <?php
                 $restaurant = null;
                 if (isset($_GET['edit_id'])) {
@@ -204,13 +195,12 @@ if (isset($_GET['delete_id'])) {
                 </thead>
                 <tbody>
                 <?php
-                try {
-                    $stmt = $conn->query("SELECT * FROM tbl_restaurantname");
-                    $restaurants = $stmt->fetchAll();
-                    if ($restaurants) {
-                        $sn = 1;
-                        foreach ($restaurants as $restaurant) {
-                            echo "<tr>
+                $stmt = $conn->query("SELECT * FROM tbl_restaurantname");
+                $restaurants = $stmt->fetchAll();
+                if ($restaurants) {
+                    $sn = 1;
+                    foreach ($restaurants as $restaurant) {
+                        echo "<tr>
                                 <td>{$sn}</td>
                                 <td>{$restaurant['name']}</td>
                                 <td>{$restaurant['address']}</td>
@@ -219,21 +209,14 @@ if (isset($_GET['delete_id'])) {
                                 <td>{$restaurant['email']}</td>
                                 <td>{$restaurant['contact_number']}</td>
                                 <td>
-                                    <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'>
-                                        <i class='bi bi-pencil'></i> 
-                                    </a>
-                                    <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'>
-                                        <i class='bi bi-trash'></i> 
-                                    </a>
+                                    <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'><i class='bi bi-pencil'></i></a>
+                                    <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'><i class='bi bi-trash'></i></a>
                                 </td>
                               </tr>";
-                            $sn++;
-                        }
-                    } else {
-                        echo "<tr><td colspan='8'>No restaurants found</td></tr>";
+                        $sn++;
                     }
-                } catch (PDOException $e) {
-                    echo "<tr><td colspan='8'>Error: " . $e->getMessage() . "</td></tr>";
+                } else {
+                    echo "<tr><td colspan='8'>No restaurants found</td></tr>";
                 }
                 ?>
                 </tbody>

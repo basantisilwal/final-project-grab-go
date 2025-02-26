@@ -19,20 +19,18 @@
 
         /* Sidebar Styles */
         .sidebar {
-            width: 250px;
-    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 15px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            width: 220px;
+            background: linear-gradient(135deg, #f7b733, #fc4a1a);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
         }
-
-        /* Logo Styling */
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
@@ -43,48 +41,29 @@
             border-radius: 50%;
             border: 2px solid black;
         }
-
-        /* Sidebar Header */
+        .sidebar a {
+            color: black;
+            text-decoration: none;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
         .sidebar h2 {
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             margin-bottom: 15px;
+            color: #000;
             font-weight: bold;
             text-align: center;
             padding-bottom: 10px;
             border-bottom: 2px solid #d4b870;
         }
-
-        /* Sidebar Links */
-        .sidebar a {
-            color: black;
-            text-decoration: none;
-            padding: 12px 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            transition: background 0.3s, padding-left 0.3s;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #d4b870;
-        }
-
-        /* Icons in Links */
-        .sidebar a i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        /* Hover Effects */
+        
         .sidebar a:hover {
             background-color: black;
             color: #fff;
-            padding-left: 20px;
         }
-
-        .sidebar a:last-child {
-            border-bottom: none;
-        }
-
         /* Main Content */
         .main-content {
             margin-left: 270px;

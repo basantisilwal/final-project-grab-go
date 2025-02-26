@@ -59,8 +59,8 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Food Items</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -84,61 +84,55 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         /* Sidebar Styles */
         .sidebar {
-    width: 250px;
-    background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
-    color: #fff;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-}
+            width: 250px;
+            background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+        }
 
-.sidebar h2 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 1px;
-}
+        .sidebar h2 {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 1px;
+        }
 
-.sidebar a {
-    color: #000;
-    text-decoration: none;
-    padding: 12px 15px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    font-size: 1.1rem;
-    transition: all 0.3s ease-in-out;
-    font-weight: 500;
-}
+        .sidebar a {
+            color: #000;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            transition: all 0.3s ease-in-out;
+            font-weight: 500;
+        }
 
-.sidebar a:hover {
-    background: #000; /* Semi-transparent hover effect */
-    color: #fff;
-    transform: translateX(5px); /* Subtle movement effect */
-}
-
-/* Optional: Add icons next to menu items */
-.sidebar a i {
-    margin-right: 10px;
-    font-size: 1.2rem;
-}
+        .sidebar a:hover {
+            background: #000; /* Semi-transparent hover effect */
+            color: #fff;
+            transform: translateX(5px); /* Subtle movement effect */
+        }
 
         /* Content Styles */
         .container {
             flex-grow: 1;
             margin-left: 250px; /* Offset for fixed sidebar */
-            max-width: 800px; /* Limit the width of the content */
+            max-width: 700px; /* Limit the width of the content */
             margin: auto; /* Center the content */
-            padding: 15px;
-            background: #fff;
+            padding: 5px;
+            background-color: #FFE0B2;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow-y: auto; /* Scroll if content overflows */
@@ -148,154 +142,117 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-align: center;
             color: #000;
             font-size: 1.5rem;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px;
             border: 1px solid #000;
-            border-radius: 4px;
-            font-size: 0.9rem;
         }
 
-        textarea {
-            resize: none;
+        table td, table th {
+            vertical-align: middle;
+            border: 1px solid #000;
         }
 
-        .form-group #imagePreview {
-            margin-top: 10px;
-            max-height: 100px;
-            border: 1px dashed #000;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+        .food-item-img {
+            width: 50px; /* Reduce width */
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #000;
         }
 
-        .form-group #imagePreview img {
-            max-height: 100%;
+        .btn-sm {
+            font-size: 10px;
+            padding: 2px 7px;
         }
 
-        button {
-            background: #000;
-            color: #fff;
-            padding: 8px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #000;
-        }
     </style>
 </head>
 <body>
     <div class="main-layout">
         <!-- Sidebar -->
         <aside class="sidebar">
-    <h2>Restaurant Dashboard</h2>
-    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
-<a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
-<a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
-<a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-<a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
-<a href="account.php"><i class="fas fa-user"></i> Account</a>
-<a href="updateprofile.php"><i class="fas fa-cog"></i> Profile</a>
-<a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-</aside>
+            <h2>Restaurant Dashboard</h2>
+            <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
+            <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
+            <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+            <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
 
-<body>
-    <div class="container mt-4">
-        <h1 class="mb-4">Food Items</h1>
-        
-        <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])): ?>
-            <?php
-            $foodId = $_GET['id'];
-            $sql = "SELECT * FROM `tbl_addfood` WHERE `f_id` = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute([':id' => $foodId]);
-            $foodItem = $stmt->fetch(PDO::FETCH_ASSOC);
-            ?>
-            <form method="POST" enctype="multipart/form-data" class="mb-4">
-                <input type="hidden" name="food_id" value="<?= htmlspecialchars($foodItem['f_id']) ?>">
-                <input type="hidden" name="current_image" value="<?= htmlspecialchars($foodItem['image']) ?>">
-                <div class="mb-3">
-                    <label for="food_name" class="form-label">Food Name</label>
-                    <input type="text" name="food_name" id="food_name" value="<?= htmlspecialchars($foodItem['food_name']) ?>" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea name="description" id="description" class="form-control" required><?= htmlspecialchars($foodItem['description']) ?></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="price" class="form-label">Price</label>
-                    <input type="number" name="price" id="price" value="<?= htmlspecialchars($foodItem['price']) ?>" class="form-control" step="0.01" required>
-                </div>
-                <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <input type="text" name="category" id="category" value="<?= htmlspecialchars($foodItem['category']) ?>" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Image</label><br>
-                    <img src="uploads/<?= htmlspecialchars($foodItem['image']) ?>" alt="Food Image" width="100" class="mb-2"><br>
-                    <input type="file" name="image" id="image" class="form-control">
-                </div>
-                <button type="submit" name="update_food" class="btn btn-primary">Update Food</button>
-                <a href="viewfood.php" class="btn btn-secondary">Cancel</a>
-            </form>
-        <?php else: ?>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Food Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
-                        <th>Category</th>
-                        <th>Image</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($foodItems as $item): ?>
+        <!-- Main Content -->
+        <div class="container mt-4">
+            <h1 class="mb-4">Food Items</h1>
+            
+            <?php if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])): ?>
+                <?php
+                $foodId = $_GET['id'];
+                $sql = "SELECT * FROM `tbl_addfood` WHERE `f_id` = :id";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([':id' => $foodId]);
+                $foodItem = $stmt->fetch(PDO::FETCH_ASSOC);
+                ?>
+                <form method="POST" enctype="multipart/form-data" class="mb-4">
+                    <input type="hidden" name="food_id" value="<?= htmlspecialchars($foodItem['f_id']) ?>">
+                    <input type="hidden" name="current_image" value="<?= htmlspecialchars($foodItem['image']) ?>">
+                    <div class="mb-3">
+                        <label for="food_name" class="form-label">Food Name</label>
+                        <input type="text" name="food_name" id="food_name" value="<?= htmlspecialchars($foodItem['food_name']) ?>" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" required><?= htmlspecialchars($foodItem['description']) ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" name="price" id="price" value="<?= htmlspecialchars($foodItem['price']) ?>" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <input type="text" name="category" id="category" value="<?= htmlspecialchars($foodItem['category']) ?>" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label><br>
+                        <img src="uploads/<?= htmlspecialchars($foodItem['image']) ?>" alt="Food Image" width="100" class="mb-2"><br>
+                        <input type="file" name="image" id="image" class="form-control">
+                    </div>
+                    <button type="submit" name="update_food" class="btn btn-primary">Update Food</button>
+                    <a href="viewfood.php" class="btn btn-secondary">Cancel</a>
+                </form>
+            <?php else: ?>
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?= htmlspecialchars($item['f_id']) ?></td>
-                            <td><?= htmlspecialchars($item['food_name']) ?></td>
-                            <td><?= htmlspecialchars($item['description']) ?></td>
-                            <td><?= htmlspecialchars($item['price']) ?></td>
-                            <td><?= htmlspecialchars($item['category']) ?></td>
-                            <td><img src="uploads/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['food_name']) ?>" width="100"></td>
-                            <td>
-                                <a href="viewfood.php?action=edit&id=<?= $item['f_id'] ?>" class="btn btn-success btn-sm">Edit</a>
-                                <a href="viewfood.php?action=delete&id=<?= $item['f_id'] ?>" onclick="return confirm('Are you sure you want to delete this item?')" class="btn btn-danger btn-sm">Delete</a>
-                            </td>
+                            <th>ID</th>
+                            <th>Food Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Image</th>
+                            <th>Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($foodItems as $item): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($item['f_id']) ?></td>
+                                <td><?= htmlspecialchars($item['food_name']) ?></td>
+                                <td><?= htmlspecialchars($item['description']) ?></td>
+                                <td><?= htmlspecialchars($item['price']) ?></td>
+                                <td><?= htmlspecialchars($item['category']) ?></td>
+                                <td><img src="uploads/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['food_name']) ?>" class="food-item-img"></td>
+                                <td>
+                                <a href="viewfood.php?action=edit&id=<?= $item['f_id'] ?>" class="btn btn-success btn-sm me-1" title="Edit">
+        <i class="fas fa-edit"></i>
+    </a>
+    <a href="viewfood.php?action=delete&id=<?= $item['f_id'] ?>" onclick="return confirm('Are you sure you want to delete this item?')" class="btn btn-danger btn-sm" title="Delete">
+        <i class="fas fa-trash-alt"></i>
+    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
     </div>
 </body>
 </html>
