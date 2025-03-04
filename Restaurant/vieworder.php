@@ -1,5 +1,6 @@
-<?php 
-include('../conn/conn.php'); 
+<?php
+// Include database connection
+include('../conn/conn.php');
 
 // Twilio Credentials (Replace with your actual credentials)
 $twilio_sid = "YOUR_TWILIO_SID";
@@ -12,43 +13,45 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
 
     if ($action === "confirm") {
         $newStatus = "Confirmed";
+        $notificationMessage = "Your order #$orderId has been CONFIRMED!";
     } elseif ($action === "cancel") {
         $newStatus = "Cancelled";
+        $notificationMessage = "Your order #$orderId has been CANCELED!";
     } else {
         die("Invalid action.");
     }
 
     try {
         // Update order status in the database
-        $sql = "UPDATE tbl_order SET status = :status WHERE id = :id";
+        $sql = "UPDATE tbl_orders SET status = :status WHERE id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':status', $newStatus, PDO::PARAM_STR);
         $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
         $stmt->execute();
 
         // Fetch customer's phone number
-        $sql = "SELECT phone FROM tbl_order WHERE id = :id";
+        $sql = "SELECT phone FROM tbl_orders WHERE id = :id";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
         $stmt->execute();
         $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-        $customerPhone = $customer['phone'];
+        $customerPhone = $customer['phone'] ?? '';
 
-        // Send SMS notification
-        $message = $action === "confirm" 
-            ? "Dear customer, your order #$orderId has been CONFIRMED. Thank you!" 
-            : "Dear customer, your order #$orderId has been CANCELLED. Please contact support.";
-        
-        sendSMS($customerPhone, $message, $twilio_sid, $twilio_token, $twilio_from);
+        // Send SMS notification if phone exists
+        if ($customerPhone) {
+            sendSMS($customerPhone, $notificationMessage, $twilio_sid, $twilio_token, $twilio_from);
+        }
 
         // Redirect with success message
         header("Location: vieworder.php?message=Order updated successfully");
         exit();
+
     } catch (PDOException $e) {
         echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
     }
 }
 
+// Close database connection
 $conn = null;
 
 // Function to send SMS via Twilio API
@@ -67,12 +70,15 @@ function sendSMS($to, $message, $sid, $token, $from) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_USERPWD, "$sid:$token");
     $response = curl_exec($ch);
-    if(curl_errno($ch)) {
-        echo 'Error:' . curl_error($ch);
+
+    if (curl_errno($ch)) {
+        error_log('Twilio SMS Error: ' . curl_error($ch));
     }
+
     curl_close($ch);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,7 +96,7 @@ function sendSMS($to, $message, $sid, $token, $from) {
         .main-layout { display: flex; height: 100vh; }
         .sidebar {
             width: 250px;
-            background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+            background: linear-gradient(135deg, #f7b733, #fc4a1a);
             color: #fff;
             height: 100vh;
             display: flex;
@@ -99,9 +105,8 @@ function sendSMS($to, $message, $sid, $token, $from) {
             position: fixed;
             top: 0;
             left: 0;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
         }
-
         .sidebar h2 {
             font-size: 1.4rem;
             font-weight: bold;
@@ -110,7 +115,6 @@ function sendSMS($to, $message, $sid, $token, $from) {
             text-align: center;
             letter-spacing: 1px;
         }
-
         .sidebar a {
             color: #000;
             text-decoration: none;
@@ -123,11 +127,10 @@ function sendSMS($to, $message, $sid, $token, $from) {
             transition: all 0.3s ease-in-out;
             font-weight: 500;
         }
-
         .sidebar a:hover {
-            background: #000; /* Semi-transparent hover effect */
+            background: #000;
             color: #fff;
-            transform: translateX(5px); /* Subtle movement effect */
+            transform: translateX(5px);
         }
         .content { margin-left: 270px; padding: 20px; }
         .table-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
@@ -135,29 +138,33 @@ function sendSMS($to, $message, $sid, $token, $from) {
 </head>
 <body>
     <div class="main-layout">
-    <aside class="sidebar">
-    <h2>Restaurant Dashboard</h2>
-    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+        <aside class="sidebar">
+            <h2>Restaurant Dashboard</h2>
+            <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
             <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
             <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
             <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
             <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-</aside>
+        </aside>
+
         <div class="content">
             <h1>View Orders</h1>
             <div class="table-container">
                 <?php
                 try {
-                    $sql = "SELECT id, name, phone, food_description, quantity, order_type, address, preferred_time, payment_method, created_at, status FROM tbl_order";
+                    include('../conn/conn.php');
+                    $sql = "SELECT id, name, phone, food_description, quantity, preferred_time, payment_method, created_at, status FROM tbl_orders";
                     $stmt = $conn->query($sql);
+
                     if ($stmt->rowCount() > 0) {
-                        echo '<table class="table table-striped"><thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th><th>Type</th><th>Address</th><th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                        echo '<table class="table table-striped"><thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th><th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo '<tr><td>' . htmlspecialchars($row["id"]) . '</td><td>' . htmlspecialchars($row["name"]) . '</td><td>' . htmlspecialchars($row["phone"]) . '</td><td>' . htmlspecialchars($row["food_description"]) . '</td><td>' . htmlspecialchars($row["quantity"]) . '</td><td>' . htmlspecialchars($row["order_type"]) . '</td><td>' . htmlspecialchars($row["address"]) . '</td><td>' . htmlspecialchars($row["preferred_time"]) . '</td><td>' . htmlspecialchars($row["payment_method"]) . '</td><td>' . htmlspecialchars($row["created_at"]) . '</td><td><strong>' . htmlspecialchars($row["status"]) . '</strong></td><td>';
+                            echo '<tr><td>' . htmlspecialchars($row["id"]) . '</td><td>' . htmlspecialchars($row["name"]) . '</td><td>' . htmlspecialchars($row["phone"]) . '</td><td>' . htmlspecialchars($row["food_description"]) . '</td><td>' . htmlspecialchars($row["quantity"]) . '</td><td>' . htmlspecialchars($row["preferred_time"]) . 
+                            '</td><td>' . htmlspecialchars($row["payment_method"]) . '</td><td>' . htmlspecialchars($row["created_at"]) . '</td><td><strong>' . htmlspecialchars($row["status"]) . '</strong></td><td>';
                             if ($row["status"] === "Pending") {
-                                echo '<a href="?id=' . htmlspecialchars($row["id"]) . '&action=confirm" class="btn btn-success btn-sm">Confirm</a> ';
-                                echo '<a href="?id=' . htmlspecialchars($row["id"]) . '&action=cancel" class="btn btn-danger btn-sm">Cancel</a>';
+                                echo '<a href="?id=' . $row["id"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
+                                echo '<a href="?id=' . $row["id"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
                             }
                             echo '</td></tr>';
                         }

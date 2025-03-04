@@ -70,17 +70,6 @@ include('../conn/conn.php'); ?>
                             <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" required>
                         </div>
                         <div class="form-group">
-                            <label for="orderType">Order Type:</label>
-                            <select id="orderType" name="orderType" class="form-control" required>
-                                <option value="pickup">Pickup</option>
-                                <option value="delivery">Delivery</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="addressGroup" style="display: none;">
-                            <label for="address">Delivery Address:</label>
-                            <textarea id="address" name="address" class="form-control" placeholder="Enter your address"></textarea>
-                        </div>
-                        <div class="form-group">
                             <label for="time">Preferred Time:</label>
                             <input type="time" id="time" name="time" class="form-control">
                         </div>
