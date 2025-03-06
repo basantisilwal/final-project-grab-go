@@ -303,11 +303,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
     <?php
 include('../conn/conn.php');
 
-$customer_id = $_SESSION['customer_id']; // Assuming session is used to identify customers
+$c_id = $_SESSION['c_id']; // Assuming session is used to identify customers
 
-$sql = "SELECT customer_notification FROM tbl_orders WHERE customer_id = :customer_id ORDER BY id DESC LIMIT 1";
+$sql = "SELECT customer_notification FROM tbl_orders WHERE c_id = :c_id ORDER BY c_id DESC LIMIT 1";
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+$stmt->bindParam('c_id', $customer_id, PDO::PARAM_INT);
 $stmt->execute();
 $notification = $stmt->fetch(PDO::FETCH_ASSOC);
 
