@@ -14,69 +14,41 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
     if ($action === "confirm") {
         $newStatus = "Confirmed";
         $notificationMessage = "Your order #$orderId has been CONFIRMED!";
-        
-        // Update the status to Confirmed
-        try {
-            $sql = "UPDATE tbl_orders SET status = :status, customer_notification = :notification WHERE c_id = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':status', $newStatus, PDO::PARAM_STR);
-            $stmt->bindParam(':notification', $notificationMessage, PDO::PARAM_STR);
-            $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Fetch customer's phone number
-            $sql = "SELECT phone FROM tbl_orders WHERE c_id = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-            $stmt->execute();
-            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-            $customerPhone = $customer['phone'] ?? '';
-
-            // Send SMS notification if phone exists
-            if ($customerPhone) {
-                sendSMS($customerPhone, $notificationMessage, $twilio_sid, $twilio_token, $twilio_from);
-            }
-
-            // Redirect with success message
-            header("Location: vieworder.php?message=Order updated successfully");
-            exit();
-
-        } catch (PDOException $e) {
-            echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
-        }
-
     } elseif ($action === "cancel") {
-        // Delete the order after cancelling
-        try {
-            // Fetch customer's phone number before deleting
-            $sql = "SELECT phone FROM tbl_orders WHERE c_id = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-            $stmt->execute();
-            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-            $customerPhone = $customer['phone'] ?? '';
-
-            // Delete the order from the database
-            $sql = "DELETE FROM tbl_orders WHERE c_id = :id";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-            $stmt->execute();
-
-            // Send SMS notification if phone exists
-            if ($customerPhone) {
-                $notificationMessage = "Your order #$orderId has been CANCELED!";
-                sendSMS($customerPhone, $notificationMessage, $twilio_sid, $twilio_token, $twilio_from);
-            }
-
-            // Redirect with success message
-            header("Location: vieworder.php?message=Order cancelled successfully");
-            exit();
-
-        } catch (PDOException $e) {
-            echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
-        }
+        $newStatus = "Cancelled";
+        $notificationMessage = "Your order #$orderId has been CANCELED!";
     } else {
         die("Invalid action.");
+    }
+
+    try {
+        // Update order status and customer notification in the database
+        $sql = "UPDATE tbl_orders SET status = :status, customer_notification = :notification WHERE cid = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':status', $newStatus, PDO::PARAM_STR);
+        $stmt->bindParam(':notification', $notificationMessage, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch customer's phone number
+        $sql = "SELECT phone FROM tbl_orders WHERE cid = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
+        $stmt->execute();
+        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+        $customerPhone = $customer['phone'] ?? '';
+
+        // Send SMS notification if phone exists
+        if ($customerPhone) {
+            sendSMS($customerPhone, $notificationMessage, $twilio_sid, $twilio_token, $twilio_from);
+        }
+
+        // Redirect with success message
+        header("Location: vieworder.php?message=Order updated successfully");
+        exit();
+
+    } catch (PDOException $e) {
+        echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
     }
 }
 
@@ -173,7 +145,6 @@ function sendSMS($to, $message, $sid, $token, $from) {
             <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
             <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
             <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-            <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </aside>
 
@@ -183,17 +154,17 @@ function sendSMS($to, $message, $sid, $token, $from) {
                 <?php
                 try {
                     include('../conn/conn.php');
-                    $sql = "SELECT c_id, name, phone, food_description, quantity, preferred_time, payment_method, created_at, status FROM tbl_orders";
+                    $sql = "SELECT cid, name, phone, food_description, quantity, preferred_time, payment_method, created_at, status FROM tbl_orders";
                     $stmt = $conn->query($sql);
 
                     if ($stmt->rowCount() > 0) {
                         echo '<table class="table table-striped"><thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th><th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo '<tr><td>' . htmlspecialchars($row["c_id"]) . '</td><td>' . htmlspecialchars($row["name"]) . '</td><td>' . htmlspecialchars($row["phone"]) . '</td><td>' . htmlspecialchars($row["food_description"]) . '</td><td>' . htmlspecialchars($row["quantity"]) . '</td><td>' . htmlspecialchars($row["preferred_time"]) . 
+                            echo '<tr><td>' . htmlspecialchars($row["cid"]) . '</td><td>' . htmlspecialchars($row["name"]) . '</td><td>' . htmlspecialchars($row["phone"]) . '</td><td>' . htmlspecialchars($row["food_description"]) . '</td><td>' . htmlspecialchars($row["quantity"]) . '</td><td>' . htmlspecialchars($row["preferred_time"]) . 
                             '</td><td>' . htmlspecialchars($row["payment_method"]) . '</td><td>' . htmlspecialchars($row["created_at"]) . '</td><td><strong>' . htmlspecialchars($row["status"]) . '</strong></td><td>';
                             if ($row["status"] === "Pending") {
-                                echo '<a href="?id=' . $row["c_id"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
-                                echo '<a href="?id=' . $row["c_id"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
+                                echo '<a href="?id=' . $row["cid"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
+                                echo '<a href="?id=' . $row["cid"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
                             }
                             echo '</td></tr>';
                         }

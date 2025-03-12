@@ -1,6 +1,5 @@
-<?php
-include('../conn/conn.php'); 
-session_start(); // Start session for CSRF token & user sessions
+<?php include('../conn/conn.php');
+session_start(); // Start session for CSRF token and other session-based operations
 
 // Generate CSRF token if not set
 if (!isset($_SESSION['csrf_token'])) {
@@ -10,7 +9,7 @@ if (!isset($_SESSION['csrf_token'])) {
 // Handle order submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
     if ($_POST['csrf_token'] === $_SESSION['csrf_token']) {
-        // Get form data securely
+        // Get form data
         $name = htmlspecialchars($_POST['name']);
         $phone = htmlspecialchars($_POST['phone']);
         $foodDescription = htmlspecialchars($_POST['foodDescription']);
@@ -18,14 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
         $preferred_time = $_POST['time'];
         $paymentMethod = $_POST['paymentMethod'];
         $status = "Pending"; // Default status
-        $c_id = $_SESSION['c_id'] ?? null; // Ensure customer ID is set
 
-        // Insert order into database
-        $sql = "INSERT INTO tbl_orders (c_id, name, phone, food_description, quantity, preferred_time, payment_method, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+        // Insert into database
+        $sql = "INSERT INTO tbl_orders (name, phone, food_description, quantity, preferred_time, payment_method, status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
         $stmt = $conn->prepare($sql);
-        if ($stmt->execute([$c_id, $name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
+        if ($stmt->execute([$name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
             $_SESSION['message'] = "Order placed successfully!";
         } else {
             $_SESSION['message'] = "Error placing order. Please try again.";
@@ -34,17 +32,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
         $_SESSION['message'] = "Invalid CSRF token!";
     }
 }
+// Fetch food items
+// Fetch food items based on search query
+$searchQuery = "";
+$foods = [];
 
-// Fetch Customer Notifications
-$customer_id = $_SESSION['c_id'] ?? null;
-if ($customer_id) {
-    $sql = "SELECT customer_notification FROM tbl_orders WHERE c_id = ? ORDER BY id DESC LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$customer_id]);
-    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
+if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
+    $searchQuery = trim($_GET['search']);
+    $query = "SELECT * FROM tbl_addfood WHERE food_name LIKE :search OR description LIKE :search ORDER BY f_id DESC";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([':search' => "%$searchQuery%"]); // Ensure the parameter uses a colon
+    $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-?>
-
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,6 +157,27 @@ if ($customer_id) {
             color: #ff5722;
             font-weight: bold;
         }
+        /* Change search button background to black */
+.btn-primary {
+    background-color: black !important;
+    border-color: black !important;
+}
+
+/* Change order button background to black */
+.modal-footer .btn-primary {
+    background-color: black !important;
+    border-color: black !important;
+}
+
+/* Change submit order button background to black */
+#orderForm .btn-primary {
+    background-color: black !important;
+    border-color: black !important;
+}
+h2 {
+    font-size: 1.3rem; /* Decrease the size */
+}
+
 
         .form-container {
             max-width: 500px;
@@ -235,25 +261,26 @@ if ($customer_id) {
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand logo" href="#">GRAB & GO</a>
+            <a class="navbar-brand logo" href="#">UNICAFE</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <form class="d-flex search-container" method="GET" action="search.php">
-                <input class="form-control me-2" type="text" name="search" placeholder="Search for restaurant, cuisine or dish" id="searchBar">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-                <img id="bell" src="../images/bell.png" alt="Notification Bell">
+            <form class="d-flex search-container" method="GET" action="">
+                <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
+                <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>
     </nav>
 
+   <!-- Search Results Section -->
+<?php if (!empty($searchQuery)): ?>
     <section class="restaurants">
-        <h2>Order Food Online Near You</h2>
+        <h2>Search Results for "<?php echo htmlspecialchars($searchQuery); ?>"</h2>
         <div class="restaurant-list">
             <?php
-            $query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
+            $query = "SELECT * FROM tbl_addfood WHERE food_name LIKE :search OR description LIKE :search ORDER BY f_id DESC";
             $stmt = $conn->prepare($query);
-            $stmt->execute();
+            $stmt->execute([':search' => "%$searchQuery%"]);
 
             if ($stmt->rowCount() > 0) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -261,32 +288,70 @@ if ($customer_id) {
                     if (!file_exists($imagePath) || empty($row['image'])) {
                         $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);   
                     }
-                
                     ?>
-                   <?php foreach ($foodItems as $row): ?>
-            <div class="restaurant <?php echo ($row['stock'] == 0) ? 'out-of-stock' : ''; ?>" 
-                 data-toggle="modal" <?php echo ($row['stock'] == 0) ? '' : 'data-target="#foodModal"'; ?>
-                 data-name="<?php echo htmlspecialchars($row['food_name']); ?>" 
-                 data-category="<?php echo htmlspecialchars($row['category']); ?>" 
-                 data-description="<?php echo htmlspecialchars($row['description']); ?>" 
-                 data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
-                 data-image="<?php echo $row['image_path']; ?>">
-                
-                <img src="<?php echo $row['image_path']; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
-                <div class="restaurant-info">
-                    <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
-                    <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
-                    <p class="description"><?php echo htmlspecialchars($row['description']); ?></p>
-                    <p class="price">Price: RS <?php echo htmlspecialchars($row['price']); ?></p>
-                    
-                    <?php if ($row['stock'] == 0): ?>
-                        <p class="text-danger">Out of Stock</p>
-                    <?php endif; }?>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
+                    <div class="restaurant" data-toggle="modal" data-target="#foodModal" 
+                         data-name="<?php echo htmlspecialchars($row['food_name']); ?>" 
+                         data-category="<?php echo htmlspecialchars($row['category']); ?>" 
+                         data-description="<?php echo htmlspecialchars($row['description']); ?>" 
+                         data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
+                         data-image="<?php echo $imagePath; ?>">
+                        <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
+                        <div class="restaurant-info">
+                            <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
+                            <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
+                            <p class="description"><?php echo htmlspecialchars($row['description']); ?></p>
+                            <p class="price">Price: RS <?php echo htmlspecialchars($row['price']); ?></p>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo '<p>No matching food items found.</p>';
+            }
+            ?>
+        </div>
     </section>
+<?php endif; ?>
+
+<!-- All Food Items -->
+<section class="restaurants">
+    <h2>Order Food Online Near You</h2>
+    <div class="restaurant-list">
+        <?php
+        $query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $imagePath = "uploads/" . htmlspecialchars($row['image']);
+                if (!file_exists($imagePath) || empty($row['image'])) {
+                    $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);   
+                }
+                ?>
+                <div class="restaurant" data-toggle="modal" data-target="#foodModal" 
+                     data-name="<?php echo htmlspecialchars($row['food_name']); ?>" 
+                     data-category="<?php echo htmlspecialchars($row['category']); ?>" 
+                     data-description="<?php echo htmlspecialchars($row['description']); ?>" 
+                     data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
+                     data-image="<?php echo $imagePath; ?>">
+                    <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
+                    <div class="restaurant-info">
+                        <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
+                        <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
+                        <p class="description"><?php echo htmlspecialchars($row['description']); ?></p>
+                        <p class="price">Price: RS <?php echo htmlspecialchars($row['price']); ?></p>
+                    </div>
+                </div>
+                <?php
+            }
+        } else {
+            echo '<p>No food items available at the moment. Please check back later!</p>';
+        }
+        ?>
+    </div>
+</section>
+
 
     <!-- Food Details Modal -->
     <div class="modal fade" id="foodModal" tabindex="-1" role="dialog" aria-labelledby="foodModalLabel" aria-hidden="true">
@@ -314,45 +379,24 @@ if ($customer_id) {
     </div>
 
     <!-- Order Form Modal -->
-
+     
     <?php
-// Order Processing
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $foodDescription = $_POST['food_description'];
-    $c_id = $_POST['c_id'];
-    $name = $_POST['name'];
-    $phone = $_POST['phone'];
-    $quantity = $_POST['quantity'];
-    $preferred_time = $_POST['preferred_time'];
-    $paymentMethod = $_POST['payment_method'];
-    $status = 'Pending';
+include('../conn/conn.php');
+// Ensure session is started
 
-    // Check stock availability
-    $query = "SELECT stock FROM tbl_addfood WHERE food_name = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([$foodDescription]);
-    $food = $stmt->fetch(PDO::FETCH_ASSOC);
+// Check if 'cid' is set in the session
+$cid = $_SESSION['cid'] ?? null; // Using null coalescing operator for cleaner code
 
-    if ($food && $food['stock'] > 0) {
-        // Insert order
-        $sql = "INSERT INTO tbl_orders (c_id, name, phone, food_description, quantity, preferred_time, payment_method, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        $stmt = $conn->prepare($sql);
-        if ($stmt->execute([$c_id, $name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
-            // Reduce stock
-            $updateStock = "UPDATE tbl_addfood SET stock = stock - ? WHERE food_name = ?";
-            $stmt = $conn->prepare($updateStock);
-            $stmt->execute([$quantity, $foodDescription]);
-            $_SESSION['message'] = "Order placed successfully!";
-        } else {
-            $_SESSION['message'] = "Error placing order. Please try again.";
-        }
-    } else {
-        $_SESSION['message'] = "Sorry, this item is out of stock!";
-    }
+if ($cid !== null) {
+    $sql = "SELECT customer_notification FROM tbl_orders WHERE cid = :cid ORDER BY cid DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':cid', $cid, PDO::PARAM_INT);
+    $stmt->execute();
+    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
+
 }
 ?>
+
 
 
     <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">

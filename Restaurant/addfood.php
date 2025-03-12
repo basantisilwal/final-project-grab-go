@@ -46,6 +46,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.');</script>";
     }
 }
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_stock'])) {
+    $food_id = $_POST['food_id'];
+    $availability = $_POST['availability'];
+
+    $sql = "UPDATE tbl_addfood SET availability = :availability WHERE id = :food_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':availability', $availability);
+    $stmt->bindParam(':food_id', $food_id);
+    $stmt->execute();
+    echo "<script>alert('Stock status updated!');</script>";
+}
+
+// Fetch all food items
+$sql = "SELECT * FROM tbl_addfood";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -210,7 +227,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
             <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
             <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-            <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </aside>
 

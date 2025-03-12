@@ -104,17 +104,14 @@
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <h2>Restaurant Dashboard</h2>
-
-        <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+<aside class="sidebar">
+            <h2>Restaurant Dashboard</h2>
+            <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
             <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
             <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
             <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-            <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-
-    </aside>
+        </aside>
 
     <div class="content-container">
         <div class="content">

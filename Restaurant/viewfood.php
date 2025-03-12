@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../conn/conn.php'); // Include database connection
 
 // Handle Delete Action
@@ -45,12 +46,28 @@ if (isset($_POST['update_food'])) {
     echo "<script>alert('Food item updated successfully!'); window.location.href='viewfood.php';</script>";
 }
 
+// Handle Stock Update
+if (isset($_POST['update_stock'])) {
+    $foodId = $_POST['food_id'];
+    $availability = $_POST['availability'];
+
+    $updateStockSql = "UPDATE `tbl_addfood` SET `availability` = :availability WHERE `f_id` = :id";
+    $stmt = $conn->prepare($updateStockSql);
+    $stmt->execute([
+        ':availability' => $availability,
+        ':id' => $foodId
+    ]);
+
+    echo "<script>alert('Availability updated successfully!'); window.location.href='viewfood.php';</script>";
+}
+
 // Fetch all food items
-$sql = "SELECT `f_id`, `food_name`, `description`, `price`, `category`, `image` FROM `tbl_addfood`";
+$sql = "SELECT `f_id`, `food_name`, `description`, `price`, `category`, `image`, `availability` FROM `tbl_addfood`";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -174,7 +191,6 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
             <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
             <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-            <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </aside>
 
@@ -217,42 +233,42 @@ $foodItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <button type="submit" name="update_food" class="btn btn-primary">Update Food</button>
                     <a href="viewfood.php" class="btn btn-secondary">Cancel</a>
                 </form>
-            <?php else: ?>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Food Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Image</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($foodItems as $item): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($item['f_id']) ?></td>
-                                <td><?= htmlspecialchars($item['food_name']) ?></td>
-                                <td><?= htmlspecialchars($item['description']) ?></td>
-                                <td><?= htmlspecialchars($item['price']) ?></td>
-                                <td><?= htmlspecialchars($item['category']) ?></td>
-                                <td><img src="uploads/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['food_name']) ?>" class="food-item-img"></td>
-                                <td>
-                                <a href="viewfood.php?action=edit&id=<?= $item['f_id'] ?>" class="btn btn-success btn-sm me-1" title="Edit">
-        <i class="fas fa-edit"></i>
-    </a>
-    <a href="viewfood.php?action=delete&id=<?= $item['f_id'] ?>" onclick="return confirm('Are you sure you want to delete this item?')" class="btn btn-danger btn-sm" title="Delete">
-        <i class="fas fa-trash-alt"></i>
-    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </div>
-    </div>
+                <?php endif; ?>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Food Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Actions</th>
+            <th>Availability</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($foodItems as $item): ?>
+            <tr>
+                <td><?= htmlspecialchars($item['f_id']) ?></td>
+                <td><?= htmlspecialchars($item['food_name']) ?></td>
+                <td><?= htmlspecialchars($item['description']) ?></td>
+                <td><?= htmlspecialchars($item['price']) ?></td>
+                <td><?= htmlspecialchars($item['category']) ?></td>
+                <td><img src="uploads/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['food_name']) ?>" width="50"></td>
+                <td>
+                    <a href="viewfood.php?action=edit&id=<?= $item['f_id'] ?>" class="btn btn-success btn-sm"><i class="fas fa-edit"></i></a>
+                    <a href="viewfood.php?action=delete&id=<?= $item['f_id'] ?>" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                </td>
+                <td><?= htmlspecialchars($item['availability']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+</div>
+</div>
+
 </body>
 </html>
