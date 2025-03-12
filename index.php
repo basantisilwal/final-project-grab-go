@@ -189,18 +189,9 @@
     <section id="contact">
         <div class="container">
             <h2>Contact Us</h2>
-            <form>
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Your Name">
-                </div>
-                <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Your Email">
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" rows="4" placeholder="Your Message"></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
+            <h3>+9779748213635, +9779816141807
+                
+            </h3>
         </div>
     </section>
 

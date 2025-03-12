@@ -433,7 +433,7 @@ if ($cid !== null) {
                             <label for="paymentMethod" class="form-label">Payment Method:</label>
                             <select id="paymentMethod" name="paymentMethod" class="form-control" required>
                                 <option value="online">Online Payment</option>
-                                <option value="cash">Cash on Delivery</option>
+                                <option value="cash">Cash</option>
                             </select>
                         </div>
                         <div class="mb-3" id="qrCodeContainer">

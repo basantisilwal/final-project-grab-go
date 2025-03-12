@@ -1,12 +1,22 @@
 <?php
 session_start();
-include('../conn/conn.php'); // Make sure this file has a MySQLi connection, e.g.:
-// $conn = mysqli_connect("localhost", "root", "", "grab&go");
-// if (!$conn) { die("Connection failed: " . mysqli_connect_error()); }
 
-// -----------------------------
-// 1. Handle Logo Upload
-// -----------------------------
+/***************************************************
+ * 1. Database Connection (MySQLi)
+ ***************************************************/
+$host = "localhost";       // Adjust if different
+$user = "root";            // Your DB username
+$pass = "";                // Your DB password
+$db   = "grab&go";         // Your DB name
+
+$conn = mysqli_connect($host, $user, $pass, $db);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+/***************************************************
+ * 2. Handle Logo Upload
+ ***************************************************/
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
     $target_dir = "uploads/logo/";
     // Create the directory if it doesn't exist
@@ -15,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
     }
 
     // Generate a unique file name to avoid conflicts
-    $file_name = uniqid() . '_' . basename($_FILES['site_logo']['name']);
+    $file_name   = uniqid() . '_' . basename($_FILES['site_logo']['name']);
     $target_file = $target_dir . $file_name;
-    $uploadOk = 1;
+    $uploadOk    = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     // Allowed file types
@@ -30,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
     // Move file if valid
     if ($uploadOk == 1) {
         if (move_uploaded_file($_FILES['site_logo']['tmp_name'], $target_file)) {
-            // Use mysqli_real_escape_string for safety
+            // Escape data for safety
             $logo_name = mysqli_real_escape_string($conn, $_FILES['site_logo']['name']);
             $logo_path = mysqli_real_escape_string($conn, $target_file);
 
@@ -65,12 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
     exit();
 }
 
-// -----------------------------
-// 2. Fetch Current Logo
-// -----------------------------
+/***************************************************
+ * 3. Fetch Current Logo from tbl_logo
+ ***************************************************/
 $current_logo = "logo.png"; // fallback if none in DB
-$logoQuery = "SELECT logo_name, logo_path FROM tbl_logo LIMIT 1";
-$logoResult = mysqli_query($conn, $logoQuery);
+$logoQuery    = "SELECT logo_name, logo_path FROM tbl_logo LIMIT 1";
+$logoResult   = mysqli_query($conn, $logoQuery);
 
 if ($row = mysqli_fetch_assoc($logoResult)) {
     // If a logo exists in DB, use that
@@ -84,7 +94,6 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
     <meta charset="UTF-8">
     <title>Logo Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!-- Optionally include icons if needed -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         /* Sidebar Styles */
@@ -126,7 +135,8 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
             background-color: #000;
             color: #fff;
         }
-        /* Main Container for page content */
+
+        /* Main Container */
         .main-container {
             margin-left: 250px; /* match sidebar width */
             width: calc(100% - 250px);
@@ -134,6 +144,7 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
             min-height: 100vh;
             background-color: #f8f9fa;
         }
+
         /* Logo Preview */
         .logo-preview-container {
             width: 200px;
@@ -155,7 +166,7 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
 <!-- Sidebar -->
 <aside class="sidebar">
     <div class="logo-container text-center mb-4">
-        <!-- Display current logo from DB (or fallback if none) -->
+        <!-- Display current logo (fallback is 'logo.png') -->
         <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
     </div>
     <h2>Admin Dashboard</h2>
@@ -185,9 +196,6 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
                         <div class="mb-4">
                             <input type="file" name="site_logo" id="siteLogo"
                                    accept="image/png,image/jpeg,image/gif,image/webp" class="form-control" required>
-                            <div id="logoPreviewContainer" class="mt-3 d-none">
-                                <img id="logoPreview" src="" alt="Logo Preview" class="logo-preview">
-                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-cloud-upload"></i> Upload New Logo
@@ -217,22 +225,18 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
     </div>
 </div>
 
-<!-- Live Preview Script (Optional) -->
+<!-- Optional JS for Live Preview (if desired) -->
 <script>
+    // If you want to preview the uploaded file before submission
     document.getElementById('siteLogo').addEventListener('change', function(event) {
         const file = event.target.files[0];
-        const previewContainer = document.getElementById('logoPreviewContainer');
-        const previewImage = document.getElementById('logoPreview');
-
         if (file) {
+            const previewImage = document.querySelector('.logo-preview');
             const reader = new FileReader();
             reader.onload = function(e) {
                 previewImage.src = e.target.result;
-                previewContainer.classList.remove('d-none');
-            }
+            };
             reader.readAsDataURL(file);
-        } else {
-            previewContainer.classList.add('d-none');
         }
     });
 </script>
