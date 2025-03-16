@@ -63,6 +63,17 @@ $sql = "SELECT * FROM tbl_addfood";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch Logo
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery    = "SELECT name, path FROM tbl_owlogo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
+
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    // If a logo exists in DB, use that
+    $current_logo = $row['path'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +83,10 @@ $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Food Item</title>
     <!-- Include Font Awesome for icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -136,6 +150,16 @@ $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background: #000; /* Semi-transparent hover effect */
             color: #fff;
             transform: translateX(5px); /* Subtle movement effect */
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
         }
         /* Content Styles */
         .container {
@@ -220,15 +244,18 @@ $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <div class="main-layout">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>Restaurant Dashboard</h2>
-            <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
-            <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
-            <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </aside>
+    <aside class="sidebar">
+    <div class="logo-container">
+        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+    </div>
+    <h2>Dashboard</h2>
+    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
+    <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
+    <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+    <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</aside>
 
         <!-- Content -->
         <div class="container">

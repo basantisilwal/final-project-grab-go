@@ -1,207 +1,264 @@
+<?php
+session_start();
+include('./conn/conn.php'); // Include the database connection
+
+// Fetch logo from the database
+$stmt = $conn->prepare("SELECT logo_path FROM tbl_logo WHERE u_id = 1");
+$stmt->execute();
+$logo = $stmt->fetch(PDO::FETCH_ASSOC);
+$logoPath = $logo['logo_path'] ?? '';
+
+// Fallback to a default logo if none found
+if (empty($logoPath)) {
+    $logoPath = "\final-project-grab-go\uploads\logo\Unicafe.png"; // Adjust this path if needed
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab&Go - Food Delivery</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>UNICAFE</title>
     <style>
-        /* General Styles */
-        <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab&Go - Food Delivery</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #FFDD57;
-            color: black;
+            background: #f7f3f1;
+            padding: 20px;
         }
 
         .navbar {
-            background-color:#f7e4a3;
-            box-shadow: 0 4px 6px black;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
         }
 
-        .navbar-brand {
-            font-family: 'Lora', serif;
-            font-color:black;
-            font-size: 1.8rem;
+        .logo-title-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 2px solid black;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .title {
+            font-size: 30px;
             font-weight: bold;
-            
+            color: red;
         }
 
-        .nav-link {
-            color:black !important;
-            
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        .nav-link:hover {
-            color:black !important;
-        }
-
-        #home {
-            background: linear-gradient(135deg,rgba(0, 0, 0, 0.1), #FFDD57);
-            color:rgb(9, 4, 0);
-            padding: 120px 0;
-            text-align: center;
-        }
-
-        #home h1 {
-            font-family: 'Lora', serif;
-            font-size: 3.5rem;
-            font-weight: bold;
-        }
-
-        #home .btn {
-            background-color:rgb(12, 10, 0);
-            border: none;
-            font-weight: 700;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            color: white;
-            border-radius: 30px;
-            transition: background 0.3s;
-        }
-
-        #home .btn:hover {
-            background-color: #3b3a36;
-        }
-
-        #about, #contact {
-            padding: 80px 0;
-            background-color:white;
-            text-align: center;
-        }
-
-        #about h1, #contact h2 {
-            font-family: 'Lora', serif;
-            font-size: 2.8rem;
-            font-weight: bold;
-            margin-bottom: 25px;
+        .nav-links li a {
+            text-decoration: none;
             color: black;
+            font-weight: 500;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .hero-section h1 {
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .search-bar {
+            display: inline-flex;
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .search-bar input {
+            border: none;
+            padding: 10px;
+            width: 300px;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .category-card {
+            width: 200px;
+            text-align: center;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .category-card p {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .circle-images {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .large {
+            width: 250px;
+            height: 250px;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .small {
+            width: 120px;
+            height: 120px;
+        }
+
+        .medium {
+            width: 200px;
+            height: 200px;
+        }
+
+        .top-right {
+            top: 0;
+            right: 10%;
+        }
+
+        .bottom-left {
+            bottom: 10%;
+            left: 15%;
+        }
+
+        .bottom-right {
+            bottom: 0;
+            right: 20%;
+        }
+
+        #about, #menu, #reviews {
+            padding: 80px 0;
         }
 
         #contact {
-            background-color:#FFDD57;
-            color: white;
-        }
-
-        #contact .form-control {
-            border: 2px solid black;
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        #contact .btn {
-            background-color:rgb(5, 3, 0);
-            border: none;
-            font-weight: bold;
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            border-radius: 25px;
-            color: white;
-        }
-
-        #contact .btn:hover {
-            background-color:rgb(12, 10, 0);
-        }
-
-        footer {
-            background-color:#f7e4a3;
-            color: black;
-            padding: 25px 0;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        footer a {
-            color: black;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        footer a:hover {
+            background-color: #FFDD57;
+            padding: 60px 0;
             color: black;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container-fluid">
-    <a class="navbar-brand me-6 fq-bold fs-3">Grab and Go</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        
-        <li class="nav-item">
-          <a class="nav-link me-2" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-2" href="#about">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-2" href="#contact">Contact Us</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link me-2" href="register.php">Login</a> 
-        </li>
-        </ul>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo-title-container">
+        <div class="logo-container">
+            <img src="<?php echo htmlspecialchars($logoPath); ?>" alt="Logo">
+        </div>
+        <div class="title">UNICAFE.</div>
     </div>
-  </div>
+    <ul class="nav-links">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="register.php">Login</a></li>
+    </ul>
 </nav>
 
-    <!-- Hero Section -->
-    <section id="home">
-        <h1>Welcome to Grab&Go</h1>
-        <p>Your favorite meals, delivered fast!</p>
-        <a href="register.php" class="btn">Order Now</a>
-    </section>
+<!-- Hero Section -->
+<header class="hero-section">
+    <h1>yamm yamm food</h1>
+    <div class="search-bar">
+        <input type="text" placeholder="foody">
+        <button>Ok</button>
+    </div>
+</header>
 
-    <!-- About Section -->
-    <section id="about" class="text-center">
-        <div class="container">
-            <h1>About Us</h1>
-            <p>
-                Grab&Go is your trusted partner for fast, reliable, and delicious food delivery. We work with the best local restaurants to ensure every meal meets your expectations. Enjoy diverse cuisines, fast service, and real-time tracking.
-            </p>
-        </div>
-    </section>
+<!-- Categories Section -->
+<section class="categories">
+    <div class="category-card">
+        <img src="/Grabandgo/final-project-grab-go/images/food.jpg" alt="Food">
+        <p>Food</p>
+    </div>
+    <div class="category-card">
+        <img src="/Grabandgo/final-project-grab-go/images/pizza.jpg" alt="Pizza">
+        <p>Pizza</p>
+    </div>
+    <div class="category-card">
+        <img src="/Grabandgo/final-project-grab-go/images/healthy.jpg" alt="Healthy">
+        <p>Healthy</p>
+    </div>
+</section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <h2>Contact Us</h2>
-            <h3>+9779748213635, +9779816141807
-                
-            </h3>
-        </div>
-    </section>
+<!-- Circle Images Section -->
+<section class="circle-images">
+    <img src="/Grabandgo/final-project-grab-go/images/foods.jpg" class="circle large" alt="Food">
+    <img src="/Grabandgo/final-project-grab-go/images/french.jpg" class="circle small top-right" alt="French">
+    <img src="/Grabandgo/final-project-grab-go/images/pasta.jpg" class="circle small bottom-left" alt="Pasta">
+    <img src="/Grabandgo/final-project-grab-go/images/burger.jpg" class="circle medium bottom-right" alt="Burger">
+</section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Grab&Go. All Rights Reserved.</p>
-        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
-    </footer>
+<!-- About Section -->
+<section id="about">
+    <div class="container text-center">
+        <h2>About Us</h2>
+        <p>UniCafe is your trusted partner for fast, reliable, and delicious food. Enjoy diverse cuisines!</p>
+    </div>
+</section>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<!-- Contact Section -->
+<section id="contact" class="text-center">
+    <h2>Contact Us</h2>
+    <p>+9779748213635, +9779816141807</p>
+</section>
+
 </body>
 </html>

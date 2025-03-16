@@ -34,6 +34,16 @@ if (isset($_GET['delete_id'])) {
     header("Location: manage.php");
     exit;
 }
+
+// Fetch logo details (Fixed PDO query)
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery = $conn->prepare("SELECT logo_name, logo_path FROM tbl_logo LIMIT 1");
+$logoQuery->execute();
+$row = $logoQuery->fetch(PDO::FETCH_ASSOC);
+
+if ($row) {
+    $current_logo = $row['logo_path'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,34 +60,26 @@ if (isset($_GET['delete_id'])) {
             background-color: #FFE0B2;
         }
         .container {
-    padding: 8px; /* Reduce padding */
-    margin: auto;  /* Center align */
-    max-width: 720px; /* Reduce width */
-}
-
-        /* Text fields with black borders */
+            padding: 8px;
+            margin: auto;
+            max-width: 720px;
+        }
         .form-control {
             border: 2px solid black !important;
             padding: 5px;
             font-size: 14px;
         }
-
-        /* Button with black background */
         .btn-primary {
             background-color: black !important;
             border: 2px solid black !important;
             color: white;
         }
-
-        /* Table with black borders */
         .table {
             border: 2px solid black !important;
         }
         .table th, .table td {
             border: 2px solid black !important;
         }
-
-        /* Sidebar Styling */
         .sidebar {
             width: 220px;
             background: linear-gradient(135deg, #f7b733, #fc4a1a);
@@ -92,15 +94,33 @@ if (isset($_GET['delete_id'])) {
             box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
         }
         .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-container img {
+      width: 80px;
+      border-radius: 50%;
+      border: 2px solid black;
+    }
+        .logo-container {
+    width: 100px;  /* Set width */
+    height: 100px; /* Set height */
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden; /* Ensure the image stays within the boundary */
+    margin: 10px auto; /* Center it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white; /* Optional: Adds contrast */
+}
 
-        .logo-container img {
-            width: 80px;
-            border-radius: 50%;
-            border: 2px solid black;
-        }
+.logo-container img {
+    width: 100%;  /* Make sure it fits the container */
+    height: 100%; /* Make sure it fits the container */
+    object-fit: cover; /* Ensure proper scaling */
+    border-radius: 50%; /* Maintain circular shape */
+}
+
         .sidebar a {
             color: black;
             text-decoration: none;
@@ -119,28 +139,27 @@ if (isset($_GET['delete_id'])) {
             padding-bottom: 10px;
             border-bottom: 2px solid #d4b870;
         }
-        
         .sidebar a:hover {
             background-color: black;
             color: #fff;
         }
-
     </style>
 </head>
 <body>
     <div class="main-container d-flex">
         <!-- Sidebar -->
         <aside class="sidebar">
-        <div class="logo-container">
-            <img src="logo.png" alt="Admin Logo"> <!-- Replace with actual logo -->
-        </div>
-            <h2>Admin Dashboard</h2>
-            <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
-            <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
-            <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
-            <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
-            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
-        </aside>
+    <div class="logo-container">
+        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
+    </div>
+    <h2>Admin Dashboard</h2>
+    <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+    <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
+    <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
+    <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+    <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
+</aside>
+
 
         <!-- Main Content -->
         <div class="main-content container mt-4">
@@ -152,7 +171,7 @@ if (isset($_GET['delete_id'])) {
                     $id = intval($_GET['edit_id']);
                     $stmt = $conn->prepare("SELECT * FROM tbl_restaurantname WHERE r_id=?");
                     $stmt->execute([$id]);
-                    $restaurant = $stmt->fetch();
+                    $restaurant = $stmt->fetch(PDO::FETCH_ASSOC);
                 }
                 ?>
                 <input type="hidden" name="id" value="<?php echo $restaurant['r_id'] ?? ''; ?>">
@@ -196,27 +215,23 @@ if (isset($_GET['delete_id'])) {
                 <tbody>
                 <?php
                 $stmt = $conn->query("SELECT * FROM tbl_restaurantname");
-                $restaurants = $stmt->fetchAll();
-                if ($restaurants) {
-                    $sn = 1;
-                    foreach ($restaurants as $restaurant) {
-                        echo "<tr>
-                                <td>{$sn}</td>
-                                <td>{$restaurant['name']}</td>
-                                <td>{$restaurant['address']}</td>
-                                <td>{$restaurant['date']}</td>
-                                <td>{$restaurant['time']}</td>
-                                <td>{$restaurant['email']}</td>
-                                <td>{$restaurant['contact_number']}</td>
-                                <td>
-                                    <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'><i class='bi bi-pencil'></i></a>
-                                    <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'><i class='bi bi-trash'></i></a>
-                                </td>
-                              </tr>";
-                        $sn++;
-                    }
-                } else {
-                    echo "<tr><td colspan='8'>No restaurants found</td></tr>";
+                $restaurants = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $sn = 1;
+                foreach ($restaurants as $restaurant) {
+                    echo "<tr>
+                            <td>{$sn}</td>
+                            <td>{$restaurant['name']}</td>
+                            <td>{$restaurant['address']}</td>
+                            <td>{$restaurant['date']}</td>
+                            <td>{$restaurant['time']}</td>
+                            <td>{$restaurant['email']}</td>
+                            <td>{$restaurant['contact_number']}</td>
+                            <td>
+                                <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'><i class='bi bi-pencil'></i></a>
+                                <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'><i class='bi bi-trash'></i></a>
+                            </td>
+                          </tr>";
+                    $sn++;
                 }
                 ?>
                 </tbody>

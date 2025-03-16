@@ -1,189 +1,107 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $country = $_POST['country'];
-    $userName = $_POST['userNameData'];
-    $profilePicData = $_POST['profilePicData'];
+session_start();
+include('../conn/conn.php');
 
-    // Save user data (this is a simple example, you may need to use a database)
-    $profilePicPath = 'uploads/profile_pic.png';
+// Check if customer is logged in
+$customer_id = $_SESSION['customer_id'] ?? null;
 
-    if ($profilePicData) {
-        list($type, $data) = explode(';', $profilePicData);
-        list(, $data) = explode(',', $data);
-        $data = base64_decode($data);
-        file_put_contents($profilePicPath, $data);
+if (!$customer_id) {
+    header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php");
+    exit();
+}
+
+// Fetch user info
+$sql = "SELECT first_name, profile_pic FROM tbl_otp WHERE tbl_user_id = :customer_id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+$stmt->execute();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Set profile picture or default
+$profilePic = !empty($user['profile_pic']) ? "uploads/{$user['profile_pic']}" : "default_profile.png";
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $first_name = htmlspecialchars($_POST['first_name']);
+    $profile_pic = $_FILES['profile_pic'];
+
+    // Upload new profile pic if provided
+    if ($profile_pic['error'] === UPLOAD_ERR_OK) {
+        $upload_dir = __DIR__ . '/uploads/';
+        if (!file_exists($upload_dir)) mkdir($upload_dir, 0777, true);
+
+        $newFileName = uniqid() . '_' . basename($profile_pic['name']);
+        $file_path = $upload_dir . $newFileName;
+
+        if (move_uploaded_file($profile_pic['tmp_name'], $file_path)) {
+            $updatePic = $conn->prepare("UPDATE tbl_otp SET profile_pic = :pic WHERE tbl_user_id = :id");
+            $updatePic->execute([':pic' => $newFileName, ':id' => $customer_id]);
+        }
     }
 
-    echo "Profile updated successfully!<br>";
-    echo "Name: $userName<br>";
-    echo "First Name: $firstName<br>";
-    echo "Last Name: $lastName<br>";
-    echo "Country: $country<br>";
-    echo "<br><a href=\"javascript:history.go(-1)\">Go back</a>";
-    exit;
+    // Update first name
+    $updateName = $conn->prepare("UPDATE tbl_otp SET first_name = :fname WHERE tbl_user_id = :id");
+    $updateName->execute([':fname' => $first_name, ':id' => $customer_id]);
+
+    // Redirect to dashboard
+    header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php");
+    exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Update Profile</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      width: 400px;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .back-button {
-      margin-bottom: 10px;
-    }
-    .back-button button {
-      background: none;
-      border: none;
-      font-size: 16px;
-      color: #007BFF;
-      cursor: pointer;
-    }
-    .profile-section {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .profile-pic-container {
-      position: relative;
-      width: 80px;
-      height: 80px;
-    }
-    .profile-pic-container img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .camera-icon {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      cursor: pointer;
-    }
-    .camera-icon input {
-      display: none;
-    }
-    .name-section {
-      margin-left: 15px;
-    }
-    .name-section h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 8px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .save-button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .save-button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            text-decoration: none;
+            color: #333;
+        }
+        .container-box {
+            position: relative;
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
+<div class="container container-box">
+    <!-- Close button -->
+    <a href="http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php" class="close-btn" title="Go Back">&times;</a>
 
-<div class="container">
-  <div class="back-button">
-    <button onclick="window.history.back()">← Back</button>
-  </div>
-
-  <div class="profile-section">
-    <div class="profile-pic-container">
-      <img id="profilePicPreview" src="default-profile.png" alt="Profile Picture">
-      <label for="profilePicInput" class="camera-icon">
-        <input type="file" id="profilePicInput" accept="image/*">
-        <img src="camera-icon.png" alt="Edit Icon">
-      </label>
-    </div>
-    <div class="name-section">
-      <h2 id="userName" contenteditable="true">Jill Student</h2>
-      <p><a href="#" id="gradeLevel">Set your grade level</a></p>
-    </div>
-  </div>
-
-  <form id="updateProfileForm" method="POST" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="firstName">First Name</label>
-      <input type="text" id="firstName" name="firstName" value="Jill" required>
-    </div>
-    <div class="form-group">
-      <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" name="lastName" value="Student" required>
-    </div>
-    <div class="form-group">
-      <label for="country">Country</label>
-      <select id="country" name="country">
-        <option value="United States">United States</option>
-        <option value="Canada">Canada</option>
-        <option value="United Kingdom">United Kingdom</option>
-      </select>
-    </div>
-    <input type="hidden" id="profilePicData" name="profilePicData">
-    <input type="hidden" id="userNameData" name="userNameData">
-    <button type="submit" class="save-button">Save</button>
-  </form>
+    <h4 class="text-center mb-4">Update Profile</h4>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="text-center">
+            <img src="<?php echo $profilePic; ?>" alt="Profile" class="profile-pic">
+        </div>
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="first_name" class="form-control" value="<?php echo htmlspecialchars($user['first_name']); ?>" required>
+        </div>
+        <div class="form-group">
+            <label>Change Profile Picture</label>
+            <input type="file" name="profile_pic" class="form-control-file" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+    </form>
 </div>
-
-<script>
-  const profilePicInput = document.getElementById('profilePicInput');
-  const profilePicPreview = document.getElementById('profilePicPreview');
-  const userName = document.getElementById('userName');
-  const userNameData = document.getElementById('userNameData');
-  const profilePicData = document.getElementById('profilePicData');
-
-  profilePicInput.addEventListener('change', function () {
-    const file = this.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        profilePicPreview.src = e.target.result;
-        profilePicData.value = e.target.result; // Save base64 data
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  userName.addEventListener('blur', () => {
-    userNameData.value = userName.textContent;
-  });
-</script>
-
 </body>
 </html>

@@ -1,3 +1,44 @@
+<?php
+include('../conn/conn.php'); // Ensure this uses PDO
+
+// Get today's date
+$today = date('Y-m-d');
+
+// Count completed orders (status = 'Confirmed')
+$sql_completed = "SELECT COUNT(*) AS completed FROM tbl_orders WHERE status='Confirmed' AND DATE(created_at) = :today";
+$stmt_completed = $conn->prepare($sql_completed);
+$stmt_completed->bindParam(':today', $today);
+$stmt_completed->execute();
+$row_completed = $stmt_completed->fetch(PDO::FETCH_ASSOC);
+$completed = $row_completed['completed'] ?? 0;
+
+// Count pending orders (status = 'Pending')
+$sql_pending = "SELECT COUNT(*) AS pending FROM tbl_orders WHERE status='Pending' AND DATE(created_at) = :today";
+$stmt_pending = $conn->prepare($sql_pending);
+$stmt_pending->bindParam(':today', $today);
+$stmt_pending->execute();
+$row_pending = $stmt_pending->fetch(PDO::FETCH_ASSOC);
+$pending = $row_pending['pending'] ?? 0;
+
+// Count total food items
+$sql_food = "SELECT COUNT(*) AS total_food FROM tbl_addfood";
+$stmt_food = $conn->prepare($sql_food);
+$stmt_food->execute();
+$row_food = $stmt_food->fetch(PDO::FETCH_ASSOC);
+$total_food = $row_food['total_food'] ?? 0;
+
+// Fetch Logo
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery    = "SELECT name, path FROM tbl_owlogo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
+
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    // If a logo exists in DB, use that
+    $current_logo = $row['path'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +61,7 @@
 
         .sidebar {
             width: 250px;
-            background: linear-gradient(135deg, #f7b733, #fc4a1a); /* Gradient Background */
+            background: linear-gradient(135deg, #f7b733, #fc4a1a);
             color: #fff;
             height: 100vh;
             display: flex;
@@ -29,7 +70,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .sidebar h2 {
@@ -55,97 +96,96 @@
         }
 
         .sidebar a:hover {
-            background: #000; /* Semi-transparent hover effect */
+            background: #000;
             color: #fff;
-            transform: translateX(5px); /* Subtle movement effect */
+            transform: translateX(5px);
         }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
+        }
+
         .content-container {
-        flex: 1;
-        padding: 20px;
-        background-color: #f8f9fa;
-        display: flex;
-        justify-content: center; /* Centers content horizontally */
-        align-items: center;   /* Centers content vertically */
-    }
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 250px;
+        }
 
-    .content {
-        background-color: #FFE0B2;
-        border-radius: 5px;
-        padding: 15px;
-        color: #000;
-        width: 100%; /* Decrease the size */
-        max-width: 600px; /* Limit the maximum size */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better aesthetics */
-    }
+        .content {
+            background-color: #FFE0B2;
+            border-radius: 5px;
+            padding: 15px;
+            color: #000;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-    .content h3 {
-        margin-bottom: 15px;
-        font-size: 1.2rem; /* Adjust font size */
-    }
-
-    .content p {
-        margin-bottom: 10px;
-        font-size: 1rem; /* Adjust font size */
-    }
-
-    .content button {
-        background-color:rgb(0, 1, 3);
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 8px 12px;
-        cursor: pointer;
-        font-size: 0.9rem; /* Adjust button size */
-    }
-
-    .content button:hover {
-        background-color:rgb(0, 5, 9);
-    }
+        .content h3 {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
+
 <aside class="sidebar">
-            <h2>Restaurant Dashboard</h2>
-            <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
-            <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
-            <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </aside>
-
-    <div class="content-container">
-        <div class="content">
-            <h3>Orders Today</h3>
-            <p>Completed: <span id="orders-completed">50</span></p>
-            <p>Pending: <span id="orders-pending">12</span></p>
-            <button onclick="updateOrders()">Refresh</button>
-
-            <h3 style="margin-top: 20px;">Reservations</h3>
-            <p>Upcoming: <span id="reservations">24</span></p>
-            <button onclick="refreshReservations()">View All</button>
-
-            <h3 style="margin-top: 20px;">Revenue</h3>
-            <p>Today: <span id="revenue">$1,245</span></p>
-            <button onclick="refreshRevenue()">Update</button>
-        </div>
+    <div class="logo-container">
+        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
     </div>
+    <h2>Dashboard</h2>
+    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
+    <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
+    <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+    <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</aside>
 
-    <script>
-        function updateOrders() {
-            document.getElementById('orders-completed').innerText = Math.floor(Math.random() * 100);
-            document.getElementById('orders-pending').innerText = Math.floor(Math.random() * 20);
-            alert('Order data updated!');
-        }
+<div class="content-container">
+    <div class="content">
+        <h3>Orders Today</h3>
+        <p>Completed: <span id="orders-completed"><?php echo $completed; ?></span></p>
+        <p>Pending: <span id="orders-pending"><?php echo $pending; ?></span></p>
+        <button onclick="updateOrders()">Refresh</button>
 
-        function refreshReservations() {
-            document.getElementById('reservations').innerText = Math.floor(Math.random() * 50);
-            alert('Reservation data refreshed!');
-        }
+        <h3 style="margin-top: 20px;">Total Menu</h3>
+        <p>Available Food Items: <span id="menu"><?php echo $total_food; ?></span></p>
+        <button onclick="refreshMenu()">View All</button>
+    </div>
+</div>
 
-        function refreshRevenue() {
-            document.getElementById('revenue').innerText = '$' + (Math.random() * 2000).toFixed(2);
-            alert('Revenue updated!');
-        }
-    </script>
+<script>
+    function updateOrders() {
+        fetch('api.php?action=orders')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('orders-completed').innerText = data.completed;
+                document.getElementById('orders-pending').innerText = data.pending;
+            })
+            .catch(error => console.error('Error fetching order data:', error));
+    }
+
+    function refreshMenu() {
+        fetch('api.php?action=menu')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('menu').innerText = data.total_food;
+            })
+            .catch(error => console.error('Error fetching menu data:', error));
+    }
+</script>
+
 </body>
 </html>

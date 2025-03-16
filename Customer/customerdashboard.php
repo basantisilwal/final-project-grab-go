@@ -1,6 +1,15 @@
-<?php include('../conn/conn.php');
-session_start(); // Start session for CSRF token and other session-based operations
+<?php
+session_start();
+include('../conn/conn.php');
 
+// Check if the customer is logged in
+$customer_id = $_SESSION['customer_id'] ?? null;
+
+if (!$customer_id) {
+    // Redirect to login if not logged in
+    header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php");
+    exit();
+}
 // Generate CSRF token if not set
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -25,14 +34,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
         $stmt = $conn->prepare($sql);
         if ($stmt->execute([$name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
             $_SESSION['message'] = "Order placed successfully!";
+            // Redirect to the same page to prevent resubmission
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit; // Make sure to exit after redirect
         } else {
             $_SESSION['message'] = "Error placing order. Please try again.";
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit;
         }
     } else {
         $_SESSION['message'] = "Invalid CSRF token!";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
     }
 }
-// Fetch food items
+
 // Fetch food items based on search query
 $searchQuery = "";
 $foods = [];
@@ -41,7 +57,7 @@ if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
     $searchQuery = trim($_GET['search']);
     $query = "SELECT * FROM tbl_addfood WHERE food_name LIKE :search OR description LIKE :search ORDER BY f_id DESC";
     $stmt = $conn->prepare($query);
-    $stmt->execute([':search' => "%$searchQuery%"]); // Ensure the parameter uses a colon
+    $stmt->execute([':search' => "%$searchQuery%"]);
     $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     $query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
@@ -49,7 +65,39 @@ if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
     $stmt->execute();
     $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
- ?>
+
+// Check if the customer is logged in and retrieve their phone number
+$customerPhone = isset($_SESSION['customer_phone']) ? $_SESSION['customer_phone'] : null;
+
+if ($customerPhone) {
+    // Fetch the latest notification for this customer
+    $sql = "SELECT customer_notification FROM tbl_orders WHERE phone = :phone ORDER BY created_at DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':phone', $customerPhone, PDO::PARAM_STR);
+    $stmt->execute();
+    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Store notification in session if available
+    if (!empty($notification['customer_notification'])) {
+        $_SESSION['dashboard_notification'] = htmlspecialchars($notification['customer_notification']);
+
+        // Clear notification after storing in session
+        $sql = "UPDATE tbl_orders SET customer_notification = '' WHERE phone = :phone";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':phone', $customerPhone, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+}
+// Fetch customer profile information
+$sql = "SELECT first_name, last_name, profile_pic FROM tbl_otp WHERE tbl_user_id = :customer_id";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+$stmt->execute();
+$customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Set the profile picture path
+$profilePicPath = $customer['profile_pic'] ? "uploads/{$customer['profile_pic']}" : "default_profile.png";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +205,24 @@ if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
             color: #ff5722;
             font-weight: bold;
         }
+        .availability {
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+
+        .available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .unavailable {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
         /* Change search button background to black */
 .btn-primary {
     background-color: black !important;
@@ -258,6 +324,45 @@ h2 {
     </style>
 </head>
 <body>
+
+<?php
+include('../conn/conn.php');
+
+$customer_id = $_SESSION['customer_id'] ?? null; // Get logged-in customer ID
+$notification = '';
+
+if ($customer_id) {
+    $stmt = $conn->prepare("SELECT customer_notification FROM tbl_orders 
+                            WHERE cid = ? ORDER BY updated_at DESC LIMIT 1");
+    $stmt->execute([$customer_id]);
+    $notification = $stmt->fetchColumn();
+}
+?>
+<!-- Notification Box -->
+<div class="container mt-3">
+    <?php if (isset($_SESSION['dashboard_notification'])): ?>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Notification:</strong> <?php echo $_SESSION['dashboard_notification']; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <?php unset($_SESSION['dashboard_notification']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['message'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Message:</strong> <?php echo $_SESSION['message']; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <?php unset($_SESSION['message']); // Unset the message after displaying it ?>
+    <?php endif; ?>
+</div>
+
+
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -269,6 +374,17 @@ h2 {
                 <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
+            <div class="navbar-nav ml-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="profile.php" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="<?php echo $profilePicPath; ?>" alt="Profile Picture" class="rounded-circle" style="width: 32px; height: 32px;">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
+                        <a class="dropdown-item" href="profile.php">View Profile</a>
+                        <a class="dropdown-item" href="logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -324,23 +440,35 @@ h2 {
 
         if ($stmt->rowCount() > 0) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Image path handling
                 $imagePath = "uploads/" . htmlspecialchars($row['image']);
                 if (!file_exists($imagePath) || empty($row['image'])) {
-                    $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);   
+                    $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);
                 }
+
+                // Availability class assignment for dynamic badge styling
+                $availabilityClass = (strtolower($row['availability']) === 'available') ? 'available' : 'unavailable';
+                $isAvailable = strtolower($row['availability']) === 'available';
                 ?>
-                <div class="restaurant" data-toggle="modal" data-target="#foodModal" 
+                <div class="restaurant <?php echo !$isAvailable ? 'disabled' : ''; ?>" 
+                     data-toggle="<?php echo $isAvailable ? 'modal' : ''; ?>" 
+                     data-target="<?php echo $isAvailable ? '#foodModal' : ''; ?>" 
                      data-name="<?php echo htmlspecialchars($row['food_name']); ?>" 
                      data-category="<?php echo htmlspecialchars($row['category']); ?>" 
                      data-description="<?php echo htmlspecialchars($row['description']); ?>" 
                      data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
-                     data-image="<?php echo $imagePath; ?>">
+                     data-image="<?php echo $imagePath; ?>"
+                     style="<?php echo !$isAvailable ? 'pointer-events: none; opacity: 0.5;' : ''; ?>">
                     <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
                     <div class="restaurant-info">
                         <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
                         <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
                         <p class="description"><?php echo htmlspecialchars($row['description']); ?></p>
                         <p class="price">Price: RS <?php echo htmlspecialchars($row['price']); ?></p>
+                        <p class="availability <?php echo $availabilityClass; ?>">Status: <?php echo htmlspecialchars($row['availability']); ?></p>
+                        <?php if (!$isAvailable): ?>
+                            <span class="badge badge-danger">Sold Out</span>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php
@@ -381,75 +509,108 @@ h2 {
     <!-- Order Form Modal -->
      
     <?php
+
 include('../conn/conn.php');
-// Ensure session is started
 
 // Check if 'cid' is set in the session
-$cid = $_SESSION['cid'] ?? null; // Using null coalescing operator for cleaner code
+$cid = $_SESSION['cid'] ?? null; // Cleaner way to check if cid exists
 
+// Fetch latest customer notification (optional, based on your use-case)
 if ($cid !== null) {
     $sql = "SELECT customer_notification FROM tbl_orders WHERE cid = :cid ORDER BY cid DESC LIMIT 1";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':cid', $cid, PDO::PARAM_INT);
     $stmt->execute();
     $notification = $stmt->fetch(PDO::FETCH_ASSOC);
-
 }
+
+// ✅ Fetch QR code path using PDO (correct way since you are using PDO)
+$sql = "SELECT qr_path FROM tbl_qr WHERE q_id = 1"; // Adjust WHERE as needed
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$qr_path = $row['qr_path'] ?? ''; // Safe fallback if no record
+
 ?>
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">Place Your Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <!-- Correct for Bootstrap 4 -->
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="orderForm" method="POST" action="#"> <!-- Add action URL if needed -->
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?? ''; ?>">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="foodDescription" class="form-label">Food Description:</label>
+                        <textarea id="foodDescription" name="foodDescription" class="form-control" rows="2" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Preferred Time:</label>
+                        <input type="time" id="time" name="time" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method:</label><br>
+                        <input type="radio" id="cash" name="paymentMethod" value="cash" required>
+                        <label for="cash">Cash</label><br>
+
+                        <input type="radio" id="online" name="paymentMethod" value="online" required>
+                        <label for="online">Online Payment</label>
+
+                        <button type="button" id="payOnlineBtn" class="btn btn-success mt-2" style="display: none;">Pay Online</button>
+                    </div>
+
+                    <!-- QR Code Display -->
+                    
+                    <div id="qrCodeContainer" class="mt-4" style="display: none;">
+    <p><strong>Scan this QR Code to Pay:</strong></p>
+    <?php if (!empty($qr_path)): ?>
+        <img id="qrCodeImage" src="/Grabandgo/final-project-grab-go/Restaurant/<?php echo htmlspecialchars($qr_path); ?>" alt="Scan this QR code to pay" class="img-fluid" style="max-width: 300px; height: auto;">
+
+    <?php else: ?>
+        <p>No QR Code Available</p>
+    <?php endif; ?>
+</div>
 
 
 
-    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderModalLabel">Place Your Order</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="orderForm" method="POST" action="">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name:</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Phone Number:</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="foodDescription" class="form-label">Food Description:</label>
-                            <textarea id="foodDescription" name="foodDescription" class="form-control" rows="2" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label">Quantity:</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="time" class="form-label">Preferred Time:</label>
-                            <input type="time" id="time" name="time" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="paymentMethod" class="form-label">Payment Method:</label>
-                            <select id="paymentMethod" name="paymentMethod" class="form-control" required>
-                                <option value="online">Online Payment</option>
-                                <option value="cash">Cash</option>
-                            </select>
-                        </div>
-                        <div class="mb-3" id="qrCodeContainer">
-                            <p>Scan QR Code to make Payment:</p>
-                            <img id="qrCodeImage" src="" alt="QR Code">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Order</button>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-primary mt-3">Submit Order</button>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
+<!-- JS to handle payment method selection -->
+
+
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Grab & Go. All Rights Reserved.</p>
+        <p>&copy; 2025 UniCafe. All Rights Reserved.</p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -465,8 +626,45 @@ if ($cid !== null) {
                 $('#modalFoodImage').attr('src', $(this).data('image'));
             });
         });
-                
-       
+        document.addEventListener('DOMContentLoaded', function () {
+    const onlinePaymentRadio = document.getElementById('online');
+    const cashPaymentRadio = document.getElementById('cash');
+    const payOnlineBtn = document.getElementById('payOnlineBtn');
+    const qrCodeContainer = document.getElementById('qrCodeContainer');
+
+    function togglePaymentElements() {
+        if (onlinePaymentRadio.checked) {
+            payOnlineBtn.style.display = 'block';
+            qrCodeContainer.style.display = 'block';
+        } else {
+            payOnlineBtn.style.display = 'none';
+            qrCodeContainer.style.display = 'none';
+        }
+    }
+
+    togglePaymentElements(); // Call on load
+    onlinePaymentRadio.addEventListener('change', togglePaymentElements);
+    cashPaymentRadio.addEventListener('change', togglePaymentElements);
+});
+    function fetchNotification() {
+        $.ajax({
+            url: "fetch_notification.php",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                if (data.notification) {
+                    $("#notificationBox").html(`
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <strong>Notification:</strong> ${data.notification}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `);
+                }
+            }
+        });
+    }
+    setInterval(fetchNotification, 5000); // Refresh every 5 seconds
+         
     </script>
 </body>
 </html>

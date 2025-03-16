@@ -1,81 +1,76 @@
 <?php
-// Include the database connection
+// Include DB connection
 include('../conn/conn.php');
 
-// Enable error reporting for debugging
+// Error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Start the session
     session_start();
 
-    // Sanitize and retrieve input
+    // Sanitize inputs
     $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
-    $password = $_POST['password']; // Password is checked exactly
-    $user_type = filter_var($_POST['user_type'], FILTER_SANITIZE_STRING);
+    $password = $_POST['password'];
+    $user_type = strtolower(filter_var($_POST['user_type'], FILTER_SANITIZE_STRING));
 
-    // Define redirection URLs for different user roles
+    // Dashboards based on roles
     $dashboards = [
-        'customer' => 'http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php',
+        'user' => 'http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php',
         'admin' => 'http://localhost/Grabandgo/final-project-grab-go/Admin/admindashboard.php',
-        'restaurant' => 'http://localhost/Grabandgo/final-project-grab-go/Restaurant/restaurantdashboard.php',
-        'dispatcher' => 'http://localhost/Grabandgo/final-project-grab-go/Dispatcher/dispatcherdashboard.php'
+        'owner' => 'http://localhost/Grabandgo/final-project-grab-go/Restaurant/das.php',
     ];
 
-    // Determine the table to query based on the role
-    $table = '';
-    if ($user_type === 'admin') {
-        $table = 'tbl_admin';
-    } elseif ($user_type === 'customer') {
-        $table = 'tbl_otp';
-    } elseif ($user_type === 'restaurant') {
-        $table = 'tbl_restaurant';
-    } elseif ($user_type === 'dispatcher') {
-        $table = 'tbl_otp';
-    } else {
-        // Invalid user type
+    if (!array_key_exists($user_type, $dashboards)) {
         header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=Invalid User Type');
         exit();
     }
 
+    // Tables and ID columns map
+    $tables = [
+        'admin' => ['table' => 'tbl_admin', 'id_column' => 'id'],
+        'user'  => ['table' => 'tbl_otp', 'id_column' => 'tbl_user_id'],
+        'owner' => ['table' => 'tbl_restaurant', 'id_column' => 'id'],
+    ];
+
+    $table = $tables[$user_type]['table'];
+    $id_column = $tables[$user_type]['id_column'];
+
     try {
-        // Prepare and execute the query to fetch the password and username
-        $query = "SELECT `password` FROM `$table` WHERE `username` = :username";
+        // Query to fetch user
+        $query = "SELECT `$id_column` AS user_id, `username`, `password`, `role` FROM `$table` 
+                  WHERE `username` = :username AND `role` = :role";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':role', $user_type);
         $stmt->execute();
 
-        // Check if the user exists
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Password comparison (hashing recommended for security)
-            if (password_verify($password, $row['password']) || $password === $row['password']) {
-                // Set session variables
+            // NOTE: If passwords are plain text, use ===
+            // If passwords are hashed, use password_verify()
+            if ($password === $row['password']) { // <-- Change this if using plain text
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = $user_type;
+                $_SESSION['customer_id'] = $row['user_id'];
 
-                // Redirect to the corresponding dashboard
-                header('Location: ' . $dashboards[$user_type]);
+                header('Location: ' . $dashboards[$user_type] . '?id=' . $row['user_id']);
                 exit();
             } else {
-                // Redirect for incorrect password
                 header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=Incorrect Password');
                 exit();
             }
         } else {
-            // Redirect for user not found
             header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=User Not Found');
             exit();
         }
     } catch (PDOException $e) {
-        // Handle database connection/query errors
-        echo "Database Error: " . $e->getMessage();
+        error_log("Database Error: " . $e->getMessage());
+        header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=Database Error');
         exit();
     }
 } else {
-    // Redirect if accessed without a POST request
     header('Location: http://localhost/Grabandgo/final-project-grab-go/register.php?error=Invalid Access');
     exit();
 }

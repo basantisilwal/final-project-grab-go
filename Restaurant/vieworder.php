@@ -1,82 +1,57 @@
 <?php
-// Include database connection
-include('../conn/conn.php');
+session_start();
+require_once('../conn/conn.php'); // Database connection
 
-// Twilio Credentials (Replace with your actual credentials)
-$twilio_sid = "YOUR_TWILIO_SID";
-$twilio_token = "YOUR_TWILIO_AUTH_TOKEN";
-$twilio_from = "+1234567890"; // Twilio phone number
+// Check if it's an AJAX request for updating order status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+    $action = $_POST['action'] ?? '';
+    $id = intval($_POST['id'] ?? 0);
 
-if (isset($_GET['id']) && isset($_GET['action'])) {
-    $orderId = $_GET['id'];
-    $action = $_GET['action'];
+    if (!$id || !$action) {
+        echo json_encode(["status" => "error", "message" => "Missing required parameters"]);
+        exit;
+    }
 
-    if ($action === "confirm") {
-        $newStatus = "Confirmed";
-        $notificationMessage = "Your order #$orderId has been CONFIRMED!";
-    } elseif ($action === "cancel") {
-        $newStatus = "Cancelled";
-        $notificationMessage = "Your order #$orderId has been CANCELED!";
+    // Determine the new status and notification message
+    switch ($action) {
+        case 'confirm':
+            $status = 'Confirmed';
+            $notification = 'Your order has been confirmed!';
+            break;
+        case 'reject':
+            $status = 'Cancelled';
+            $notification = 'Your order has been cancelled!';
+            break;
+        default:
+            echo json_encode(["status" => "error", "message" => "Invalid action"]);
+            exit;
+    }
+
+    // Update the order status in the database
+    $stmt = $conn->prepare("UPDATE tbl_orders 
+                            SET status = ?, 
+                                customer_notification = ?, 
+                                updated_at = CURRENT_TIMESTAMP 
+                            WHERE cid = ?");
+    
+    if ($stmt->execute([$status, $notification, $id])) {
+        // Store notification in session for display
+        $_SESSION['notification'] = $notification; 
+        echo json_encode(["status" => "success", "message" => "Order updated", "notification" => $notification]);
     } else {
-        die("Invalid action.");
+        echo json_encode(["status" => "error", "message" => "Database update failed"]);
     }
 
-    try {
-        // Update order status and customer notification in the database
-        $sql = "UPDATE tbl_orders SET status = :status, customer_notification = :notification WHERE cid = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':status', $newStatus, PDO::PARAM_STR);
-        $stmt->bindParam(':notification', $notificationMessage, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Fetch customer's phone number
-        $sql = "SELECT phone FROM tbl_orders WHERE cid = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-        $stmt->execute();
-        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-        $customerPhone = $customer['phone'] ?? '';
-
-        // Send SMS notification if phone exists
-        if ($customerPhone) {
-            sendSMS($customerPhone, $notificationMessage, $twilio_sid, $twilio_token, $twilio_from);
-        }
-
-        // Redirect with success message
-        header("Location: vieworder.php?message=Order updated successfully");
-        exit();
-
-    } catch (PDOException $e) {
-        echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
-    }
+    exit;
 }
 
-// Close database connection
-$conn = null;
-
-// Function to send SMS via Twilio API
-function sendSMS($to, $message, $sid, $token, $from) {
-    $url = "https://api.twilio.com/2010-04-01/Accounts/$sid/Messages.json";
-    $data = [
-        'From' => $from,
-        'To' => $to,
-        'Body' => $message
-    ];
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_USERPWD, "$sid:$token");
-    $response = curl_exec($ch);
-
-    if (curl_errno($ch)) {
-        error_log('Twilio SMS Error: ' . curl_error($ch));
-    }
-
-    curl_close($ch);
+// Fetch Logo from Database
+$current_logo = "logo.png"; // Default logo
+$logoQuery = "SELECT path FROM tbl_owlogo LIMIT 1";
+$logoStmt = $conn->prepare($logoQuery);
+$logoStmt->execute();
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    $current_logo = $row['path'];
 }
 ?>
 
@@ -88,10 +63,11 @@ function sendSMS($to, $message, $sid, $token, $from) {
     <title>View Orders</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color:#FFE0B2;
+            background-color: #FFE0B2;
             color: #333;
         }
         .main-layout { display: flex; height: 100vh; }
@@ -107,14 +83,6 @@ function sendSMS($to, $message, $sid, $token, $from) {
             top: 0;
             left: 0;
             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .sidebar h2 {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            text-align: center;
-            letter-spacing: 1px;
         }
         .sidebar a {
             color: #000;
@@ -133,6 +101,15 @@ function sendSMS($to, $message, $sid, $token, $from) {
             color: #fff;
             transform: translateX(5px);
         }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
+        }
         .content { margin-left: 270px; padding: 20px; }
         .table-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
     </style>
@@ -140,31 +117,62 @@ function sendSMS($to, $message, $sid, $token, $from) {
 <body>
     <div class="main-layout">
         <aside class="sidebar">
-            <h2>Restaurant Dashboard</h2>
+            <div class="logo-container">
+                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+            </div>
+            <h2>Dashboard</h2>
             <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
             <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
             <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
             <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+            <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
             <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </aside>
 
         <div class="content">
             <h1>View Orders</h1>
+            
+            <!-- Notification Box -->
+            <?php if (isset($_SESSION['notification'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?php echo htmlspecialchars($_SESSION['notification']); ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['notification']); // Clear the notification after displaying ?>
+            <?php endif; ?>
+
             <div class="table-container">
                 <?php
                 try {
-                    include('../conn/conn.php');
-                    $sql = "SELECT cid, name, phone, food_description, quantity, preferred_time, payment_method, created_at, status FROM tbl_orders";
-                    $stmt = $conn->query($sql);
-
+                    $stmt = $conn->query("SELECT cid, name, phone, food_description, quantity, preferred_time, payment_method, created_at, status FROM tbl_orders");
+                    
                     if ($stmt->rowCount() > 0) {
-                        echo '<table class="table table-striped"><thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th><th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                        echo '<table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Serial No</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th>
+                                    <th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+                        $serialNo = 1; // Initialize serial number
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo '<tr><td>' . htmlspecialchars($row["cid"]) . '</td><td>' . htmlspecialchars($row["name"]) . '</td><td>' . htmlspecialchars($row["phone"]) . '</td><td>' . htmlspecialchars($row["food_description"]) . '</td><td>' . htmlspecialchars($row["quantity"]) . '</td><td>' . htmlspecialchars($row["preferred_time"]) . 
-                            '</td><td>' . htmlspecialchars($row["payment_method"]) . '</td><td>' . htmlspecialchars($row["created_at"]) . '</td><td><strong>' . htmlspecialchars($row["status"]) . '</strong></td><td>';
+                            echo '<tr>
+                                <td>' . $serialNo++ . '</td> <!-- Displaying serial number -->
+                                <td>' . htmlspecialchars($row["name"]) . '</td>
+                                <td>' . htmlspecialchars($row["phone"]) . '</td>
+                                <td>' . htmlspecialchars($row["food_description"]) . '</td>
+                                <td>' . htmlspecialchars($row["quantity"]) . '</td>
+                                <td>' . htmlspecialchars($row["preferred_time"]) . '</td>
+                                <td>' . htmlspecialchars($row["payment_method"]) . '</td>
+                                <td>' . htmlspecialchars($row["created_at"]) . '</td>
+                                <td><strong>' . htmlspecialchars($row["status"]) . '</strong></td>
+                                <td>';
                             if ($row["status"] === "Pending") {
-                                echo '<a href="?id=' . $row["cid"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
-                                echo '<a href="?id=' . $row["cid"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
+                                echo '<button class="btn btn-success btn-sm update-order" data-id="'.$row["cid"].'" data-action="confirm"><i class="fas fa-check-circle"></i> Confirm</button>
+                                <button class="btn btn-danger btn-sm update-order" data-id="'.$row["cid"].'" data-action="reject"><i class="fas fa-times-circle"></i> Cancel</button>';
                             }
                             echo '</td></tr>';
                         }
@@ -179,5 +187,25 @@ function sendSMS($to, $message, $sid, $token, $from) {
             </div>
         </div>
     </div>
+
+    <script>
+    $(document).ready(function () {
+        $(".update-order").click(function () {
+            var orderId = $(this).data("id");
+            var action = $(this).data("action");
+
+            $.post("", { id: orderId, action: action }, function (response) {
+                if (response.status === "success") {
+                    // Reload the page to reflect changes
+                    location.reload();
+                } else {
+                    alert(response.message); // Show error message if any
+                }
+            }, "json").fail(function () {
+                alert("An error occurred. Please try again.");
+            });
+        });
+    });
+    </script>
 </body>
 </html>

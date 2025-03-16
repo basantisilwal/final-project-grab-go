@@ -25,7 +25,15 @@ while ($row = $stmtOrders->fetch(PDO::FETCH_ASSOC)) {
     $months[] = $row['month'];
     $orders[] = $row['total_orders'];
 }
+// Fetch logo details (Fixed PDO query)
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery = $conn->prepare("SELECT logo_name, logo_path FROM tbl_logo LIMIT 1");
+$logoQuery->execute();
+$row = $logoQuery->fetch(PDO::FETCH_ASSOC);
 
+if ($row) {
+    $current_logo = $row['logo_path'];
+}
 // Close connection (optional)
 $conn = null;
 ?>
@@ -94,6 +102,24 @@ $conn = null;
       background-color: black;
       color: #fff;
     }
+    .logo-container {
+    width: 100px;  /* Set width */
+    height: 100px; /* Set height */
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden; /* Ensure the image stays within the boundary */
+    margin: 10px auto; /* Center it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white; /* Optional: Adds contrast */
+}
+
+.logo-container img {
+    width: 100%;  /* Make sure it fits the container */
+    height: 100%; /* Make sure it fits the container */
+    object-fit: cover; /* Ensure proper scaling */
+    border-radius: 50%; /* Maintain circular shape */
+}
 
     /* Main Content */
     .main-content {
@@ -126,19 +152,19 @@ $conn = null;
 <body>
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <div class="main-container d-flex">
+        <!-- Sidebar -->
+        <aside class="sidebar">
     <div class="logo-container">
-      <img src="logo.png" alt="Admin Logo"> <!-- Replace with actual logo -->
+        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
     </div>
-
     <h2>Admin Dashboard</h2>
-
     <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
     <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
     <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
     <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
-  </aside>
+</aside>
 
   <!-- Main content -->
   <main class="main-content">

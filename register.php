@@ -1,4 +1,44 @@
-<?php include ('./conn/conn.php') ?>
+<?php
+include('./conn/conn.php');
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize and retrieve input
+    $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password
+    $firstName = filter_var($_POST['first_name'], FILTER_SANITIZE_STRING);
+    $lastName = filter_var($_POST['last_name'], FILTER_SANITIZE_STRING);
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $contactNumber = filter_var($_POST['contact_number'], FILTER_SANITIZE_STRING);
+    $address = filter_var($_POST['address'], FILTER_SANITIZE_STRING);
+
+    // Insert into the database
+    $query = "INSERT INTO tbl_otp (username, password, first_name, last_name, email, contact_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    
+    if ($stmt->execute([$username, $password, $firstName, $lastName, $email, $contactNumber, $address])) {
+        // Get the last inserted ID
+        $tbl_user_id = $conn->lastInsertId();
+
+        // Start session and store tbl_user_id
+        session_start();
+        $_SESSION['tbl_user_id'] = $tbl_user_id;
+        $_SESSION['username'] = $username; // Optional: store username for further use
+
+        // Redirect to the customer dashboard
+        header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php?id=$tbl_user_id");
+        exit();
+    } else {
+        // Registration failed
+        header("Location: register.php?error=Registration failed.");
+        exit();
+    }
+}
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -116,10 +156,10 @@
                     </div>
                     <div class="form-group">
                 <select class="form-control" name="user_type" required>
-                    <option value="customer">Customer</option>
+                    <option value="user">User</option>
                     <option value="admin">Admin</option>
-                    <option value="restaurant">Restaurant</option>
-                    <option value="dispatcher">Dispatcher</option>
+                    <option value="owner">Owner</option>
+                    
                 </select>
             </div>
                     <p>No Account? Register <span  class="switch-form-link" onclick="showRegistrationForm()">Here.</span></p>

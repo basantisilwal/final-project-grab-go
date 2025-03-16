@@ -63,9 +63,9 @@ if (isset($_POST['register'])) {
             $mail->SMTPSecure = 'ssl';
             $mail->Port       = 465;
 
-            $mail->setFrom('lorem.ipsum.sample.email@gmail.com', 'Grab & Go');
+            $mail->setFrom('lorem.ipsum.sample.email@gmail.com', 'UNICAFE');
             $mail->addAddress($email);   
-            $mail->addReplyTo('lorem.ipsum.sample.email@gmail.com', 'Grab & Go');
+            $mail->addReplyTo('lorem.ipsum.sample.email@gmail.com', 'UNICAFE');
 
             $mail->isHTML(true);
             $mail->Subject = 'Verification Code';
