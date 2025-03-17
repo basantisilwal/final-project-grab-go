@@ -10,7 +10,7 @@ $logoPath = $logo['logo_path'] ?? '';
 
 // Fallback to a default logo if none found
 if (empty($logoPath)) {
-    $logoPath = "\final-project-grab-go\uploads\logo\Unicafe.png"; // Adjust this path if needed
+    $logoPath =  "\final-project-grab-go\uploads\logo\Unicafe.png";// Adjust this path if needed
 }
 ?>
 

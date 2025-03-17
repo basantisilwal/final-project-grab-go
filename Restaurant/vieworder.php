@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WI
                             WHERE cid = ?");
     
     if ($stmt->execute([$status, $notification, $id])) {
-        // Store notification in session for display
+        // Store notification in session for display on customer dashboard
         $_SESSION['notification'] = $notification; 
         echo json_encode(["status" => "success", "message" => "Order updated", "notification" => $notification]);
     } else {
@@ -132,17 +132,7 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
         <div class="content">
             <h1>View Orders</h1>
             
-            <!-- Notification Box -->
-            <?php if (isset($_SESSION['notification'])): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?php echo htmlspecialchars($_SESSION['notification']); ?>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php unset($_SESSION['notification']); // Clear the notification after displaying ?>
-            <?php endif; ?>
-
+            
             <div class="table-container">
                 <?php
                 try {

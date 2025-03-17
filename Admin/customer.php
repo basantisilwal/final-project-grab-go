@@ -138,8 +138,8 @@ if ($row) {
     </div>
     <h2>Admin Dashboard</h2>
     <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
-    <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
+    <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
+    <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
     <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
     <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
 </aside>

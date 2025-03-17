@@ -154,8 +154,8 @@ if ($row) {
     </div>
     <h2>Admin Dashboard</h2>
     <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a href="manage.php"><i class="bi bi-shop"></i> Manage Restaurants</a>
-    <a href="customer.php"><i class="bi bi-people"></i> View Customers</a>
+    <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
+    <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
     <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
     <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
 </aside>
@@ -163,7 +163,7 @@ if ($row) {
 
         <!-- Main Content -->
         <div class="main-content container mt-4">
-            <h2>Add / Edit Restaurant</h2>
+            <h2>Add Owner</h2>
             <form method="POST">
                 <?php
                 $restaurant = null;
@@ -176,7 +176,7 @@ if ($row) {
                 ?>
                 <input type="hidden" name="id" value="<?php echo $restaurant['r_id'] ?? ''; ?>">
                 <div class="mb-3">
-                    <input type="text" class="form-control" name="name" placeholder="Restaurant Name" value="<?php echo $restaurant['name'] ?? ''; ?>" required>
+                    <input type="text" class="form-control" name="name" placeholder="Owner Name" value="<?php echo $restaurant['name'] ?? ''; ?>" required>
                 </div>
                 <div class="mb-3">
                     <textarea class="form-control" name="address" placeholder="Address" required><?php echo $restaurant['address'] ?? ''; ?></textarea>
@@ -194,11 +194,11 @@ if ($row) {
                     <input type="tel" class="form-control" name="contact" placeholder="Contact Number" value="<?php echo $restaurant['contact_number'] ?? ''; ?>" required>
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    <?php echo isset($restaurant) ? 'Update' : 'Add'; ?> Restaurant
+                    <?php echo isset($restaurant) ? 'Update' : 'Add'; ?> Owner
                 </button>
             </form>
 
-            <h3 class="mt-4">Restaurant List</h3>
+            <h3 class="mt-4">Owner List</h3>
             <table class="table table-bordered">
                 <thead>
                     <tr>

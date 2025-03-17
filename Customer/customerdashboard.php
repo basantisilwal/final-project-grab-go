@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../conn/conn.php');
+include('../conn/conn.php'); // Database connection
 
 // Check if the customer is logged in
 $customer_id = $_SESSION['customer_id'] ?? null;
@@ -10,6 +10,12 @@ if (!$customer_id) {
     header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php");
     exit();
 }
+
+// Assuming customer details are stored in session or fetched from DB
+$customerFirstName = $_SESSION['customerFirstName'] ?? 'Guest';
+$customerLastName = $_SESSION['customerLastName'] ?? '';
+$customerPhone = $_SESSION['customerPhone'] ?? '';
+
 // Generate CSRF token if not set
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -18,36 +24,37 @@ if (!isset($_SESSION['csrf_token'])) {
 // Handle order submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
     if ($_POST['csrf_token'] === $_SESSION['csrf_token']) {
-        // Get form data
+        // Get form data and sanitize
         $name = htmlspecialchars($_POST['name']);
         $phone = htmlspecialchars($_POST['phone']);
-        $foodDescription = htmlspecialchars($_POST['foodDescription']);
+        $foodDescription = htmlspecialchars($_POST['fooddescription']);
         $quantity = (int)$_POST['quantity'];
         $preferred_time = $_POST['time'];
         $paymentMethod = $_POST['paymentMethod'];
         $status = "Pending"; // Default status
 
-        // Insert into database
+        // Insert order into database
         $sql = "INSERT INTO tbl_orders (name, phone, food_description, quantity, preferred_time, payment_method, status) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $conn->prepare($sql);
+
         if ($stmt->execute([$name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
             $_SESSION['message'] = "Order placed successfully!";
-            // Redirect to the same page to prevent resubmission
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit; // Make sure to exit after redirect
+            header("Location: " . $_SERVER['PHP_SELF']); // Prevent resubmission
+            exit();
         } else {
-            $_SESSION['message'] = "Error placing order. Please try again.";
+            $_SESSION['message'] = "Error placing order: " . implode(", ", $stmt->errorInfo());
             header("Location: " . $_SERVER['PHP_SELF']);
-            exit;
+            exit();
         }
     } else {
         $_SESSION['message'] = "Invalid CSRF token!";
         header("Location: " . $_SERVER['PHP_SELF']);
-        exit;
+        exit();
     }
 }
+
 
 // Fetch food items based on search query
 $searchQuery = "";
@@ -66,28 +73,24 @@ if (isset($_GET['search']) && !empty(trim($_GET['search']))) {
     $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Check if the customer is logged in and retrieve their phone number
-$customerPhone = isset($_SESSION['customer_phone']) ? $_SESSION['customer_phone'] : null;
+/// Fetch latest customer notification
+$notification = '';
+$sql = "SELECT customer_notification FROM tbl_orders WHERE cid = :customer_id ORDER BY updated_at DESC LIMIT 1";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+$stmt->execute();
+$notification = $stmt->fetchColumn();
 
-if ($customerPhone) {
-    // Fetch the latest notification for this customer
-    $sql = "SELECT customer_notification FROM tbl_orders WHERE phone = :phone ORDER BY created_at DESC LIMIT 1";
+// Unset the notification after fetching
+if ($notification) {
+    $_SESSION['dashboard_notification'] = htmlspecialchars($notification);
+    $sql = "UPDATE tbl_orders SET customer_notification = '' WHERE cid = :customer_id";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':phone', $customerPhone, PDO::PARAM_STR);
+    $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
     $stmt->execute();
-    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Store notification in session if available
-    if (!empty($notification['customer_notification'])) {
-        $_SESSION['dashboard_notification'] = htmlspecialchars($notification['customer_notification']);
-
-        // Clear notification after storing in session
-        $sql = "UPDATE tbl_orders SET customer_notification = '' WHERE phone = :phone";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':phone', $customerPhone, PDO::PARAM_STR);
-        $stmt->execute();
-    }
 }
+
+
 // Fetch customer profile information
 $sql = "SELECT first_name, last_name, profile_pic FROM tbl_otp WHERE tbl_user_id = :customer_id";
 $stmt = $conn->prepare($sql);
@@ -349,17 +352,19 @@ if ($customer_id) {
         </div>
         <?php unset($_SESSION['dashboard_notification']); ?>
     <?php endif; ?>
-
-    <?php if (isset($_SESSION['message'])): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Message:</strong> <?php echo $_SESSION['message']; ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <?php unset($_SESSION['message']); // Unset the message after displaying it ?>
-    <?php endif; ?>
+ 
+    <?php if (isset($_SESSION['notification'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?php echo htmlspecialchars($_SESSION['notification']); ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['notification']); // Clear the notification after displaying ?>
+            <?php endif; ?>
 </div>
+
+
 
 
 
@@ -429,27 +434,79 @@ if ($customer_id) {
     </section>
 <?php endif; ?>
 
-<!-- All Food Items -->
+<?php
+include('../conn/conn.php');
+
+// Debugging: Print session variables (REMOVE in production)
+if (isset($_GET['debug'])) {
+    echo "<pre>";
+    var_dump($_SESSION);
+    echo "</pre>";
+}
+
+// ✅ Check if user is logged in
+$customer_id = $_SESSION['customer_id'] ?? null;
+
+$customerFirstName = '';
+$customerLastName = '';
+$customerPhone = '';
+
+// ✅ Fetch customer details securely
+if ($customer_id !== null) {
+    $sql = "SELECT first_name, last_name, contact_number FROM tbl_otp WHERE tbl_user_id = :customer_id LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($customer) {
+        $customerFirstName = htmlspecialchars($customer['first_name']);
+        $customerLastName = htmlspecialchars($customer['last_name']);
+        $customerPhone = htmlspecialchars($customer['contact_number']);
+    }
+}
+// Fetch latest customer notification (optional, based on your use case)
+$notification = null;
+$cid = $_SESSION['cid'] ?? null;
+if ($cid !== null) {
+    $sql = "SELECT customer_notification FROM tbl_orders WHERE cid = :cid ORDER BY cid DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':cid', $cid, PDO::PARAM_INT);
+    $stmt->execute();
+    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+
+// ✅ Fetch food items from database
+$query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+
+// ✅ Fetch QR Code (if applicable)
+$sql = "SELECT qr_path FROM tbl_qr WHERE q_id = 1"; 
+$stmt_qr = $conn->prepare($sql);
+$stmt_qr->execute();
+$row_qr = $stmt_qr->fetch(PDO::FETCH_ASSOC);
+$qr_path = $row_qr['qr_path'] ?? '';
+
+?>
+<!-- ✅ Food Items Section -->
 <section class="restaurants">
     <h2>Order Food Online Near You</h2>
     <div class="restaurant-list">
-        <?php
-        $query = "SELECT * FROM tbl_addfood ORDER BY f_id DESC";
-        $stmt = $conn->prepare($query);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // Image path handling
+        <?php if ($stmt->rowCount() > 0): ?>
+            <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+                <?php
                 $imagePath = "uploads/" . htmlspecialchars($row['image']);
                 if (!file_exists($imagePath) || empty($row['image'])) {
                     $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);
                 }
 
-                // Availability class assignment for dynamic badge styling
                 $availabilityClass = (strtolower($row['availability']) === 'available') ? 'available' : 'unavailable';
                 $isAvailable = strtolower($row['availability']) === 'available';
                 ?>
+                
                 <div class="restaurant <?php echo !$isAvailable ? 'disabled' : ''; ?>" 
                      data-toggle="<?php echo $isAvailable ? 'modal' : ''; ?>" 
                      data-target="<?php echo $isAvailable ? '#foodModal' : ''; ?>" 
@@ -459,26 +516,25 @@ if ($customer_id) {
                      data-price="RS <?php echo htmlspecialchars($row['price']); ?>" 
                      data-image="<?php echo $imagePath; ?>"
                      style="<?php echo !$isAvailable ? 'pointer-events: none; opacity: 0.5;' : ''; ?>">
+                    
                     <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($row['food_name']); ?>" class="circle-img">
+                    
                     <div class="restaurant-info">
                         <h3><?php echo htmlspecialchars($row['food_name']); ?></h3>
                         <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
                         <p class="description"><?php echo htmlspecialchars($row['description']); ?></p>
                         <p class="price">Price: RS <?php echo htmlspecialchars($row['price']); ?></p>
                         <p class="availability <?php echo $availabilityClass; ?>">Status: <?php echo htmlspecialchars($row['availability']); ?></p>
-                        <?php if (!$isAvailable): ?>
-                            <span class="badge badge-danger">Sold Out</span>
-                        <?php endif; ?>
+
                     </div>
                 </div>
-                <?php
-            }
-        } else {
-            echo '<p>No food items available at the moment. Please check back later!</p>';
-        }
-        ?>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p>No food items available at the moment. Please check back later!</p>
+        <?php endif; ?>
     </div>
 </section>
+
 
 
     <!-- Food Details Modal -->
@@ -506,70 +562,60 @@ if ($customer_id) {
         </div>
     </div>
 
-    <!-- Order Form Modal -->
-     
-    <?php
+     <!-- ✅ Display Session Message -->
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <?php
+        echo $_SESSION['message'];
+        unset($_SESSION['message']); // Clear message after displaying
+        ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php endif; ?>
 
-include('../conn/conn.php');
 
-// Check if 'cid' is set in the session
-$cid = $_SESSION['cid'] ?? null; // Cleaner way to check if cid exists
-
-// Fetch latest customer notification (optional, based on your use-case)
-if ($cid !== null) {
-    $sql = "SELECT customer_notification FROM tbl_orders WHERE cid = :cid ORDER BY cid DESC LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':cid', $cid, PDO::PARAM_INT);
-    $stmt->execute();
-    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
-// ✅ Fetch QR code path using PDO (correct way since you are using PDO)
-$sql = "SELECT qr_path FROM tbl_qr WHERE q_id = 1"; // Adjust WHERE as needed
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-$qr_path = $row['qr_path'] ?? ''; // Safe fallback if no record
-
-?>
-<!-- Modal -->
+<!-- ✅ Order Modal -->
 <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="orderModalLabel">Place Your Order</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <!-- Correct for Bootstrap 4 -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                <form id="orderForm" method="POST" action="#"> <!-- Add action URL if needed -->
+                <form id="orderForm" method="POST" action="">
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?? ''; ?>">
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Name:</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
+                        <input type="text" id="name" name="name" class="form-control"
+                               value="<?php echo $customerFirstName . ' ' . $customerLastName; ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number:</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="foodDescription" class="form-label">Food Description:</label>
-                        <textarea id="foodDescription" name="foodDescription" class="form-control" rows="2" required></textarea>
+                        <input type="tel" id="phone" name="phone" class="form-control"
+                               value="<?php echo $customerPhone; ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="quantity" class="form-label">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="100" step="1" required>
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fooddescription" class="form-label">Food Description:</label>
+                        <textarea id="fooddescription" name="fooddescription" class="form-control" rows="2" required></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="time" class="form-label">Preferred Time:</label>
-                        <input type="time" id="time" name="time" class="form-control">
+                        <input type="time" id="time" name="time" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
@@ -596,7 +642,6 @@ $qr_path = $row['qr_path'] ?? ''; // Safe fallback if no record
 </div>
 
 
-
                     <button type="submit" class="btn btn-primary mt-3">Submit Order</button>
                 </form>
             </div>
@@ -604,7 +649,7 @@ $qr_path = $row['qr_path'] ?? ''; // Safe fallback if no record
     </div>
 </div>
 
-<!-- JS to handle payment method selection -->
+
 
 
 
@@ -646,7 +691,7 @@ $qr_path = $row['qr_path'] ?? ''; // Safe fallback if no record
     onlinePaymentRadio.addEventListener('change', togglePaymentElements);
     cashPaymentRadio.addEventListener('change', togglePaymentElements);
 });
-    function fetchNotification() {
+function fetchNotification() {
         $.ajax({
             url: "fetch_notification.php",
             method: "GET",
@@ -663,8 +708,37 @@ $qr_path = $row['qr_path'] ?? ''; // Safe fallback if no record
             }
         });
     }
-    setInterval(fetchNotification, 5000); // Refresh every 5 seconds
-         
+    setInterval(fetchNotification, 5000);
+    
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".star").forEach(star => {
+        star.addEventListener("click", function () {
+            let foodId = this.parentElement.getAttribute("data-food-id");
+            let rating = this.getAttribute("data-value");
+
+            fetch("submit_rating.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `food_id=${foodId}&rating=${rating}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById(`rating-message-${foodId}`).innerText = data;
+
+                // Update the average rating dynamically
+                fetch(`get_avg_rating.php?food_id=${foodId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById(`avg-rating-${foodId}`).innerText = `⭐ ${data.avg_rating}`;
+                });
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+});
+
+
+  
     </script>
 </body>
 </html>
