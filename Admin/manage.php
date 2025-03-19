@@ -1,29 +1,52 @@
 <?php
-// Include the database connection
+// Include database connection
 include('../conn/conn.php');
+
+// Function to generate a random password (visible, not hashed)
+function generatePassword($length = 8) {
+    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return substr(str_shuffle($characters), 0, $length);
+}
+
+// Function to generate a unique username
+function generateUsername($name) {
+    return strtolower(str_replace(' ', '_', $name)) . rand(100, 999);
+}
 
 // Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Add or Update Restaurant
-    $name = $_POST['name'];
-    $address = $_POST['address'];
+    $name = trim($_POST['name']);
+    $address = trim($_POST['address']);
     $date = $_POST['date'];
     $time = $_POST['time'];
-    $email = $_POST['email'];
-    $contact = $_POST['contact'];
+    $email = trim($_POST['email']);
+    $contact = trim($_POST['contact']);
 
-    if (isset($_POST['id']) && !empty($_POST['id'])) {
-        // Update Restaurant
-        $id = intval($_POST['id']);
-        $stmt = $conn->prepare("UPDATE tbl_restaurantname SET name=?, address=?, date=?, time=?, email=?, contact_number=? WHERE r_id=?");
-        $stmt->execute([$name, $address, $date, $time, $email, $contact, $id]);
+    // Validate phone number (must start with 98 and have exactly 10 digits)
+    if (!preg_match('/^98\d{8}$/', $contact)) {
+        echo "<script>alert('Invalid contact number! It must start with 98 and be 10 digits long.');</script>";
     } else {
-        // Add New Restaurant
-        $stmt = $conn->prepare("INSERT INTO tbl_restaurantname (name, address, date, time, email, contact_number) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $address, $date, $time, $email, $contact]);
+        if (!empty($_POST['id'])) {
+            // Update existing owner
+            $id = intval($_POST['id']);
+            $stmt = $conn->prepare("UPDATE tbl_restaurantname SET name=?, address=?, date=?, time=?, email=?, contact_number=? WHERE r_id=?");
+            $stmt->execute([$name, $address, $date, $time, $email, $contact, $id]);
+        } else {
+            // Insert new owner
+            $stmt = $conn->prepare("INSERT INTO tbl_restaurantname (name, address, date, time, email, contact_number) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $address, $date, $time, $email, $contact]);
+
+            // Generate credentials for the new owner
+            $username = generateUsername($name);
+            $password = generatePassword(); // Plain text password (Consider hashing for security)
+            
+            // Insert into user table
+            $stmt = $conn->prepare("INSERT INTO tbl_restaurant (username, password) VALUES (?, ?)");
+            $stmt->execute([$username, $password]);
+        }
+        header("Location: manage.php");
+        exit;
     }
-    header("Location: manage.php");
-    exit;
 }
 
 // Handle Delete Request
@@ -35,12 +58,11 @@ if (isset($_GET['delete_id'])) {
     exit;
 }
 
-// Fetch logo details (Fixed PDO query)
-$current_logo = "logo.png"; // fallback if none in DB
-$logoQuery = $conn->prepare("SELECT logo_name, logo_path FROM tbl_logo LIMIT 1");
+// Fetch logo details
+$current_logo = "logo.png"; // Default logo
+$logoQuery = $conn->prepare("SELECT logo_path FROM tbl_logo LIMIT 1");
 $logoQuery->execute();
 $row = $logoQuery->fetch(PDO::FETCH_ASSOC);
-
 if ($row) {
     $current_logo = $row['logo_path'];
 }
@@ -94,33 +116,14 @@ if ($row) {
             box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
         }
         .logo-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .logo-container img {
-      width: 80px;
-      border-radius: 50%;
-      border: 2px solid black;
-    }
-        .logo-container {
-    width: 100px;  /* Set width */
-    height: 100px; /* Set height */
-    border-radius: 50%; /* Make it circular */
-    overflow: hidden; /* Ensure the image stays within the boundary */
-    margin: 10px auto; /* Center it */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white; /* Optional: Adds contrast */
-}
-
-.logo-container img {
-    width: 100%;  /* Make sure it fits the container */
-    height: 100%; /* Make sure it fits the container */
-    object-fit: cover; /* Ensure proper scaling */
-    border-radius: 50%; /* Maintain circular shape */
-}
-
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
+        }
         .sidebar a {
             color: black;
             text-decoration: none;
@@ -149,17 +152,16 @@ if ($row) {
     <div class="main-container d-flex">
         <!-- Sidebar -->
         <aside class="sidebar">
-    <div class="logo-container">
-        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
-    </div>
-    <h2>Admin Dashboard</h2>
-    <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
-    <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
-    <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
-    <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
-</aside>
-
+            <div class="logo-container">
+                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
+            </div>
+            <h2>Admin Dashboard</h2>
+            <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
+            <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
+            <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        </aside>
 
         <!-- Main Content -->
         <div class="main-content container mt-4">

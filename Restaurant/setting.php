@@ -200,6 +200,7 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
     <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
     <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
     <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+    <a href="viewfeedback.php"><i class="bi bi-chat-dots"></i> Feedback</a>
     <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </aside>
 <!-- Main content area -->

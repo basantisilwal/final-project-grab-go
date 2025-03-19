@@ -236,6 +236,7 @@ $profilePicPath = $customer['profile_pic'] ? "uploads/{$customer['profile_pic']}
 .modal-footer .btn-primary {
     background-color: black !important;
     border-color: black !important;
+    
 }
 
 /* Change submit order button background to black */
@@ -324,6 +325,34 @@ h2 {
             max-height: 400px;
             overflow-y: auto; /* Allow scrolling in modal if content exceeds height */
         }
+        .modal-footer {
+    text-align: left;
+}
+.comment-box {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+button {
+    background: #28a745;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #218838;
+}
     </style>
 </head>
 <body>
@@ -465,15 +494,16 @@ if ($customer_id !== null) {
         $customerPhone = htmlspecialchars($customer['contact_number']);
     }
 }
-// Fetch latest customer notification (optional, based on your use case)
+
+// Fetch latest customer notification
 $notification = null;
-$cid = $_SESSION['cid'] ?? null;
-if ($cid !== null) {
-    $sql = "SELECT customer_notification FROM tbl_orders WHERE cid = :cid ORDER BY cid DESC LIMIT 1";
+if ($customer_id !== null) {
+    $sql = "SELECT customer_notification FROM tbl_orders 
+            WHERE cid = :customer_id ORDER BY updated_at DESC LIMIT 1";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':cid', $cid, PDO::PARAM_INT);
+    $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
     $stmt->execute();
-    $notification = $stmt->fetch(PDO::FETCH_ASSOC);
+    $notification = $stmt->fetchColumn();
 }
 
 
@@ -490,7 +520,9 @@ $stmt_qr->execute();
 $row_qr = $stmt_qr->fetch(PDO::FETCH_ASSOC);
 $qr_path = $row_qr['qr_path'] ?? '';
 
+
 ?>
+
 <!-- ✅ Food Items Section -->
 <section class="restaurants">
     <h2>Order Food Online Near You</h2>
@@ -553,10 +585,18 @@ $qr_path = $row_qr['qr_path'] ?? '';
                     <p><strong>Category:</strong> <span id="modalFoodCategory"></span></p>
                     <p><strong>Description:</strong> <span id="modalFoodDescription"></span></p>
                     <p><strong>Price:</strong> <span id="modalFoodPrice"></span></p>
-                </div>
-                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#orderModal">Order</button>
+                </div>
+                 <!-- Comment Section -->
+<div class="modal-footer">
+    <div class="comment-box">
+        <h3>Leave a Comment</h3>
+        <textarea id="commentText" placeholder="Write your comment here..." required></textarea>
+        <button onclick="submitComment()">Submit</button>
+        <div id="commentsSection"></div>
+    </div>
+</div>
                 </div>
             </div>
         </div>
@@ -710,35 +750,40 @@ function fetchNotification() {
     }
     setInterval(fetchNotification, 5000);
     
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".star").forEach(star => {
-        star.addEventListener("click", function () {
-            let foodId = this.parentElement.getAttribute("data-food-id");
-            let rating = this.getAttribute("data-value");
-
-            fetch("submit_rating.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `food_id=${foodId}&rating=${rating}`
-            })
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById(`rating-message-${foodId}`).innerText = data;
-
-                // Update the average rating dynamically
-                fetch(`get_avg_rating.php?food_id=${foodId}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById(`avg-rating-${foodId}`).innerText = `⭐ ${data.avg_rating}`;
-                });
-            })
-            .catch(error => console.error("Error:", error));
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".restaurant").forEach(item => {
+        item.addEventListener("click", function () {
+            let foodId = this.getAttribute("data-food-id");
+            document.getElementById("foodModal").setAttribute("data-food-id", foodId);
         });
     });
 });
 
+function submitComment() {
+    let commentText = document.getElementById("commentText").value.trim();
+    let foodId = document.getElementById("foodModal").getAttribute("data-food-id");
 
-  
+    if (!foodId || commentText === "") {
+        alert("Please provide a valid food ID and a comment.");
+        return;
+    }
+
+    fetch('comment_system.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'submit', f_id: foodId, tbl_user_id: <?php echo $customer_id; ?>, comment: commentText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Comment submitted successfully!");
+            document.getElementById("commentText").value = "";
+        } else {
+            alert("Error: " + data.error);
+        }
+    });
+}
+
     </script>
 </body>
 </html>
