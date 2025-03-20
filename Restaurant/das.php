@@ -159,11 +159,9 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
         <h3>Orders Today</h3>
         <p>Completed: <span id="orders-completed"><?php echo $completed; ?></span></p>
         <p>Pending: <span id="orders-pending"><?php echo $pending; ?></span></p>
-        <button onclick="updateOrders()">Refresh</button>
-
+        
         <h3 style="margin-top: 20px;">Total Menu</h3>
         <p>Available Food Items: <span id="menu"><?php echo $total_food; ?></span></p>
-        <button onclick="refreshMenu()">View All</button>
     </div>
 </div>
 
