@@ -8,13 +8,15 @@ $customer_id = 1; // Replace this with actual customer ID
 // Fetch order history with food details
 $sql = "
     SELECT 
-        o.cid, o.order_time, o.quantity, o.total, 
-        f.food_name, f.image, f.price
+        o.cid, o.created_at, o.quantity, o.status, 
+        f.food_name, f.image, f.price,
+        (f.price * o.quantity) AS total_price
     FROM tbl_orders o
     JOIN tbl_addfood f ON o.food_id = f.f_id
     WHERE o.cid = :customer_id
-    ORDER BY o.order_time DESC
+    ORDER BY o.created_at DESC
 ";
+
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
 $stmt->execute();
