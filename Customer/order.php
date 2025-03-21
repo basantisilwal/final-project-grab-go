@@ -1,13 +1,13 @@
 <?php
 // Include database connection
-require 'config.php';
+include('../conn/conn.php');
 
 // Start session to get user details
 session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: order.php");
     exit();
 }
 
