@@ -408,6 +408,11 @@ if ($customer_id) {
                 <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
+            <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="order_history.php">Order History</a>
+                </li>
             <div class="navbar-nav ml-auto">
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="profile.php" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
