@@ -108,6 +108,9 @@ $profilePicPath = $customer['profile_pic'] ? "uploads/{$customer['profile_pic']}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grab & Go</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -353,6 +356,15 @@ button {
 button:hover {
     background: #218838;
 }
+.navbar .btn-order {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+.btn-success {
+    padding: 10px 20px;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -397,35 +409,40 @@ if ($customer_id) {
 
 
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand logo" href="#">UNICAFE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <form class="d-flex search-container" method="GET" action="">
-                <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-            <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="order_history.php">Order History</a>
-                </li>
-            <div class="navbar-nav ml-auto">
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="profile.php" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="<?php echo $profilePicPath; ?>" alt="Profile Picture" class="rounded-circle" style="width: 32px; height: 32px;">
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
-                        <a class="dropdown-item" href="profile.php">View Profile</a>
-                        <a class="dropdown-item" href="logout.php">Logout</a>
-                    </div>
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand logo" href="#">UNICAFE</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Search Bar -->
+        <form class="d-flex search-container me-auto" method="GET" action="">
+            <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+
+        <!-- Right-side Items (Order Button + Profile) -->
+        <div class="d-flex align-items-center">
+            <!-- Order Button -->
+            <a href="order.php" class="btn btn-success mx-3">Order Now</a>
+
+            <!-- Profile Dropdown -->
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="profile.php" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="<?php echo $profilePicPath; ?>" alt="Profile Picture" class="rounded-circle" style="width: 32px; height: 32px;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <a class="dropdown-item" href="profile.php">View Profile</a>
+                    <a class="dropdown-item" href="logout.php">Logout</a>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
+
+
 
    <!-- Search Results Section -->
 <?php if (!empty($searchQuery)): ?>
@@ -755,28 +772,19 @@ function fetchNotification() {
     }
     setInterval(fetchNotification, 5000);
     
-    document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".restaurant").forEach(item => {
-        item.addEventListener("click", function () {
-            let foodId = this.getAttribute("data-food-id");
-            document.getElementById("foodModal").setAttribute("data-food-id", foodId);
-        });
-    });
-});
-
-function submitComment() {
+    function submitComment() {
     let commentText = document.getElementById("commentText").value.trim();
     let foodId = document.getElementById("foodModal").getAttribute("data-food-id");
 
     if (!foodId || commentText === "") {
-        alert("Please provide a valid food ID and a comment.");
+        alert("Please enter a comment.");
         return;
     }
 
     fetch('comment_system.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'submit', f_id: foodId, tbl_user_id: <?php echo $customer_id; ?>, comment: commentText })
+        body: JSON.stringify({ f_id: foodId, comment: commentText })
     })
     .then(response => response.json())
     .then(data => {
@@ -786,6 +794,9 @@ function submitComment() {
         } else {
             alert("Error: " + data.error);
         }
+    })
+    .catch(error => {
+        alert("Request failed: " + error);
     });
 }
 
