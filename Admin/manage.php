@@ -102,50 +102,69 @@ if ($row) {
         .table th, .table td {
             border: 2px solid black !important;
         }
-        .sidebar {
-            width: 220px;
-            background: linear-gradient(135deg, #f7b733, #fc4a1a);
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
-        }
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-container img {
-            width: 80px;
-            border-radius: 50%;
-            border: 2px solid black;
-        }
-        .sidebar a {
-            color: black;
-            text-decoration: none;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-        .sidebar h2 {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #000;
-            font-weight: bold;
-            text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #d4b870;
-        }
-        .sidebar a:hover {
-            background-color: black;
-            color: #fff;
-        }
+        /* Sidebar Styles */
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(135deg, #f7b733, #fc4a1a);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
+    }
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-container img {
+      width: 80px;
+      border-radius: 50%;
+      border: 2px solid black;
+    }
+    .sidebar a {
+      color: black;
+      text-decoration: none;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+    .sidebar h2 {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: #000;
+      font-weight: bold;
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #d4b870;
+    }
+    .sidebar a:hover {
+      background-color: black;
+      color: #fff;
+    }
+    .logo-container {
+    width: 100px;  /* Set width */
+    height: 100px; /* Set height */
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden; /* Ensure the image stays within the boundary */
+    margin: 10px auto; /* Center it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white; /* Optional: Adds contrast */
+}
+
+.logo-container img {
+    width: 100%;  /* Make sure it fits the container */
+    height: 100%; /* Make sure it fits the container */
+    object-fit: cover; /* Ensure proper scaling */
+    border-radius: 50%; /* Maintain circular shape */
+}
     </style>
 </head>
 <body>

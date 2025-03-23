@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
         }
     }
     // Refresh the page to show messages and updated logo
-    header("Location: " . $_SERVER['PHP_SELF']);
+    header("Location:'\final-project-grab-go\uploads '" . $_SERVER['PHP_SELF']);
     exit();
 }
 
@@ -149,6 +149,24 @@ if ($row = mysqli_fetch_assoc($logoResult)) {
       background-color: black;
       color: #fff;
     }
+    .logo-container {
+    width: 100px;  /* Set width */
+    height: 100px; /* Set height */
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden; /* Ensure the image stays within the boundary */
+    margin: 10px auto; /* Center it */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white; /* Optional: Adds contrast */
+}
+
+.logo-container img {
+    width: 100%;  /* Make sure it fits the container */
+    height: 100%; /* Make sure it fits the container */
+    object-fit: cover; /* Ensure proper scaling */
+    border-radius: 50%; /* Maintain circular shape */
+}
 
         /* Main Container */
         .main-container {

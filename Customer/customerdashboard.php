@@ -473,7 +473,9 @@ if ($customer_id) {
                             <p>Category: <?php echo htmlspecialchars($row['category']); ?></p>
                             <p class="description"><?php echo htmlspecialchars($row['description']); ?></p>
                             <p class="price">Price: RS <?php echo htmlspecialchars($row['price']); ?></p>
+                            <p class="availability <?php echo $availabilityClass; ?>">Status: <?php echo htmlspecialchars($row['availability']); ?></p>
                         </div>
+                    </div>
                     </div>
                     <?php
                 }
@@ -610,15 +612,15 @@ $qr_path = $row_qr['qr_path'] ?? '';
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#orderModal">Order</button>
                 </div>
-                 <!-- Comment Section -->
-<div class="modal-footer">
-    <div class="comment-box">
-        <h3>Leave a Comment</h3>
-        <textarea id="commentText" placeholder="Write your comment here..." required></textarea>
-        <button onclick="submitComment()">Submit</button>
-        <div id="commentsSection"></div>
+                <!-- Comment Section -->
+    <div class="modal-footer">
+        <div class="comment-box">
+            <h3>Leave a Comment</h3>
+            <textarea id="commentText" placeholder="Write your comment here..." required></textarea>
+            <button onclick="submitComment()">Submit</button>
+            <div id="commentsSection"></div>
+        </div>
     </div>
-</div>
                 </div>
             </div>
         </div>
@@ -773,32 +775,35 @@ function fetchNotification() {
     setInterval(fetchNotification, 5000);
     
     function submitComment() {
-    let commentText = document.getElementById("commentText").value.trim();
-    let foodId = document.getElementById("foodModal").getAttribute("data-food-id");
+            let comment = document.getElementById("commentText").value;
+            let f_id = 1; // Replace with actual foreign key ID
+            let tbl_user_id = 1; // Replace with actual user ID
 
-    if (!foodId || commentText === "") {
-        alert("Please enter a comment.");
-        return;
-    }
+            if (comment.trim() === "") {
+                alert("Please enter a comment!");
+                return;
+            }
 
-    fetch('comment_system.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ f_id: foodId, comment: commentText })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Comment submitted successfully!");
-            document.getElementById("commentText").value = "";
-        } else {
-            alert("Error: " + data.error);
+            let formData = new FormData();
+            formData.append("f_id", f_id);
+            formData.append("tbl_user_id", tbl_user_id);
+            formData.append("comment", comment);
+
+            fetch("comment_system.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(data.message);
+                    document.getElementById("commentText").value = ""; // Clear input field
+                }
+            })
+            .catch(error => console.error("Error:", error));
         }
-    })
-    .catch(error => {
-        alert("Request failed: " + error);
-    });
-}
 
     </script>
 </body>
