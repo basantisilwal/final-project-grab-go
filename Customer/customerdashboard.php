@@ -422,11 +422,9 @@ if ($customer_id) {
             <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
             <button class="btn btn-primary" type="submit">Search</button>
         </form>
-
-        <!-- Right-side Items (Order Button + Profile) -->
-        <div class="d-flex align-items-center">
-            <!-- Order Button -->
-            <a href="order.php" class="btn btn-success mx-3">Order Now</a>
+<!-- Order History Link -->
+<a href="order_history.php" class="btn btn-outline-primary me-3">Order History</a>
+       
 
             <!-- Profile Dropdown -->
             <div class="nav-item dropdown">
