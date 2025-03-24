@@ -1,8 +1,5 @@
 <?php
-// Start session
 session_start();
-
-// Establish database connection
 require_once('../conn/conn.php'); 
 
 // Ensure user is logged in
@@ -10,9 +7,9 @@ if (!isset($_SESSION['customer_id'])) {
     die("Please log in to view your order history.");
 }
 
-$customer_id = $_SESSION['customer_id']; // Retrieve customer ID from session
+$customer_id = $_SESSION['customer_id']; 
 
-// Fetch order history with food details (including image)
+// Fetch confirmed orders
 $sql = "
     SELECT 
         o.cid, o.created_at, o.quantity, o.status, 
@@ -20,7 +17,7 @@ $sql = "
         (f.price * o.quantity) AS total_price
     FROM tbl_orders o
     JOIN tbl_addfood f ON o.f_id = f.f_id
-    WHERE o.cid = :customer_id
+    WHERE o.cid = :customer_id AND o.status = 'Confirmed'
     ORDER BY o.created_at DESC
 ";
 
@@ -28,6 +25,23 @@ $stmt = $conn->prepare($sql);
 $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Delete order history
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_order'])) {
+    $order_id = $_POST['order_id'];
+
+    $delete_sql = "DELETE FROM tbl_orders WHERE cid = :order_id AND cid = :customer_id";
+    $delete_stmt = $conn->prepare($delete_sql);
+    $delete_stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+    $delete_stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+    
+    if ($delete_stmt->execute()) {
+        header("Location: order_history.php");
+        exit();
+    } else {
+        echo "Error deleting order.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +61,6 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin: auto;
             position: relative;
         }
-        /* Close Button */
         .close-btn {
             position: absolute;
             top: 10px;
@@ -118,44 +131,59 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-weight: bold;
             color: #e63946;
         }
+        .delete-btn {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .delete-btn:hover {
+            background-color: #c92b39;
+        }
     </style>
 </head>
 <body>
-
     <div class="order-container">
-        <!-- Close Button -->
         <button class="close-btn" onclick="goToDashboard()">❌</button>
-
         <h1 style="text-align:center;">Order History</h1>
-
-        <?php foreach ($orders as $order) { ?>
-        <div class="order-card">
-            <div class="order-header">
-                <div class="icon">📦</div>
-                <div>
-                    <h3>Delivered</h3>
-                    <p><?php echo date('d/m/Y', strtotime($order['created_at'])); ?></p>
+        
+        <?php if (empty($orders)) { ?>
+            <p style="text-align:center; color: gray;">No confirmed orders found.</p>
+        <?php } else { ?>
+            <?php foreach ($orders as $order) { ?>
+            <div class="order-card">
+                <div class="order-header">
+                    <div class="icon">📦</div>
+                    <div>
+                        <h3><?php echo ucfirst($order['status']); ?></h3>
+                        <p><?php echo date('d/m/Y', strtotime($order['created_at'])); ?></p>
+                    </div>
+                </div>
+                <div class="order-body">
+                    <img src="<?php echo htmlspecialchars($order['image']); ?>" alt="<?php echo htmlspecialchars($order['food_name']); ?>">
+                    <div class="order-info">
+                        <p><b><?php echo htmlspecialchars($order['food_name']); ?></b></p>
+                        <p>Quantity: <?php echo $order['quantity']; ?></p>
+                        <p>Total Price: <span>$<?php echo number_format($order['total_price'], 2); ?></span></p>
+                        <form method="POST">
+                            <input type="hidden" name="order_id" value="<?php echo $order['cid']; ?>">
+                            <button type="submit" name="delete_order" class="delete-btn">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="order-body">
-                <!-- Fetch and display image from tbl_addfood -->
-                <img src="<?php echo htmlspecialchars($order['image']); ?>" alt="<?php echo htmlspecialchars($order['food_name']); ?>">
-                <div class="order-info">
-                    <p>Your feedback will help others make the right choice. Tap here to share your review</p>
-                    <p>Order # <?php echo rand(100000000000000, 999999999999999); ?></p>
-                    <p>Tracking # <?php echo rand(100000000000, 999999999999); ?></p>
-                </div>
-            </div>
-        </div>
+            <?php } ?>
         <?php } ?>
-
     </div>
 
     <script>
         function goToDashboard() {
-            window.location.href = "customerdashboard.php"; // Redirect to dashboard
+            window.location.href = "customerdashboard.php";
         }
     </script>
-
 </body>
 </html>
