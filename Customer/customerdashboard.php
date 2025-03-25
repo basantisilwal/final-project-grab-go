@@ -357,7 +357,7 @@ button:hover {
     background: #218838;
 }
 .navbar .btn-order {
-    font-size: 16px;
+    font-size: 10px;
     font-weight: bold;
     padding: 10px 20px;
 }
