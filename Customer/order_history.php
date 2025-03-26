@@ -1,189 +1,191 @@
 <?php
 session_start();
-require_once('../conn/conn.php'); 
 
-// Ensure user is logged in
-if (!isset($_SESSION['customer_id'])) {
-    die("Please log in to view your order history.");
+// Ensure user is logged in and has contact_number in session
+if (!isset($_SESSION['contact_number'])) {
+    header("Location: login.php"); // Redirect to login page
+    exit();
 }
 
-$customer_id = $_SESSION['customer_id']; 
+$contact_number = $_SESSION['contact_number'];
 
-// Fetch confirmed orders
-$sql = "
-    SELECT 
-        o.cid, o.created_at, o.quantity, o.status, 
-        f.food_name, f.image, f.price,
-        (f.price * o.quantity) AS total_price
-    FROM tbl_orders o
-    JOIN tbl_addfood f ON o.f_id = f.f_id
-    WHERE o.cid = :customer_id AND o.status = 'Confirmed'
-    ORDER BY o.created_at DESC
-";
+// Database connection
+$host = "localhost";
+$username = "root";  
+$password = "";      
+$dbname = "grab&go"; 
 
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
-$stmt->execute();
-$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Delete order history
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_order'])) {
-    $order_id = $_POST['order_id'];
-
-    $delete_sql = "DELETE FROM tbl_orders WHERE cid = :order_id AND cid = :customer_id";
-    $delete_stmt = $conn->prepare($delete_sql);
-    $delete_stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
-    $delete_stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+// Create connection with error handling
+try {
+    $conn = new mysqli($host, $username, $password, $dbname);
     
-    if ($delete_stmt->execute()) {
-        header("Location: order_history.php");
-        exit();
-    } else {
-        echo "Error deleting order.";
+    // Check connection
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
     }
+
+    // Base query for orders using phoneno column
+    $query = "SELECT * FROM tbl_orders WHERE phone = ?";
+    $params = [$contact_number];
+    $types = "s"; // 's' for string
+    
+    // Apply status filter if provided
+    if (isset($_GET['status']) && in_array($_GET['status'], ['Pending', 'Confirmed', 'Cancelled'])) {
+        $query .= " AND status = ?";
+        $params[] = $_GET['status'];
+        $types .= "s";
+    }
+    
+    $query .= " ORDER BY created_at DESC";
+    
+    // Prepare and execute orders query
+    $stmt_orders = $conn->prepare($query);
+    $stmt_orders->bind_param($types, ...$params);
+    $stmt_orders->execute();
+    $result = $stmt_orders->get_result();
+
+} catch (Exception $e) {
+    die("Error: " . $e->getMessage());
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Order History</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Orders</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            padding: 20px;
-        }
-        .order-container {
-            width: 100%;
-            max-width: 600px;
-            margin: auto;
-            position: relative;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #e63946;
-        }
-        .order-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
-            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        .order-header {
-            display: flex;
-            align-items: center;
-        }
-        .order-header .icon {
-            width: 40px;
-            height: 40px;
-            background: #007bff;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            font-size: 18px;
-            margin-right: 10px;
-        }
-        .order-header h3 {
             margin: 0;
-            font-size: 16px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
             color: #333;
         }
-        .order-header p {
-            margin: 0;
-            font-size: 14px;
-            color: gray;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
-        .order-body {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
         }
-        .order-body img {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            margin-right: 15px;
-            object-fit: cover;
-            border: 1px solid #ddd;
+
+        th {
+            background-color: #4CAF50;
+            color: white;
         }
-        .order-info {
-            flex-grow: 1;
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
-        .order-info p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: gray;
+
+        tr:hover {
+            background-color: #ddd;
         }
-        .order-info span {
-            font-size: 16px;
-            font-weight: bold;
-            color: #e63946;
-        }
-        .delete-btn {
-            background-color: #e63946;
+
+        .btn {
+            padding: 8px 16px;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
+            text-decoration: none;
+            margin: 10px;
+            border-radius: 5px;
         }
-        .delete-btn:hover {
-            background-color: #c92b39;
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .status-btn {
+            margin-right: 10px;
+        }
+
+        .btn-back {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #d32f2f;
         }
     </style>
 </head>
 <body>
-    <div class="order-container">
-        <button class="close-btn" onclick="goToDashboard()">❌</button>
-        <h1 style="text-align:center;">Order History</h1>
-        
-        <?php if (empty($orders)) { ?>
-            <p style="text-align:center; color: gray;">No confirmed orders found.</p>
-        <?php } else { ?>
-            <?php foreach ($orders as $order) { ?>
-            <div class="order-card">
-                <div class="order-header">
-                    <div class="icon">📦</div>
-                    <div>
-                        <h3><?php echo ucfirst($order['status']); ?></h3>
-                        <p><?php echo date('d/m/Y', strtotime($order['created_at'])); ?></p>
-                    </div>
-                </div>
-                <div class="order-body">
-                    <img src="<?php echo htmlspecialchars($order['image']); ?>" alt="<?php echo htmlspecialchars($order['food_name']); ?>">
-                    <div class="order-info">
-                        <p><b><?php echo htmlspecialchars($order['food_name']); ?></b></p>
-                        <p>Quantity: <?php echo $order['quantity']; ?></p>
-                        <p>Total Price: <span>$<?php echo number_format($order['total_price'], 2); ?></span></p>
-                        <form method="POST">
-                            <input type="hidden" name="order_id" value="<?php echo $order['cid']; ?>">
-                            <button type="submit" name="delete_order" class="delete-btn">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <?php } ?>
-        <?php } ?>
+
+<div class="container">
+    <!-- Back Button -->
+    <a href="customerdashboard.php" class="btn btn-back">Back to Dashboard</a>
+
+    <h1>Order List</h1>
+
+    <!-- Sorting buttons -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="?status=" class="btn status-btn">All</a>
+        <a href="?status=Pending" class="btn status-btn">Pending</a>
+        <a href="?status=Confirmed" class="btn status-btn">Confirmed</a>
+        <a href="?status=Cancelled" class="btn status-btn">Cancelled</a>
     </div>
 
-    <script>
-        function goToDashboard() {
-            window.location.href = "customerdashboard.php";
-        }
-    </script>
+    <?php if ($result->num_rows > 0): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Phone</th>
+                    <th>Food Description</th>
+                    <th>Quantity</th>
+                    <th>Preferred Time</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Customer Notification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo $row['cid']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
+                        <td><?php echo $row['phone']; ?></td>
+                        <td><?php echo $row['food_description']; ?></td>
+                        <td><?php echo $row['quantity']; ?></td>
+                        <td><?php echo $row['preferred_time']; ?></td>
+                        <td><?php echo $row['payment_method']; ?></td>
+                        <td><?php echo $row['status']; ?></td>
+                        <td><?php echo $row['customer_notification']; ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>No orders found.</p>
+    <?php endif; ?>
+</div>
+
 </body>
 </html>
+
+<?php $conn->close(); ?>

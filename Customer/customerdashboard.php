@@ -365,6 +365,19 @@ button:hover {
     padding: 10px 20px;
     font-weight: bold;
 }
+.order-history {
+    margin-right: 0px; /* Decrease value to move more left */
+}
+
+.profile-dropdown {
+    margin-right: 50px; /* Decrease value to move more left */
+}
+
+.dropdown-menu {
+    position: absolute !important;
+    z-index: 1050; /* Ensures the dropdown appears above other elements */
+    right: 0; /* Aligns the dropdown properly */
+}
     </style>
 </head>
 <body>
@@ -423,7 +436,8 @@ if ($customer_id) {
             <button class="btn btn-primary" type="submit">Search</button>
         </form>
 <!-- Order History Link -->
-<a href="order_history.php" class="btn btn-outline-primary me-3">Order History</a>
+ 
+<a href="order_history.php" class="btn btn-outline-primary me-2">Order History</a>
        
 
             <!-- Profile Dropdown -->
@@ -610,15 +624,6 @@ $qr_path = $row_qr['qr_path'] ?? '';
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#orderModal">Order</button>
                 </div>
-                <!-- Comment Section -->
-    <div class="modal-footer">
-        <div class="comment-box">
-            <h3>Leave a Comment</h3>
-            <textarea id="commentText" placeholder="Write your comment here..." required></textarea>
-            <button onclick="submitComment()">Submit</button>
-            <div id="commentsSection"></div>
-        </div>
-    </div>
                 </div>
             </div>
         </div>
