@@ -221,39 +221,47 @@ if ($row) {
 
             <h3 class="mt-4">Owner List</h3>
             <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Email</th>
-                        <th>Contact</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+            <thead>
+    <tr>
+        <th>SN</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+
                 <tbody>
                 <?php
-                $stmt = $conn->query("SELECT * FROM tbl_restaurantname");
-                $restaurants = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $sn = 1;
-                foreach ($restaurants as $restaurant) {
-                    echo "<tr>
-                            <td>{$sn}</td>
-                            <td>{$restaurant['name']}</td>
-                            <td>{$restaurant['address']}</td>
-                            <td>{$restaurant['date']}</td>
-                            <td>{$restaurant['time']}</td>
-                            <td>{$restaurant['email']}</td>
-                            <td>{$restaurant['contact_number']}</td>
-                            <td>
-                                <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'><i class='bi bi-pencil'></i></a>
-                                <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'><i class='bi bi-trash'></i></a>
-                            </td>
-                          </tr>";
-                    $sn++;
-                }
+                $stmt = $conn->query("SELECT r.*, u.username, u.password 
+                FROM tbl_restaurantname r
+                LEFT JOIN tbl_restaurant u ON r.r_id = u.id");
+$restaurants = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$sn = 1;
+foreach ($restaurants as $restaurant) {
+echo "<tr>
+      <td>{$sn}</td>
+      <td>{$restaurant['name']}</td>
+      <td>{$restaurant['address']}</td>
+      <td>{$restaurant['date']}</td>
+      <td>{$restaurant['time']}</td>
+      <td>{$restaurant['email']}</td>
+      <td>{$restaurant['contact_number']}</td>
+      <td>{$restaurant['username']}</td>
+      <td>{$restaurant['password']}</td>
+      <td>
+          <a href='?edit_id={$restaurant['r_id']}' class='btn btn-warning btn-sm'><i class='bi bi-pencil'></i></a>
+          <a href='?delete_id={$restaurant['r_id']}' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure?\")'><i class='bi bi-trash'></i></a>
+      </td>
+    </tr>";
+$sn++;
+}
+
                 ?>
                 </tbody>
             </table>
