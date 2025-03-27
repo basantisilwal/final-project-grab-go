@@ -50,8 +50,6 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
     }
 }
 
-$conn = null;
-
 // Function to send SMS via Twilio API
 function sendSMS($to, $message, $sid, $token, $from) {
     $url = "https://api.twilio.com/2010-04-01/Accounts/$sid/Messages.json";
@@ -72,6 +70,15 @@ function sendSMS($to, $message, $sid, $token, $from) {
         echo 'Error:' . curl_error($ch);
     }
     curl_close($ch);
+}
+
+// Fetch logo details
+$current_logo = "logo.png"; // Default logo
+$logoQuery = $conn->prepare("SELECT logo_path FROM tbl_logo LIMIT 1");
+$logoQuery->execute();
+$row = $logoQuery->fetch(PDO::FETCH_ASSOC);
+if ($row) {
+    $current_logo = $row['logo_path'];
 }
 ?>
 
@@ -131,35 +138,59 @@ function sendSMS($to, $message, $sid, $token, $from) {
         .content { margin-left: 270px; padding: 20px; }
         .table-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
         .btn i { font-size: 1.2rem; }
+        .order-details-modal .modal-body {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .order-details-modal .food-image {
+            flex: 0 0 40%;
+            padding-right: 20px;
+        }
+        .order-details-modal .food-info {
+            flex: 0 0 60%;
+        }
+        .order-details-modal .food-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="main-layout">
-    <aside class="sidebar">
-    <h2>Restaurant Dashboard</h2>
-    <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
-    <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
-    <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
-    <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
-    <a href="managepayment.php"><i class="fas fa-money-bill"></i> View Payment</a>
-    <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-</aside>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+            </div>
+            <h2>Dashboard</h2>
+            <a href="das.php"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="addfood.php"><i class="fas fa-utensils"></i> Add Food</a>
+            <a href="viewfood.php"><i class="fas fa-list"></i> View Food</a>
+            <a href="vieworder.php"><i class="fas fa-shopping-cart"></i> View Order</a>
+            <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
+            <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </aside>
 
         <div class="content">
             <h1>View Orders</h1>
             <div class="table-container">
                 <?php
                 try {
-                    include('../conn/conn.php'); 
-                    $sql = "SELECT cid, name, phone, food_description, quantity,time, payment_method, created_at, status FROM tbl_orders";
+                    // Join tbl_orders with tbl_addfood to get food details
+                    $sql = "SELECT o.*, f.food_name, f.description as food_description_full, 
+                            f.price, f.category, f.image, f.availability
+                            FROM tbl_orders o
+                            LEFT JOIN tbl_addfood f ON o.f_id = f.f_id
+                            ORDER BY o.created_at DESC";
                     $stmt = $conn->query($sql);
+                    
                     if ($stmt->rowCount() > 0) {
-<<<<<<< HEAD
                         echo '<table class="table table-striped">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Serial No</th>
-                                    <th>Name</th>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
                                     <th>Phone</th>
                                     <th>Food</th>
                                     <th>Qty</th>
@@ -172,13 +203,19 @@ function sendSMS($to, $message, $sid, $token, $from) {
                                 </tr>
                             </thead>
                             <tbody>';
-                        $serialNo = 1; // Initialize serial number
+                        
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            // Build image path
+                            $imagePath = "uploads/" . htmlspecialchars($row['image']);
+                            if (!file_exists($imagePath) || empty($row['image'])) {
+                                $imagePath = "/Grabandgo/final-project-grab-go/Restaurant/uploads/" . htmlspecialchars($row['image']);
+                            }
+                            
                             echo '<tr>
-                                <td>' . $serialNo++ . '</td>
+                                <td>' . htmlspecialchars($row["cid"]) . '</td>
                                 <td>' . htmlspecialchars($row["name"]) . '</td>
                                 <td>' . htmlspecialchars($row["phone"]) . '</td>
-                                <td>' . htmlspecialchars($row["food_description"]) . '</td>
+                                <td>' . htmlspecialchars($row["food_name"]) . '</td>
                                 <td>' . htmlspecialchars($row["quantity"]) . '</td>
                                 <td>' . htmlspecialchars($row["preferred_time"]) . '</td>
                                 <td>' . htmlspecialchars($row["payment_method"]) . '</td>
@@ -186,62 +223,32 @@ function sendSMS($to, $message, $sid, $token, $from) {
                                 <td><strong>' . htmlspecialchars($row["status"]) . '</strong></td>
                                 <td>';
                             
-=======
-                        echo '<table class="table table-striped"><thead class="table-dark"><tr><th>ID</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th><th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th><th>Details</th></tr></thead><tbody>';
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo '<tr><td>' . htmlspecialchars($row["id"]) . '</td><td>' . htmlspecialchars($row["name"]) . '</td><td>' . htmlspecialchars($row["phone"]) . '</td><td>' . htmlspecialchars($row["food_description"]) . '</td><td>' . htmlspecialchars($row["quantity"]) . '</td><td>' . htmlspecialchars($row["time"]) . '</td><td>' . htmlspecialchars($row["payment_method"]) . '</td><td>' . htmlspecialchars($row["created_at"]) . '</td><td><strong>' . htmlspecialchars($row["status"]) . '</strong></td><td>';
->>>>>>> d1c5025688dfccdf5a5f0489bdaf7e588ccedb60
                             if ($row["status"] === "Pending") {
-                                echo '<a href="?id=' . $row["id"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
-                                echo '<a href="?id=' . $row["id"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
+                                echo '<a href="?id=' . $row["cid"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
+                                echo '<a href="?id=' . $row["cid"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
                             }
-<<<<<<< HEAD
                             
                             echo '</td>
                                 <td>
                                     <button class="btn btn-primary view-details" 
                                             data-bs-toggle="modal" 
-                                            data-bs-target="#foodModal" 
-                                            data-image="' . htmlspecialchars($row['food_image'] ?? '') . '" 
-                                            data-name="' . htmlspecialchars($row['food_description']) . '" 
-                                            data-category="' . htmlspecialchars($row['category'] ?? 'N/A') . '" 
-                                            data-description="' . htmlspecialchars($row['description'] ?? 'No description available.') . '" 
-                                            data-price="' . htmlspecialchars($row['price'] ?? 'N/A') . '">
+                                            data-bs-target="#orderDetailsModal" 
+                                            data-image="' . $imagePath . '" 
+                                            data-name="' . htmlspecialchars($row['food_name']) . '" 
+                                            data-category="' . htmlspecialchars($row['category']) . '" 
+                                            data-description="' . htmlspecialchars($row['food_description_full']) . '" 
+                                            data-price="RS ' . htmlspecialchars($row['price']) . '"
+                                            data-customer="' . htmlspecialchars($row['name']) . '"
+                                            data-phone="' . htmlspecialchars($row['phone']) . '"
+                                            data-quantity="' . htmlspecialchars($row['quantity']) . '"
+                                            data-time="' . htmlspecialchars($row['preferred_time']) . '"
+                                            data-payment="' . htmlspecialchars($row['payment_method']) . '"
+                                            data-status="' . htmlspecialchars($row['status']) . '"
+                                            data-date="' . htmlspecialchars($row['created_at']) . '">
                                         View Details
                                     </button>
                                 </td>
                             </tr>';
-=======
-                            echo '</td>';
-                            echo '<td><a href="#" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#orderModal' . $row['id'] . '">View Details</a></td>';
-                            echo '</tr>';
-
-                            // Modal for order details
-                            echo '<div class="modal fade" id="orderModal' . $row['id'] . '" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="orderModalLabel">Order Details</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p><strong>Order ID:</strong> ' . htmlspecialchars($row['id']) . '</p>
-                                                <p><strong>Name:</strong> ' . htmlspecialchars($row['name']) . '</p>
-                                                <p><strong>Phone:</strong> ' . htmlspecialchars($row['phone']) . '</p>
-                                                <p><strong>Food Description:</strong> ' . htmlspecialchars($row['food_description']) . '</p>
-                                                <p><strong>Quantity:</strong> ' . htmlspecialchars($row['quantity']) . '</p>
-                                                <p><strong>Time:</strong> ' . htmlspecialchars($row['time']) . '</p>
-                                                <p><strong>Payment Method:</strong> ' . htmlspecialchars($row['payment_method']) . '</p>
-                                                <p><strong>Status:</strong> ' . htmlspecialchars($row['status']) . '</p>
-                                                <p><strong>Order Date:</strong> ' . htmlspecialchars($row['created_at']) . '</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>';
->>>>>>> d1c5025688dfccdf5a5f0489bdaf7e588ccedb60
                         }
                         echo '</tbody></table>';
                     } else {
@@ -253,63 +260,80 @@ function sendSMS($to, $message, $sid, $token, $from) {
                 ?>
             </div>
         </div>
-<<<<<<< HEAD
         
-        <!-- Food Details Modal -->
-        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <!-- Order Details Modal -->
+        <div class="modal fade order-details-modal" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="foodModalLabel">Food Details</h5>
+                        <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <img id="modalFoodImage" src="" alt="Food Image" class="img-fluid mb-3">
-                        <p><strong>Name:</strong> <span id="modalFoodName"></span></p>
-                        <p><strong>Category:</strong> <span id="modalFoodCategory"></span></p>
-                        <p><strong>Description:</strong> <span id="modalFoodDescription"></span></p>
-                        <p><strong>Price:</strong> <span id="modalFoodPrice"></span></p>
+                        <div class="food-image">
+                            <img id="modalFoodImage" src="" alt="Food Image" class="img-fluid mb-3">
+                            <h4 id="modalFoodName"></h4>
+                            <p><strong>Category:</strong> <span id="modalFoodCategory"></span></p>
+                            <p><strong>Description:</strong> <span id="modalFoodDescription"></span></p>
+                            <p><strong>Price:</strong> <span id="modalFoodPrice"></span></p>
+                        </div>
+                        <div class="food-info">
+                            <h4>Order Information</h4>
+                            <p><strong>Customer Name:</strong> <span id="modalCustomerName"></span></p>
+                            <p><strong>Phone Number:</strong> <span id="modalCustomerPhone"></span></p>
+                            <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
+                            <p><strong>Preferred Time:</strong> <span id="modalPreferredTime"></span></p>
+                            <p><strong>Payment Method:</strong> <span id="modalPaymentMethod"></span></p>
+                            <p><strong>Order Status:</strong> <span id="modalOrderStatus"></span></p>
+                            <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Order Now</button>
                     </div>
                 </div>
             </div>
         </div>
         
-    <script>
-    $(document).ready(function () {
-        $(".update-order").click(function () {
-            var orderId = $(this).data("id");
-            var action = $(this).data("action");
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        $(document).ready(function () {
+            $(".update-order").click(function () {
+                var orderId = $(this).data("id");
+                var action = $(this).data("action");
 
-            $.post("", { id: orderId, action: action }, function (response) {
-                if (response.status === "success") {
-                    // Reload the page to reflect changes
-                    location.reload();
-                } else {
-                    alert(response.message); // Show error message if any
-                }
-            }, "json").fail(function () {
-                alert("An error occurred. Please try again.");
+                $.post("", { id: orderId, action: action }, function (response) {
+                    if (response.status === "success") {
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                }, "json").fail(function () {
+                    alert("An error occurred. Please try again.");
+                });
+            });
+            
+            // Handle view details button click
+            $(document).on("click", ".view-details", function() {
+                // Set food details
+                $("#modalFoodImage").attr("src", $(this).data("image"));
+                $("#modalFoodName").text($(this).data("name"));
+                $("#modalFoodCategory").text($(this).data("category"));
+                $("#modalFoodDescription").text($(this).data("description"));
+                $("#modalFoodPrice").text($(this).data("price"));
+                
+                // Set order details
+                $("#modalCustomerName").text($(this).data("customer"));
+                $("#modalCustomerPhone").text($(this).data("phone"));
+                $("#modalQuantity").text($(this).data("quantity"));
+                $("#modalPreferredTime").text($(this).data("time"));
+                $("#modalPaymentMethod").text($(this).data("payment"));
+                $("#modalOrderStatus").text($(this).data("status"));
+                $("#modalOrderDate").text($(this).data("date"));
             });
         });
-    });
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll(".view-details").forEach(button => {
-            button.addEventListener("click", function() {
-                document.getElementById("modalFoodImage").src = this.getAttribute("data-image") || 'default-image.jpg';
-                document.getElementById("modalFoodName").textContent = this.getAttribute("data-name");
-                document.getElementById("modalFoodCategory").textContent = this.getAttribute("data-category");
-                document.getElementById("modalFoodDescription").textContent = this.getAttribute("data-description");
-                document.getElementById("modalFoodPrice").textContent = this.getAttribute("data-price");
-            });
-        });
-    });
-    </script>
-=======
+        </script>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
->>>>>>> d1c5025688dfccdf5a5f0489bdaf7e588ccedb60
 </body>
 </html>
