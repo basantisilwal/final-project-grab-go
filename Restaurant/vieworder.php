@@ -142,15 +142,24 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                         echo '<table class="table table-striped">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Serial No</th><th>Name</th><th>Phone</th><th>Food</th><th>Qty</th>
-                                    <th>Time</th><th>Payment</th><th>Order Date</th><th>Status</th><th>Actions</th>
+                                    <th>Serial No</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Food</th>
+                                    <th>Qty</th>
+                                    <th>Time</th>
+                                    <th>Payment</th>
+                                    <th>Order Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                    <th>Details</th>
                                 </tr>
                             </thead>
                             <tbody>';
                         $serialNo = 1; // Initialize serial number
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo '<tr>
-                                <td>' . $serialNo++ . '</td> <!-- Displaying serial number -->
+                                <td>' . $serialNo++ . '</td>
                                 <td>' . htmlspecialchars($row["name"]) . '</td>
                                 <td>' . htmlspecialchars($row["phone"]) . '</td>
                                 <td>' . htmlspecialchars($row["food_description"]) . '</td>
@@ -160,15 +169,30 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                                 <td>' . htmlspecialchars($row["created_at"]) . '</td>
                                 <td><strong>' . htmlspecialchars($row["status"]) . '</strong></td>
                                 <td>';
+                            
                             if ($row["status"] === "Pending") {
                                 echo '<button class="btn btn-success btn-sm update-order" data-id="'.$row["cid"].'" data-action="confirm"><i class="fas fa-check-circle"></i> Confirm</button>
                                 <button class="btn btn-danger btn-sm update-order" data-id="'.$row["cid"].'" data-action="reject"><i class="fas fa-times-circle"></i> Cancel</button>';
                             }
-                            echo '</td></tr>';
+                            
+                            echo '</td>
+                                <td>
+                                    <button class="btn btn-primary view-details" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#foodModal" 
+                                            data-image="' . htmlspecialchars($row['food_image'] ?? '') . '" 
+                                            data-name="' . htmlspecialchars($row['food_description']) . '" 
+                                            data-category="' . htmlspecialchars($row['category'] ?? 'N/A') . '" 
+                                            data-description="' . htmlspecialchars($row['description'] ?? 'No description available.') . '" 
+                                            data-price="' . htmlspecialchars($row['price'] ?? 'N/A') . '">
+                                        View Details
+                                    </button>
+                                </td>
+                            </tr>';
                         }
                         echo '</tbody></table>';
                     } else {
-                        echo "<p>No orders found.</p>";
+                        echo "<p class='text-center text-danger'>No orders found.</p>";
                     }
                 } catch (PDOException $e) {
                     echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
@@ -176,8 +200,28 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                 ?>
             </div>
         </div>
-    </div>
-
+        
+        <!-- Food Details Modal -->
+        <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="foodModalLabel">Food Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="modalFoodImage" src="" alt="Food Image" class="img-fluid mb-3">
+                        <p><strong>Name:</strong> <span id="modalFoodName"></span></p>
+                        <p><strong>Category:</strong> <span id="modalFoodCategory"></span></p>
+                        <p><strong>Description:</strong> <span id="modalFoodDescription"></span></p>
+                        <p><strong>Price:</strong> <span id="modalFoodPrice"></span></p>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Order Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     <script>
     $(document).ready(function () {
         $(".update-order").click(function () {
@@ -193,6 +237,17 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                 }
             }, "json").fail(function () {
                 alert("An error occurred. Please try again.");
+            });
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".view-details").forEach(button => {
+            button.addEventListener("click", function() {
+                document.getElementById("modalFoodImage").src = this.getAttribute("data-image") || 'default-image.jpg';
+                document.getElementById("modalFoodName").textContent = this.getAttribute("data-name");
+                document.getElementById("modalFoodCategory").textContent = this.getAttribute("data-category");
+                document.getElementById("modalFoodDescription").textContent = this.getAttribute("data-description");
+                document.getElementById("modalFoodPrice").textContent = this.getAttribute("data-price");
             });
         });
     });
