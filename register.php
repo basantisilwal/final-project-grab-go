@@ -7,32 +7,73 @@ ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitize and retrieve input
-    $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash the password
-    $firstName = filter_var($_POST['first_name'], FILTER_SANITIZE_STRING);
-    $lastName = filter_var($_POST['last_name'], FILTER_SANITIZE_STRING);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $contactNumber = filter_var($_POST['contact_number'], FILTER_SANITIZE_STRING);
-    $address = filter_var($_POST['address'], FILTER_SANITIZE_STRING);
+    $firstName = filter_var(trim($_POST['first_name']), FILTER_SANITIZE_STRING);
+    $lastName = filter_var(trim($_POST['last_name']), FILTER_SANITIZE_STRING);
+    $address = filter_var(trim($_POST['address']), FILTER_SANITIZE_STRING);
+    $contactNumber = filter_var(trim($_POST['contact_number']), FILTER_SANITIZE_STRING);
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $username = filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING);
+    $password = $_POST['password']; // Will be hashed later
+
+    // Validation patterns
+    $nameRegex = "/^[a-zA-Z]{2,}$/";
+    $phoneRegex = "/^[0-9]{10}$/";
+    $emailRegex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
+    $usernameRegex = "/^[a-zA-Z0-9_]{4,}$/";
+    $passwordRegex = "/^(?=.*[A-Z])(?=.*\d).{8,}$/";
+
+    // Validate First & Last Name
+    if (!preg_match($nameRegex, $firstName) || !preg_match($nameRegex, $lastName)) {
+        header("Location: register.php?error=Invalid name format.");
+        exit();
+    }
+
+    // Validate Address
+    if (strlen($address) < 5) {
+        header("Location: register.php?error=Address must be at least 5 characters long.");
+        exit();
+    }
+
+    // Validate Contact Number
+    if (!preg_match($phoneRegex, $contactNumber)) {
+        header("Location: register.php?error=Invalid contact number.");
+        exit();
+    }
+
+    // Validate Email
+    if (!preg_match($emailRegex, $email)) {
+        header("Location: register.php?error=Invalid email format.");
+        exit();
+    }
+
+    // Validate Username
+    if (!preg_match($usernameRegex, $username)) {
+        header("Location: register.php?error=Invalid username format.");
+        exit();
+    }
+
+    // Validate Password
+    if (!preg_match($passwordRegex, $password)) {
+        header("Location: register.php?error=Password must be at least 8 characters long, include one uppercase letter and one number.");
+        exit();
+    }
+
+    // Hash the password for security
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     // Insert into the database
     $query = "INSERT INTO tbl_otp (username, password, first_name, last_name, email, contact_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    
-    if ($stmt->execute([$username, $password, $firstName, $lastName, $email, $contactNumber, $address])) {
-        // Get the last inserted ID
-        $tbl_user_id = $conn->lastInsertId();
 
-        // Start session and store tbl_user_id
+    if ($stmt->execute([$username, $hashedPassword, $firstName, $lastName, $email, $contactNumber, $address])) {
         session_start();
-        $_SESSION['tbl_user_id'] = $tbl_user_id;
-        $_SESSION['username'] = $username; // Optional: store username for further use
+        $_SESSION['username'] = $username;
+        $_SESSION['tbl_user_id'] = $conn->lastInsertId();
 
-        // Redirect to the customer dashboard
-        header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php?id=$tbl_user_id");
+        // Redirect to customer dashboard
+        header("Location: http://localhost/Grabandgo/final-project-grab-go/Customer/customerdashboard.php?id=" . $_SESSION['tbl_user_id']);
         exit();
     } else {
-        // Registration failed
         header("Location: register.php?error=Registration failed.");
         exit();
     }
@@ -148,11 +189,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="./endpoint/login.php" method="POST">
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="text" class="form-control" id="username" name="username" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
                     </div>
                     <div class="form-group">
                 <select class="form-control" name="user_type" required>
@@ -206,11 +247,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group registration">
                     <label for="registerUsername">Username:</label>
-                    <input type="text" class="form-control" id="registerUsername" name="username">
+                    <input type="text" class="form-control" id="registerUsername" name="username" autocomplete="off">
                 </div>
                 <div class="form-group registration">
                     <label for="registerPassword">Password:</label>
-                    <input type="password" class="form-control" id="registerPassword" name="password">
+                    <input type="password" class="form-control" id="registerPassword" name="password" autocomplete="new-password">
                 </div>
                 <p>Already have an account? Login <span class="switch-form-link" onclick="showLoginForm()">Here.</span></p>
                 <button type="submit" class="btn btn-dark login-register form-control" name="register">Register</button>
@@ -250,7 +291,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 verification.style.display = 'none';
             }
         }
+        
+document.getElementById("registerForm").addEventListener("submit", function (event) {
+    let password = document.getElementById("password").value;
+    let email = document.getElementById("email").value;
+    let contact = document.getElementById("contact_number").value;
+    
+    let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).{8,}$/;
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let contactRegex = /^[0-9]{10,15}$/;
 
+    if (!emailRegex.test(email)) {
+        alert("Invalid email format.");
+        event.preventDefault();
+    }
+
+    if (!passwordRegex.test(password)) {
+        alert("Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character.");
+        event.preventDefault();
+    }
+
+    if (!contactRegex.test(contact)) {
+        alert("Invalid contact number.");
+        event.preventDefault();
+    }
+});
     </script>
 
     <!-- Bootstrap Js -->
