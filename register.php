@@ -164,6 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
                     <p>No Account? Register <span  class="switch-form-link" onclick="showRegistrationForm()">Here.</span></p>
                     <button type="submit" class="btn btn-secondary login-btn form-control" >Login</button>
+                    <div class="text-center mt-3">
+                        <a href="forgotpassword.php" class="switch-form-link">Forgot Password?</a>
+                    </div>
                 </form>
             </div>
 
