@@ -50,7 +50,7 @@ if (isset($_POST['register'])) {
             $insertStmt->bindParam(':contact_number', $contactNumber, PDO::PARAM_STR);
             $insertStmt->bindParam(':email', $email, PDO::PARAM_STR);
             $insertStmt->bindParam(':username', $username, PDO::PARAM_STR);
-            $insertStmt->bindParam(':password', $password, PDO::PARAM_STR); // Hash this in production!
+            $insertStmt->bindParam(':password', $password, PDO::PARAM_STR); 
             $insertStmt->bindParam(':verification_code', $verificationCode, PDO::PARAM_INT);
             $insertStmt->execute();
 
