@@ -25,17 +25,15 @@ while ($row = $stmtOrders->fetch(PDO::FETCH_ASSOC)) {
     $months[] = $row['month'];
     $orders[] = $row['total_orders'];
 }
-// Fetch logo details (Fixed PDO query)
+// Fetch Logo
 $current_logo = "logo.png"; // fallback if none in DB
-$logoQuery = $conn->prepare("SELECT logo_name, logo_path FROM tbl_logo LIMIT 1");
-$logoQuery->execute();
-$row = $logoQuery->fetch(PDO::FETCH_ASSOC);
+$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
 
-if ($row) {
-    $current_logo = $row['logo_path'];
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    $current_logo = $row['path'];
 }
-// Close connection (optional)
-$conn = null;
 ?>
 
 <!DOCTYPE html>
@@ -155,14 +153,13 @@ $conn = null;
   <div class="main-container d-flex">
         <!-- Sidebar -->
         <aside class="sidebar">
-    <div class="logo-container">
-        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
-    </div>
+        <div class="logo-container">
+                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+            </div>
     <h2>Admin Dashboard</h2>
     <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
     <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
     <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
-    <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
     <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
 </aside>
 

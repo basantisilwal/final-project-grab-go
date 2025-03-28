@@ -74,13 +74,14 @@ if (isset($_GET['delete_id'])) {
     exit;
 }
 
-// Fetch logo details
-$current_logo = "logo.png"; // Default logo
-$logoQuery = $conn->prepare("SELECT logo_path FROM tbl_logo LIMIT 1");
-$logoQuery->execute();
-$row = $logoQuery->fetch(PDO::FETCH_ASSOC);
-if ($row) {
-    $current_logo = $row['logo_path'];
+// Fetch Logo
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
+
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    $current_logo = $row['path'];
 }
 ?>
 
@@ -191,14 +192,13 @@ if ($row) {
     <div class="main-container d-flex">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo-container">
-                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Admin Logo">
+        <div class="logo-container">
+                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
             </div>
             <h2>Admin Dashboard</h2>
             <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
             <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
             <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
-            <a href="setting.php"><i class="bi bi-gear"></i> Settings</a>
             <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
         </aside>
 

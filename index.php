@@ -2,15 +2,14 @@
 session_start();
 include('./conn/conn.php'); // Include the database connection
 
-// Fetch logo from the database
-$stmt = $conn->prepare("SELECT logo_path FROM tbl_logo WHERE u_id = 1");
-$stmt->execute();
-$logo = $stmt->fetch(PDO::FETCH_ASSOC);
-$logoPath = $logo['logo_path'] ?? '';
+// Fetch Logo
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
 
-// Fallback to a default logo if none found
-if (empty($logoPath)) {
-    $logoPath =  "\final-project-grab-go\logo\Unicafe.png";// Adjust this path if needed
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    $current_logo = $row['path'];
 }
 ?>
 
@@ -200,9 +199,9 @@ if (empty($logoPath)) {
 <!-- Navbar -->
 <nav class="navbar">
     <div class="logo-title-container">
-        <div class="logo-container">
-            <img src="<?php echo htmlspecialchars($logoPath); ?>" alt="Logo">
-        </div>
+    <div class="logo-container">
+                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+            </div>
         <div class="title">UNICAFE.</div>
     </div>
     <ul class="nav-links">

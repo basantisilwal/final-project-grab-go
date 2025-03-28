@@ -75,15 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
     exit();
 }
 
-/***************************************************
- * 3. Fetch Current Logo from tbl_logo
- ***************************************************/
+// Fetch Logo
 $current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_owlogo LIMIT 1";
-$logoResult   = mysqli_query($conn, $logoQuery);
+$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
 
-if ($row = mysqli_fetch_assoc($logoResult)) {
-    // If a logo exists in DB, use that
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
     $current_logo = $row['path'];
 }
 ?>

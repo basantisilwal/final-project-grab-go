@@ -66,12 +66,11 @@ $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch Logo
 $current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_owlogo LIMIT 1";
+$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
 $logoStmt     = $conn->prepare($logoQuery);
 $logoStmt->execute();
 
 if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
-    // If a logo exists in DB, use that
     $current_logo = $row['path'];
 }
 ?>

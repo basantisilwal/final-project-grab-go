@@ -72,13 +72,14 @@ function sendSMS($to, $message, $sid, $token, $from) {
     curl_close($ch);
 }
 
-// Fetch logo details
-$current_logo = "logo.png"; // Default logo
-$logoQuery = $conn->prepare("SELECT logo_path FROM tbl_logo LIMIT 1");
-$logoQuery->execute();
-$row = $logoQuery->fetch(PDO::FETCH_ASSOC);
-if ($row) {
-    $current_logo = $row['logo_path'];
+// Fetch Logo
+$current_logo = "logo.png"; // fallback if none in DB
+$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt     = $conn->prepare($logoQuery);
+$logoStmt->execute();
+
+if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
+    $current_logo = $row['path'];
 }
 ?>
 
@@ -88,8 +89,9 @@ if ($row) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -153,6 +155,16 @@ if ($row) {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid black;
         }
     </style>
 </head>
