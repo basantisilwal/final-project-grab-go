@@ -134,7 +134,7 @@ if ($customer_id !== null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grab & Go</title>
+    <title>UniCafe</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -407,35 +407,36 @@ if ($customer_id !== null) {
             <?php endif; ?>
 </div>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand logo" href="#">UNICAFE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+   <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand logo" href="#">UNICAFE</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <!-- Search Bar -->
-            <form class="d-flex search-container me-auto" method="GET" action="">
-                <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery); ?>" required>
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
+        <!-- Search Bar -->
+        <form class="d-flex search-container me-auto" method="GET" action="">
+            <input class="form-control" type="text" name="search" placeholder="Search for food..." value="<?php echo htmlspecialchars($searchQuery ?? ''); ?>" required>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
 
-            <!-- Order History Link -->
-            <a href="order_history.php" class="btn btn-outline-primary me-2">Order History</a>
-           
-            <!-- Profile Dropdown -->
-            <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="profile.php" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="<?php echo $profilePicPath; ?>" alt="Profile Picture" class="rounded-circle" style="width: 32px; height: 32px;">
-                </a>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item" href="profile.php">View Profile</a>
-                    <a class="dropdown-item" href="logout.php">Logout</a>
-                </div>
-            </div>
+        <!-- Order History Link -->
+        <a href="order_history.php" class="btn btn-outline-primary me-2">Order History</a>
+
+        <!-- Profile Dropdown -->
+        <div class="nav-item dropdown position-relative">
+            <a class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="<?php echo $profilePicPath; ?>" alt="Profile Picture" class="rounded-circle" style="width: 32px; height: 32px;">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="profile.php">View Profile</a></li>
+                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
+
 
     <!-- Search Results Section -->
     <?php if (!empty($searchQuery)): ?>

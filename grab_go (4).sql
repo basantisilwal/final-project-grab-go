@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 04:39 PM
+-- Generation Time: Mar 28, 2025 at 05:23 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,15 @@ INSERT INTO `tbl_addfood` (`f_id`, `food_name`, `description`, `price`, `categor
 (6, 'White Tea', 'milky', 20.00, 'starter', 'milk-tea.jpg', 'available'),
 (7, 'Black Coffee', 'minimal ingrediant', 100.00, 'starter', 'black cofee.jpg', 'available'),
 (8, 'Milk Coffee', 'sweet', 150.00, 'starter', 'cofee.jpg', 'available'),
-(10, 'Momo', 'So Delicious', 120.00, 'main-course', 'food.jpg', 'available');
+(10, 'Momo', 'So Delicious', 120.00, 'main-course', 'food.jpg', 'available'),
+(11, 'Thukpa', 'veg/chicken', 80.00, 'main-course', 'thukpa-Blog.jpg', 'available'),
+(12, 'Veg Chaumin', 'with vegetable', 50.00, 'main-course', 'veg chaumin.jpg', 'available'),
+(13, 'Chicken Chaumin', 'with vagetable', 60.00, 'main-course', 'chicken chaumin.jpg', 'unavailable'),
+(14, 'Parautha', 'with butter', 30.00, 'main-course', 'images (2).jpg', 'available'),
+(15, 'Roti', 'with butter', 15.00, 'main-course', 'images (1).jpg', 'available'),
+(16, 'Roti Tarkali', 'with tarkali', 40.00, 'main-course', 'images.jpg', 'available'),
+(17, 'Sanwitch', 'Delicious', 80.00, 'main-course', 'sanwitch.jpg', 'available'),
+(18, 'Pakauda', 'less oily', 10.00, 'starter', 'pakauda.jpg', 'available');
 
 -- --------------------------------------------------------
 
@@ -74,35 +82,21 @@ INSERT INTO `tbl_admin` (`id`, `username`, `password`, `role`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_comments`
---
-
-CREATE TABLE `tbl_comments` (
-  `comment_id` int(11) NOT NULL,
-  `f_id` int(11) NOT NULL,
-  `tbl_user_id` int(11) NOT NULL,
-  `comment` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tbl_logo`
 --
 
 CREATE TABLE `tbl_logo` (
-  `u_id` int(11) NOT NULL,
-  `logo_name` varchar(255) NOT NULL,
-  `logo_path` varchar(255) NOT NULL
+  `o_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_logo`
 --
 
-INSERT INTO `tbl_logo` (`u_id`, `logo_name`, `logo_path`) VALUES
-(1, 'Screenshot 2025-03-20 061833.png', 'uploads/logo/67db95f57fb2b_Screenshot 2025-03-20 061833.png');
+INSERT INTO `tbl_logo` (`o_id`, `name`, `path`) VALUES
+(1, 'Unicafe.png', 'uploads/logo/67e5f87eed30f_Unicafe.png');
 
 -- --------------------------------------------------------
 
@@ -130,21 +124,29 @@ CREATE TABLE `tbl_orders` (
 --
 
 INSERT INTO `tbl_orders` (`cid`, `f_id`, `name`, `phone`, `food_description`, `quantity`, `preferred_time`, `payment_method`, `status`, `created_at`, `updated_at`, `customer_notification`) VALUES
-(1, NULL, 'Manisha Darai', '9845122366', 'spicy', 1, '08:19:00', 'cash', 'Confirmed', '2025-03-12 01:34:46', '2025-03-20 00:50:04', ''),
-(4, NULL, 'pushpa', '9844905557', 'chilly less', 1, '17:33:00', 'cash', 'Confirmed', '2025-03-12 10:48:20', '2025-03-12 10:51:55', 'Your order #4 has been CONFIRMED!'),
-(5, NULL, 'Manisha Darai', '9824199146', 'Hello', 3, '17:30:00', 'online', 'Confirmed', '2025-03-16 10:57:13', '2025-03-16 10:58:41', 'Your order #5 has been CONFIRMED!'),
-(6, NULL, 'Ram Thapa', '9824133278', 'less sugar', 1, '09:02:00', 'cash', 'Confirmed', '2025-03-16 13:17:16', '2025-03-16 13:17:22', 'Your order has been confirmed!'),
-(7, NULL, 'Ram Thapa', '9824133278', 'less sugar', 1, '09:02:00', 'cash', 'Cancelled', '2025-03-16 13:17:32', '2025-03-16 13:30:49', 'Your order has been cancelled!'),
-(9, NULL, 'Basanti Silwal', '9824100179', 'spicy', 1, '09:00:00', 'online', 'Confirmed', '2025-03-16 13:30:38', '2025-03-16 13:30:59', 'Your order has been confirmed!'),
-(15, NULL, 'Basanti Silwal', '9824100179', 'spicy', 1, '09:00:00', 'online', 'Cancelled', '2025-03-16 15:06:15', '2025-03-20 00:59:04', 'Your order has been cancelled!'),
-(16, NULL, 'Basanti Silwal', '9824100179', 'spicy', 1, '09:00:00', 'online', 'Cancelled', '2025-03-16 15:11:49', '2025-03-20 00:59:06', 'Your order has been cancelled!'),
-(17, NULL, 'Basanti Silwal', '9824100179', 'spicy', 1, '09:00:00', 'online', 'Cancelled', '2025-03-16 15:12:11', '2025-03-20 00:59:07', 'Your order has been cancelled!'),
-(18, NULL, 'Basanti Silwal', '9824100179', 'spicy', 1, '09:00:00', 'online', 'Cancelled', '2025-03-16 15:12:29', '2025-03-20 00:59:09', 'Your order has been cancelled!'),
-(19, NULL, 'Basanti Silwal', '9824100179', 'spicy', 1, '09:00:00', 'online', 'Cancelled', '2025-03-16 15:18:37', '2025-03-20 00:59:10', 'Your order has been cancelled!'),
-(20, NULL, 'Manisha Darai', '9845622388', 'want less spicey pickles', 1, '07:00:00', 'cash', 'Confirmed', '2025-03-20 00:52:50', '2025-03-20 00:53:51', 'Your order has been confirmed!'),
-(21, NULL, 'Manisha Thapa', '9844905557', 'less sugar', 1, '10:57:00', 'cash', 'Confirmed', '2025-03-24 05:12:51', '2025-03-24 05:13:50', ''),
-(22, NULL, 'Manisha Thapa', '9844905557', 'njnkm,', 1, '19:58:00', 'cash', 'Confirmed', '2025-03-24 14:14:04', '2025-03-24 14:14:22', 'Your order has been confirmed!'),
-(23, NULL, 'Manisha Thapa', '9844905557', 'mmmmmmm', 1, '09:12:00', 'cash', 'Confirmed', '2025-03-24 15:27:39', '2025-03-24 15:27:52', 'Your order has been confirmed!');
+(21, 18, 'Guest ', '9844905557', 'Pakauda - less oily', 1, '10:03:00', 'cash', 'Confirmed', '2025-03-27 16:17:08', '2025-03-28 02:08:50', NULL),
+(24, NULL, 'Manisha Thapa', '9844905557', 'spicy', 1, '10:36:00', 'online', 'Confirmed', '2025-03-25 16:51:13', '2025-03-25 17:30:51', 'Your order has been confirmed!'),
+(25, NULL, 'Manisha Thapa', '9844905557', 'sugar', 1, '00:14:00', 'cash', 'Cancelled', '2025-03-25 17:29:21', '2025-03-25 17:30:53', 'Your order has been cancelled!'),
+(26, NULL, 'Manisha Thapa', '9844905557', 'kkkk', 1, '01:14:00', 'online', 'Confirmed', '2025-03-25 17:29:52', '2025-03-28 01:29:06', ''),
+(27, NULL, 'Manisha Thapa', '9844905557', 'less sugar', 1, '11:15:00', 'cash', 'Confirmed', '2025-03-25 17:30:23', '2025-03-26 09:42:45', 'Your order has been confirmed!'),
+(28, NULL, 'kabin Kc', '9846133299', 'spicy', 1, '11:17:00', 'cash', 'Confirmed', '2025-03-25 17:32:37', '2025-03-26 09:44:04', 'Your order has been confirmed!'),
+(29, NULL, 'kabin Kc', '9846133299', 'sweet', 1, '11:18:00', 'cash', 'Cancelled', '2025-03-25 17:32:54', '2025-03-26 09:43:16', 'Your order has been cancelled!'),
+(30, NULL, 'Manisha Darai', '9816141807', 'spicy', 1, '09:12:00', 'online', 'Cancelled', '2025-03-26 02:28:10', '2025-03-26 09:46:22', 'Your order has been cancelled!'),
+(31, NULL, 'pushpa Thapa', '9844905557', 'less sugar', 1, '09:47:00', 'online', 'Confirmed', '2025-03-26 04:01:01', '2025-03-26 04:03:54', 'Your order has been confirmed!'),
+(32, NULL, 'Amisha Sundas', '9824157576', 'less suger', 4, '08:30:00', 'cash', 'Confirmed', '2025-03-26 09:34:29', '2025-03-26 09:46:24', 'Your order has been confirmed!'),
+(33, NULL, 'Amisha Sundas', '9824157576', 'normal', 1, '08:25:00', 'cash', 'Confirmed', '2025-03-26 09:35:27', '2025-03-26 09:46:27', 'Your order has been confirmed!'),
+(34, NULL, 'pushpa Thapa', '9844905557', 'chicken(steam)', 2, '09:25:00', 'online', 'Cancelled', '2025-03-26 09:38:02', '2025-03-26 09:46:30', 'Your order has been cancelled!'),
+(35, NULL, 'pushpa Thapa', '9844905557', 'normal', 2, '07:25:00', 'cash', 'Confirmed', '2025-03-26 09:38:57', '2025-03-26 09:46:32', 'Your order has been confirmed!'),
+(36, NULL, 'kabin Kc', '9846133299', 'with spicy achar', 2, '07:10:00', 'online', 'Confirmed', '2025-03-26 10:22:33', '2025-03-27 03:02:44', 'Your order has been confirmed!'),
+(37, NULL, 'kabin Kc', '9846133299', 'with tarkali', 3, '08:15:00', 'cash', 'Cancelled', '2025-03-26 10:26:59', '2025-03-27 03:03:00', 'Your order has been cancelled!'),
+(38, NULL, 'kabin Kc', '9846133299', 'normal', 1, '07:15:00', 'cash', 'Cancelled', '2025-03-26 10:28:05', '2025-03-28 02:12:29', NULL),
+(39, 18, 'Guest ', '9846133299', 'Pakauda - less oily', 1, '07:50:00', 'cash', 'Confirmed', '2025-03-28 02:06:28', '2025-03-28 02:08:26', NULL),
+(40, 15, 'Guest ', '9846133299', 'Roti - with butter', 1, '08:00:00', 'cash', 'Confirmed', '2025-03-28 02:11:53', '2025-03-28 02:12:16', NULL),
+(41, 17, 'Guest ', '9824157576', 'Sanwitch - Delicious', 1, '07:58:00', 'cash', 'Cancelled', '2025-03-28 02:13:42', '2025-03-28 02:13:53', NULL),
+(42, 18, 'Guest ', '9844905557', 'Pakauda - less oily', 1, '08:39:00', 'cash', 'Confirmed', '2025-03-28 02:54:56', '2025-03-28 02:55:59', 'Your order has been confirmed!'),
+(43, 14, 'Guest ', '9846133299', 'Parautha - with butter', 1, '08:53:00', 'cash', 'Confirmed', '2025-03-28 03:08:40', '2025-03-28 03:08:50', 'Your order has been confirmed!'),
+(44, 18, 'Manisha Darai', '9816141807', 'Pakauda - less oily', 1, '09:12:00', 'cash', 'Cancelled', '2025-03-28 03:27:34', '2025-03-28 03:27:44', 'Your order has been cancelled!'),
+(45, 16, 'Manisha Darai', '9816141807', 'Roti Tarkali - with tarkali', 1, '11:13:00', 'cash', 'Confirmed', '2025-03-28 03:28:19', '2025-03-28 03:28:24', 'Your order has been confirmed!');
 
 -- --------------------------------------------------------
 
@@ -175,29 +177,11 @@ CREATE TABLE `tbl_otp` (
 --
 
 INSERT INTO `tbl_otp` (`tbl_user_id`, `first_name`, `last_name`, `address`, `contact_number`, `email`, `username`, `password`, `verification_code`, `profile_pic`, `bio`, `dashboard_data`, `role`, `password_reset_token`, `token_expiry`) VALUES
-(20, 'Amisha', 'Sundas', 'Patan', '9824157576', 'ameesaa54@gmail.com', 'amisha', 'amisha', 344658, NULL, NULL, NULL, 'user', NULL, NULL),
-(21, 'Manisha', 'Thapa', 'Damauli', '9844905557', 'puspathapamagar017@gmail.com', 'pushpa10', '123456', 225493, '67d7120cabbcc_WIN_20220909_10_00_21_Pro.jpg', NULL, NULL, 'user', NULL, NULL),
+(20, 'Amisha', 'Sundas', 'Patan', '9824157576', 'ameesaa54@gmail.com', 'amisha', 'amisha@12345', 344658, NULL, NULL, NULL, 'user', NULL, NULL),
+(21, 'pushpa', 'Thapa', 'Damauli', '9844905557', 'puspathapamagar017@gmail.com', 'pushpa10', '1234567890', 225493, '67e592fa6abe0_pakauda.jpg', NULL, NULL, 'user', NULL, NULL),
 (22, 'kabin', 'Kc', 'Dumre', '9846133299', 'kckabin710@gmail.com', 'kabin', '12345', 820921, NULL, NULL, NULL, 'user', NULL, NULL),
-(25, 'Ghan', 'Thapa', 'vyas  3 damauli', '9845633255', 'sinjali.gb@gmail.com', 'ghan thapa', '12', 601091, NULL, NULL, NULL, 'user', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_owlogo`
---
-
-CREATE TABLE `tbl_owlogo` (
-  `o_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `path` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_owlogo`
---
-
-INSERT INTO `tbl_owlogo` (`o_id`, `name`, `path`) VALUES
-(1, 'Food Delivery Logo (1).png', 'uploads/logo/67d42fb505b23_Food Delivery Logo (1).png');
+(25, 'Ghan', 'Thapa', 'vyas  3 damauli', '9845633255', 'sinjali.gb@gmail.com', 'ghan thapa', '12', 601091, NULL, NULL, NULL, 'user', NULL, NULL),
+(26, 'Manisha', 'Darai', 'Damauli', '9816141807', 'neha888shahi@gmail.com', 'manisha', 'manisha@@12345', 464664, '67e613f62cca1_thukpa-Blog.jpg', NULL, NULL, 'user', 'cccdf7c32cf86380e52e891dad52abe00e1e9ce05807b348f1373659984d0517', '2025-03-26 19:34:04');
 
 -- --------------------------------------------------------
 
@@ -228,18 +212,15 @@ CREATE TABLE `tbl_restaurant` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(10) NOT NULL,
-  `role` enum('owner') NOT NULL DEFAULT 'owner',
-  `password_reset_token` varchar(255) DEFAULT NULL,
-  `token_expiry` datetime DEFAULT NULL
+  `role` enum('owner') NOT NULL DEFAULT 'owner'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tbl_restaurant`
 --
 
-INSERT INTO `tbl_restaurant` (`id`, `username`, `password`, `role`, `password_reset_token`, `token_expiry`) VALUES
-(1, 'ram', 'ram', 'owner', NULL, NULL),
-(2, 'aagya_adhikari855', 'QvOIs5Km', 'owner', NULL, NULL);
+INSERT INTO `tbl_restaurant` (`id`, `username`, `password`, `role`) VALUES
+(8, 'shiva_mijar920', 'shiva@@##$', 'owner');
 
 -- --------------------------------------------------------
 
@@ -262,9 +243,7 @@ CREATE TABLE `tbl_restaurantname` (
 --
 
 INSERT INTO `tbl_restaurantname` (`r_id`, `name`, `address`, `date`, `time`, `email`, `contact_number`) VALUES
-(2, 'Amisha Restro', 'vyas-5', '2024-10-30', '18:32:00', 'ameesaa22@gmail.com', '2147483647'),
-(3, 'Amisha Restro', 'vyas-5', '2024-10-30', '18:32:00', 'ameesaa22@gmail.com', '2147483647'),
-(5, 'Aagya Adhikari', 'Vyas-1', '2025-03-19', '10:14:00', 'aagyaadhikari@gmail.com', '9876544322');
+(8, 'Shiva Mijar', 'damauli', '2025-03-27', '22:42:00', 'shivashiva@gmail.com', '9852311477');
 
 --
 -- Indexes for dumped tables
@@ -283,18 +262,10 @@ ALTER TABLE `tbl_admin`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tbl_comments`
---
-ALTER TABLE `tbl_comments`
-  ADD PRIMARY KEY (`comment_id`),
-  ADD KEY `f_id` (`f_id`),
-  ADD KEY `tbl_user_id` (`tbl_user_id`);
-
---
 -- Indexes for table `tbl_logo`
 --
 ALTER TABLE `tbl_logo`
-  ADD PRIMARY KEY (`u_id`);
+  ADD PRIMARY KEY (`o_id`);
 
 --
 -- Indexes for table `tbl_orders`
@@ -308,12 +279,6 @@ ALTER TABLE `tbl_orders`
 --
 ALTER TABLE `tbl_otp`
   ADD PRIMARY KEY (`tbl_user_id`);
-
---
--- Indexes for table `tbl_owlogo`
---
-ALTER TABLE `tbl_owlogo`
-  ADD PRIMARY KEY (`o_id`);
 
 --
 -- Indexes for table `tbl_qr`
@@ -341,7 +306,7 @@ ALTER TABLE `tbl_restaurantname`
 -- AUTO_INCREMENT for table `tbl_addfood`
 --
 ALTER TABLE `tbl_addfood`
-  MODIFY `f_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `f_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tbl_admin`
@@ -350,34 +315,22 @@ ALTER TABLE `tbl_admin`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `tbl_comments`
---
-ALTER TABLE `tbl_comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
-
---
 -- AUTO_INCREMENT for table `tbl_logo`
 --
 ALTER TABLE `tbl_logo`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_orders`
 --
 ALTER TABLE `tbl_orders`
-  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `tbl_otp`
 --
 ALTER TABLE `tbl_otp`
-  MODIFY `tbl_user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
---
--- AUTO_INCREMENT for table `tbl_owlogo`
---
-ALTER TABLE `tbl_owlogo`
-  MODIFY `o_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `tbl_user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `tbl_qr`
@@ -389,24 +342,17 @@ ALTER TABLE `tbl_qr`
 -- AUTO_INCREMENT for table `tbl_restaurant`
 --
 ALTER TABLE `tbl_restaurant`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tbl_restaurantname`
 --
 ALTER TABLE `tbl_restaurantname`
-  MODIFY `r_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `r_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `tbl_comments`
---
-ALTER TABLE `tbl_comments`
-  ADD CONSTRAINT `tbl_comments_ibfk_1` FOREIGN KEY (`f_id`) REFERENCES `tbl_addfood` (`f_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tbl_comments_ibfk_2` FOREIGN KEY (`tbl_user_id`) REFERENCES `tbl_otp` (`tbl_user_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `tbl_orders`
