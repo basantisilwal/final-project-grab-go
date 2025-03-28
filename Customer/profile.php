@@ -16,7 +16,7 @@ $password_message = '';
 $error = '';
 
 // Fetch user info
-$sql = "SELECT first_name, profile_pic, password FROM tbl_otp WHERE tbl_user_id = :customer_id";
+$sql = "SELECT first_name,last_name, profile_pic, password FROM tbl_otp WHERE tbl_user_id = :customer_id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Handle Profile Update
     if (isset($_POST['update_profile'])) {
         $first_name = htmlspecialchars(trim($_POST['first_name']));
+        $last_name = htmlspecialchars(trim($_POST['last_name']));
         $profile_pic = $_FILES['profile_pic'];
 
         try {

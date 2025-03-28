@@ -45,18 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
             $path = mysqli_real_escape_string($conn, $target_file);
 
             // Check if a logo record already exists
-            $check_existing = "SELECT o_id FROM tbl_owlogo LIMIT 1";
+            $check_existing = "SELECT o_id FROM tbl_logo LIMIT 1";
             $existing_result = mysqli_query($conn, $check_existing);
 
             if (mysqli_num_rows($existing_result) > 0) {
                 // Update existing logo record
-                $update_query = "UPDATE tbl_owlogo 
+                $update_query = "UPDATE tbl_logo 
                                  SET name = '$name', path = '$path'
-                                 WHERE o_id = (SELECT o_id FROM tbl_owlogo LIMIT 1)";
+                                 WHERE o_id = (SELECT o_id FROM tbl_logo LIMIT 1)";
                 $result = mysqli_query($conn, $update_query);
             } else {
                 // Insert a new record
-                $insert_query = "INSERT INTO tbl_owlogo (name, path)
+                $insert_query = "INSERT INTO tbl_logo (name, path)
                                  VALUES ('$name', '$path')";
                 $result = mysqli_query($conn, $insert_query);
             }
@@ -76,14 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
 }
 
 // Fetch Logo
-$current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
-$logoStmt     = $conn->prepare($logoQuery);
+$logoQuery = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt  = $conn->prepare($logoQuery);
 $logoStmt->execute();
+$logoStmt->bind_result($name, $path);
 
-if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
-    $current_logo = $row['path'];
+if ($logoStmt->fetch()) {
+    $current_logo = $path;
 }
+
+$logoStmt->close(); // Close statement after use
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

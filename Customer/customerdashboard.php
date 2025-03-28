@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
         
         $stmt = $conn->prepare($sql);
 
-        if ($stmt->execute([$customer_id, $f_id, $name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
+        if ($stmt->execute([$cid, $f_id, $name, $phone, $foodDescription, $quantity, $preferred_time, $paymentMethod, $status])) {
             $_SESSION['message'] = "Order placed successfully!";
             header("Location: " . $_SERVER['PHP_SELF']); // Prevent resubmission
             exit();
@@ -106,6 +106,28 @@ $stmt_qr = $conn->prepare($sql);
 $stmt_qr->execute();
 $row_qr = $stmt_qr->fetch(PDO::FETCH_ASSOC);
 $qr_path = $row_qr['qr_path'] ?? '';
+
+// ✅ Check if user is logged in
+$customer_id = $_SESSION['customer_id'] ?? null;
+
+$customerFirstName = '';
+$customerLastName = '';
+$customerPhone = '';
+
+// ✅ Fetch customer details securely
+if ($customer_id !== null) {
+    $sql = "SELECT first_name, last_name, contact_number FROM tbl_otp WHERE tbl_user_id = :customer_id LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($customer) {
+        $customerFirstName = htmlspecialchars($customer['first_name']);
+        $customerLastName = htmlspecialchars($customer['last_name']);
+        $customerPhone = htmlspecialchars($customer['contact_number']);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -339,28 +361,51 @@ $qr_path = $row_qr['qr_path'] ?? '';
     </style>
 </head>
 <body>
-    <!-- Notification Box -->
-    <div class="container mt-3">
-        <?php if (isset($_SESSION['dashboard_notification'])): ?>
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <strong>Notification:</strong> <?php echo $_SESSION['dashboard_notification']; ?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <?php unset($_SESSION['dashboard_notification']); ?>
-        <?php endif; ?>
-     
-        <?php if (isset($_SESSION['message'])): ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <?php echo htmlspecialchars($_SESSION['message']); ?>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <?php unset($_SESSION['message']); ?>
-        <?php endif; ?>
-    </div>
+<?php
+include('../conn/conn.php');
+
+$customer_id = $_SESSION['customer_id'] ?? null; // Get logged-in customer ID
+$notification = '';
+
+if ($customer_id) {
+    $stmt = $conn->prepare("SELECT customer_notification FROM tbl_orders 
+                            WHERE cid = ? ORDER BY updated_at DESC LIMIT 1");
+    $stmt->execute([$customer_id]);
+    $notification = $stmt->fetchColumn();
+}
+// Fetch latest customer notification
+$notification = null;
+if ($customer_id !== null) {
+    $sql = "SELECT customer_notification FROM tbl_orders 
+            WHERE cid = :customer_id ORDER BY updated_at DESC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':customer_id', $customer_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $notification = $stmt->fetchColumn();
+}
+?>
+<!-- Notification Box -->
+<div class="container mt-3">
+    <?php if (isset($_SESSION['dashboard_notification'])): ?>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Notification:</strong> <?php echo $_SESSION['dashboard_notification']; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <?php unset($_SESSION['dashboard_notification']); ?>
+    <?php endif; ?>
+ 
+    <?php if (isset($_SESSION['notification'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?php echo htmlspecialchars($_SESSION['notification']); ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php unset($_SESSION['notification']); // Clear the notification after displaying ?>
+            <?php endif; ?>
+</div>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -614,24 +659,23 @@ $qr_path = $row_qr['qr_path'] ?? '';
             onlinePaymentRadio.addEventListener('change', togglePaymentElements);
             cashPaymentRadio.addEventListener('change', togglePaymentElements);
 
-            // Notification polling
             function fetchNotification() {
-                $.ajax({
-                    url: "fetch_notification.php",
-                    method: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.notification) {
-                            $("#notificationBox").html(`
-                                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                    <strong>Notification:</strong> ${data.notification}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            `);
-                        }
-                    }
-                });
+        $.ajax({
+            url: "fetch_notification.php",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                if (data.notification) {
+                    $("#notificationBox").html(`
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <strong>Notification:</strong> ${data.notification}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `);
+                }
             }
+        });
+    }
             setInterval(fetchNotification, 5000);
         });
     </script>

@@ -1,75 +1,48 @@
-<?php 
-// Include database connection
-include('../conn/conn.php'); 
+<?php
+session_start();
+require_once('../conn/conn.php'); // Database connection
 
-// Twilio Credentials (Replace with your actual credentials)
-$twilio_sid = "YOUR_TWILIO_SID";
-$twilio_token = "YOUR_TWILIO_AUTH_TOKEN";
-$twilio_from = "+1234567890"; // Twilio phone number
+// Check if it's an AJAX request for updating order status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+    $action = $_POST['action'] ?? '';
+    $id = intval($_POST['id'] ?? 0);
 
-if (isset($_GET['id']) && isset($_GET['action'])) {
-    $orderId = $_GET['id'];
-    $action = $_GET['action'];
+    if (!$id || !$action) {
+        echo json_encode(["status" => "error", "message" => "Missing required parameters"]);
+        exit;
+    }
 
-    if ($action === "confirm") {
-        $newStatus = "Confirmed";
-    } elseif ($action === "cancel") {
-        $newStatus = "Cancelled";
+    // Determine the new status and notification message
+    switch ($action) {
+        case 'confirm':
+            $status = 'Confirmed';
+            $notification = 'Your order has been confirmed!';
+            break;
+        case 'reject':
+            $status = 'Cancelled';
+            $notification = 'Your order has been cancelled!';
+            break;
+        default:
+            echo json_encode(["status" => "error", "message" => "Invalid action"]);
+            exit;
+    }
+
+    // Update the order status in the database
+    $stmt = $conn->prepare("UPDATE tbl_orders 
+                            SET status = ?, 
+                                customer_notification = ?, 
+                                updated_at = CURRENT_TIMESTAMP 
+                            WHERE cid = ?");
+    
+    if ($stmt->execute([$status, $notification, $id])) {
+        // Store notification in session for display on customer dashboard
+        $_SESSION['notification'] = $notification; 
+        echo json_encode(["status" => "success", "message" => "Order updated", "notification" => $notification]);
     } else {
-        die("Invalid action.");
+        echo json_encode(["status" => "error", "message" => "Database update failed"]);
     }
 
-    try {
-        // Update order status in the database
-        $sql = "UPDATE tbl_orders SET status = :status WHERE id = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':status', $newStatus, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-        $stmt->execute();
-
-        // Fetch customer's phone number
-        $sql = "SELECT phone FROM tbl_orders WHERE id = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':id', $orderId, PDO::PARAM_INT);
-        $stmt->execute();
-        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-        $customerPhone = $customer['phone'];
-
-        // Send SMS notification
-        $message = $action === "confirm" 
-            ? "Dear customer, your order #$orderId has been CONFIRMED. Thank you!" 
-            : "Dear customer, your order #$orderId has been CANCELLED. Please contact support.";
-        
-        sendSMS($customerPhone, $message, $twilio_sid, $twilio_token, $twilio_from);
-
-        // Redirect with success message
-        header("Location: vieworder.php?message=Order updated successfully");
-        exit();
-    } catch (PDOException $e) {
-        echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
-    }
-}
-
-// Function to send SMS via Twilio API
-function sendSMS($to, $message, $sid, $token, $from) {
-    $url = "https://api.twilio.com/2010-04-01/Accounts/$sid/Messages.json";
-    $data = [
-        'From' => $from,
-        'To' => $to,
-        'Body' => $message
-    ];
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_USERPWD, "$sid:$token");
-    $response = curl_exec($ch);
-    if(curl_errno($ch)) {
-        echo 'Error:' . curl_error($ch);
-    }
-    curl_close($ch);
+    exit;
 }
 
 // Fetch Logo
@@ -138,8 +111,15 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
             transform: translateX(5px);
         }
         .content { margin-left: 270px; padding: 20px; }
-        .table-container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .table-container { background-color: #FFE0B2; padding: 20px;
+            border: 1px solid #000;
+             border-radius: 8px; box-shadow: #FFE0B2 }
         .btn i { font-size: 1.2rem; }
+        table td, table th {
+            vertical-align: middle;
+            border: 1px solid #000;
+        }
+
         .order-details-modal .modal-body {
             display: flex;
             flex-wrap: wrap;
@@ -166,6 +146,7 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
             border-radius: 50%;
             border: 2px solid black;
         }
+        
     </style>
 </head>
 <body>
@@ -198,11 +179,12 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmt = $conn->query($sql);
                     
                     if ($stmt->rowCount() > 0) {
+                        $serialNumber = 1; // ✅ Initialize Serial Number
                         echo '<table class="table table-striped">
-                            <thead class="table-dark">
+                            <thead class="">
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
+                                    <th>Serial No</th> <!-- Serial Number -->
+                                    <th>User</th>
                                     <th>Phone</th>
                                     <th>Food</th>
                                     <th>Qty</th>
@@ -224,7 +206,7 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                             }
                             
                             echo '<tr>
-                                <td>' . htmlspecialchars($row["cid"]) . '</td>
+                            <td>' . $serialNumber++ . '</td> <!-- ✅ Replace Random ID with Serial Number -->
                                 <td>' . htmlspecialchars($row["name"]) . '</td>
                                 <td>' . htmlspecialchars($row["phone"]) . '</td>
                                 <td>' . htmlspecialchars($row["food_name"]) . '</td>
@@ -236,13 +218,13 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                                 <td>';
                             
                             if ($row["status"] === "Pending") {
-                                echo '<a href="?id=' . $row["cid"] . '&action=confirm" class="btn btn-success btn-sm"><i class="fas fa-check-circle"></i> Confirm</a> ';
-                                echo '<a href="?id=' . $row["cid"] . '&action=cancel" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancel</a>';
+                                echo '<button class="btn btn-success btn-sm update-order" data-id="'.$row["cid"].'" data-action="confirm"><i class="fas fa-check-circle"></i> Confirm</button>
+                                <button class="btn btn-danger btn-sm update-order" data-id="'.$row["cid"].'" data-action="reject"><i class="fas fa-times-circle"></i> Cancel</button>';
                             }
                             
                             echo '</td>
                                 <td>
-                                    <button class="btn btn-primary view-details" 
+                                    <button class="btn btn-success view-details"   
                                             data-bs-toggle="modal" 
                                             data-bs-target="#orderDetailsModal" 
                                             data-image="' . $imagePath . '" 
@@ -299,9 +281,6 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
                             <p><strong>Order Status:</strong> <span id="modalOrderStatus"></span></p>
                             <p><strong>Order Date:</strong> <span id="modalOrderDate"></span></p>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

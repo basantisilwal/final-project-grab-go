@@ -25,15 +25,16 @@ while ($row = $stmtOrders->fetch(PDO::FETCH_ASSOC)) {
     $months[] = $row['month'];
     $orders[] = $row['total_orders'];
 }
-// Fetch Logo
-$current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
-$logoStmt     = $conn->prepare($logoQuery);
+// Fetch Logo from tbl_logo
+$current_logo = "logo.png"; // Fallback image if no logo is found
+$logoQuery = "SELECT path FROM tbl_logo ORDER BY o_id DESC LIMIT 1";
+$logoStmt = $conn->prepare($logoQuery);
 $logoStmt->execute();
 
 if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
     $current_logo = $row['path'];
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -154,7 +155,8 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
         <!-- Sidebar -->
         <aside class="sidebar">
         <div class="logo-container">
-                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+        <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
+
             </div>
     <h2>Admin Dashboard</h2>
     <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
