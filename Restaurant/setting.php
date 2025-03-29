@@ -271,6 +271,7 @@ if ($qrRow = $qrResult->fetch_assoc()) {
         </div>
     </div>
    <!-- QR code Upload -->
+    <div class= "small-container">
    <div class="card-body">
    <img src="<?php echo htmlspecialchars($qr_path); ?>" alt="QR Code" class="qr-preview">
 
