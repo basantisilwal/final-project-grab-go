@@ -73,16 +73,6 @@ if (isset($_GET['delete_id'])) {
     header("Location: manage.php");
     exit;
 }
-
-// Fetch Logo
-$current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
-$logoStmt     = $conn->prepare($logoQuery);
-$logoStmt->execute();
-
-if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
-    $current_logo = $row['path'];
-}
 ?>
 
 <!DOCTYPE html>
@@ -133,15 +123,6 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
             left: 0;
             box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
         }
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-container img {
-            width: 80px;
-            border-radius: 50%;
-            border: 2px solid black;
-        }
         .sidebar a {
             color: black;
             text-decoration: none;
@@ -164,23 +145,6 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
             background-color: black;
             color: #fff;
         }
-        .logo-container {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin: 10px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
         .main-content {
             margin-left: 240px;
             padding: 20px;
@@ -192,9 +156,7 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
     <div class="main-container d-flex">
         <!-- Sidebar -->
         <aside class="sidebar">
-        <div class="logo-container">
-                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
-            </div>
+
             <h2>Admin Dashboard</h2>
             <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
             <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>

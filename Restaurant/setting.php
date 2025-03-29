@@ -64,37 +64,39 @@ if ($logoRow = $logoResult->fetch_assoc()) {
  ***************************************************/
 $qr_path = "default_qr.png"; // Default QR Code
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['qrcode'])) {
-    $target_dir = "uploads/qr/";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['site_logo'])) {
+    $target_dir = "uploads/logo/";
     if (!file_exists($target_dir)) mkdir($target_dir, 0777, true);
 
-    $file_name = uniqid() . '_' . basename($_FILES['qrcode']['name']);
-    $target_file = $target_dir . $file_name;
+    $file_name = uniqid() . '_' . basename($_FILES['site_logo']['name']);
+    $target_file = $target_dir . $file_name; // Relative path
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
     $allowed_types = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
     if (!in_array($imageFileType, $allowed_types)) {
-        $_SESSION['error_message_qr'] = "Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.";
-    } elseif (move_uploaded_file($_FILES['qrcode']['tmp_name'], $target_file)) {
-        $qr_path = $conn->real_escape_string($target_file);
+        $_SESSION['error_message'] = "Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.";
+    } elseif (move_uploaded_file($_FILES['site_logo']['tmp_name'], "../" . $target_file)) { // Ensure correct path
+        $name = $conn->real_escape_string($_FILES['site_logo']['name']);
+        $path = $conn->real_escape_string($target_file); // Save relative path only
 
-        $check_existing = "SELECT q_id FROM tbl_qr LIMIT 1";
+        $check_existing = "SELECT o_id FROM tbl_logo LIMIT 1";
         $existing_result = $conn->query($check_existing);
 
         if ($existing_result->num_rows > 0) {
-            $conn->query("UPDATE tbl_qr SET qr_path='$qr_path' WHERE q_id=(SELECT q_id FROM tbl_qr LIMIT 1)");
+            $conn->query("UPDATE tbl_logo SET name='$name', path='$path' WHERE o_id=(SELECT o_id FROM tbl_logo LIMIT 1)");
         } else {
-            $conn->query("INSERT INTO tbl_qr (qr_path) VALUES ('$qr_path')");
+            $conn->query("INSERT INTO tbl_logo (name, path) VALUES ('$name', '$path')");
         }
 
-        $_SESSION['success_message_qr'] = "QR code uploaded successfully!";
+        $_SESSION['success_message'] = "Logo uploaded successfully!";
     } else {
-        $_SESSION['error_message_qr'] = "Failed to upload QR code.";
+        $_SESSION['error_message'] = "Error uploading the logo.";
     }
 
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
+
 
 // Fetch QR Code
 $qrQuery = "SELECT qr_path FROM tbl_qr LIMIT 1";

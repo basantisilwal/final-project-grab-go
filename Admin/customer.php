@@ -1,16 +1,6 @@
 <?php  
 include('../conn/conn.php');  
 
-// Fetch Logo
-$current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
-$logoStmt     = $conn->prepare($logoQuery);
-$logoStmt->execute();
-
-if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
-    $current_logo = $row['path'];
-}
-
 // Handle user deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $id = $_POST['delete_id'];
@@ -56,15 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
       left: 0;
       box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2);
     }
-    .logo-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .logo-container img {
-      width: 80px;
-      border-radius: 50%;
-      border: 2px solid black;
-    }
     .sidebar a {
       color: black;
       text-decoration: none;
@@ -87,24 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
       background-color: black;
       color: #fff;
     }
-    .logo-container {
-    width: 100px;  /* Set width */
-    height: 100px; /* Set height */
-    border-radius: 50%; /* Make it circular */
-    overflow: hidden; /* Ensure the image stays within the boundary */
-    margin: 10px auto; /* Center it */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white; /* Optional: Adds contrast */
-}
-
-.logo-container img {
-    width: 100%;  /* Make sure it fits the container */
-    height: 100%; /* Make sure it fits the container */
-    object-fit: cover; /* Ensure proper scaling */
-    border-radius: 50%; /* Maintain circular shape */
-}
         .content { 
             flex-grow: 1; 
             padding: 40px; 
@@ -131,9 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     <!-- Sidebar -->
     <div class="main-container d-flex">
         <aside class="sidebar">
-        <div class="logo-container">
-                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
-            </div>
             <h2>Admin Dashboard</h2>
             <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
             <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>

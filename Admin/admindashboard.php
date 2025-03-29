@@ -1,21 +1,23 @@
 <?php 
 include('../conn/conn.php'); 
 
+/******************************
+ * 1. Fetch Total Users
+ ******************************/
 $sqlUsers = "SELECT COUNT(*) AS total_users FROM tbl_otp";
 $stmtUsers = $conn->prepare($sqlUsers);
 $stmtUsers->execute();
 $rowUsers = $stmtUsers->fetch(PDO::FETCH_ASSOC);
-$totalUsers = $rowUsers['total_users'] ?? 0;  // 0 if no rows found
+$totalUsers = $rowUsers['total_users'] ?? 0;  // Default to 0 if no users
 
 /******************************
- * 3. Fetch Monthly Orders Data
+ * 2. Fetch Monthly Orders Data
  ******************************/
 $sqlOrders = "SELECT DATE_FORMAT(created_at, '%b') AS month, COUNT(*) AS total_orders
               FROM tbl_orders
               WHERE YEAR(created_at) = YEAR(CURDATE())
               GROUP BY MONTH(created_at), month
               ORDER BY MONTH(created_at)";
-
 $stmtOrders = $conn->query($sqlOrders);
 
 $months = [];
@@ -83,9 +85,17 @@ while ($row = $stmtOrders->fetch(PDO::FETCH_ASSOC)) {
       color: #fff;
     }
     
-        .small-container {
-    max-width: 350px; /* Adjust the width as needed */
-    margin: auto;}
+    /* Logo */
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo-container img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid black;
+    }
 
     /* Main Content */
     .main-content {
@@ -119,14 +129,13 @@ while ($row = $stmtOrders->fetch(PDO::FETCH_ASSOC)) {
 
   <!-- Sidebar -->
   <div class="main-container d-flex">
-        <!-- Sidebar -->
         <aside class="sidebar">
-    <h2>Admin Dashboard</h2>
-    <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
-    <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
-    <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
-    <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
-</aside>
+            <h2>Admin Dashboard</h2>
+            <a href="admindashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="manage.php"><i class="bi bi-shop"></i> Manage Owner</a>
+            <a href="customer.php"><i class="bi bi-people"></i> View Users</a>
+            <a href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
+        </aside>
 
   <!-- Main content -->
   <main class="main-content">

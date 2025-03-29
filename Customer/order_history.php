@@ -153,29 +153,21 @@ try {
         <table>
             <thead>
                 <tr>
-                    <th>Order ID</th>
-                    <th>Customer Name</th>
-                    <th>Phone</th>
                     <th>Food Description</th>
                     <th>Quantity</th>
                     <th>Preferred Time</th>
                     <th>Payment Method</th>
                     <th>Status</th>
-                    <th>Customer Notification</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo $row['cid']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
-                        <td><?php echo $row['phone']; ?></td>
                         <td><?php echo $row['food_description']; ?></td>
                         <td><?php echo $row['quantity']; ?></td>
                         <td><?php echo $row['preferred_time']; ?></td>
                         <td><?php echo $row['payment_method']; ?></td>
                         <td><?php echo $row['status']; ?></td>
-                        <td><?php echo $row['customer_notification']; ?></td>
                     </tr>
                 <?php endwhile; ?>
             </tbody>

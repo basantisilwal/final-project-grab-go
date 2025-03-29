@@ -1,23 +1,21 @@
 <?php
 session_start();
-include('./conn/conn.php'); // Include the database connection
+include('./conn/conn.php'); // Include database connection
 
-// Fetch Logo
-$current_logo = "default-logo.png"; // fallback
-$logoQuery = "SELECT name, path FROM tbl_logo LIMIT 1";
-$logoStmt = $conn->prepare($logoQuery);
-$logoStmt->execute();
+/******************************
+ * Fetch Latest Logo
+ ******************************/
+$sqlLogo = "SELECT path FROM tbl_logo ORDER BY o_id DESC LIMIT 1";
+$stmtLogo = $conn->query($sqlLogo);
+$logoRow = $stmtLogo->fetch(PDO::FETCH_ASSOC);
 
-if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
-    // Go up 2 levels (from Admin), then into Restaurant
-    $current_logo = "../Restaurant/uploads/logo/" . $row['path'];
-    
-    // Verify the file exists
-    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . "/Grabandgo/" . $current_logo)) {
-        error_log("Logo not found at: " . $current_logo);
-        $current_logo = "default-logo.png";
-    }
-}
+// Set default logo if no entry found
+$logoPath = ($logoRow && !empty($logoRow['path'])) 
+            ? "/Grabandgo/final-project-grab-go/Restaurant/uploads/logo/" . htmlspecialchars($logoRow['path']) 
+            : "/Grabandgo/final-project-grab-go/Restaurant/uploads/logo/default_logo.png";
+
+// Debugging line to check the logo path
+echo "<script>console.log('Logo Path: " . $logoPath . "');</script>";
 ?>
 
 <!DOCTYPE html>
@@ -45,13 +43,15 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
             margin-bottom: 20px;
         }
 
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
+        .logo-title-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        
+
         .logo-container img {
-            width: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: 2px solid black;
         }
@@ -192,9 +192,9 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
 <!-- Navbar -->
 <nav class="navbar">
     <div class="logo-title-container">
-    <div class="logo-container">
-                <img src="<?php echo htmlspecialchars($current_logo); ?>" alt="Logo">
-            </div>
+        <div class="logo-container">
+            <img src="<?php echo $logoPath; ?>" alt="Logo">
+        </div>
         <div class="title">UNICAFE.</div>
     </div>
     <ul class="nav-links">
@@ -207,9 +207,9 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
 
 <!-- Hero Section -->
 <header class="hero-section">
-    <h1>yamm yamm food</h1>
+    <h1>Yamm Yamm Food</h1>
     <div class="search-bar">
-        <input type="text" placeholder="foody">
+        <input type="text" placeholder="Search food">
         <button>Ok</button>
     </div>
 </header>
