@@ -3,13 +3,20 @@ session_start();
 include('./conn/conn.php'); // Include the database connection
 
 // Fetch Logo
-$current_logo = "logo.png"; // fallback if none in DB
-$logoQuery    = "SELECT name, path FROM tbl_logo LIMIT 1";
-$logoStmt     = $conn->prepare($logoQuery);
+$current_logo = "default-logo.png"; // fallback
+$logoQuery = "SELECT name, path FROM tbl_logo LIMIT 1";
+$logoStmt = $conn->prepare($logoQuery);
 $logoStmt->execute();
 
 if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
-    $current_logo = $row['path'];
+    // Go up 2 levels (from Admin), then into Restaurant
+    $current_logo = "../Restaurant/uploads/logo/" . $row['path'];
+    
+    // Verify the file exists
+    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . "/Grabandgo/" . $current_logo)) {
+        error_log("Logo not found at: " . $current_logo);
+        $current_logo = "default-logo.png";
+    }
 }
 ?>
 
@@ -38,29 +45,15 @@ if ($row = $logoStmt->fetch(PDO::FETCH_ASSOC)) {
             margin-bottom: 20px;
         }
 
-        .logo-title-container {
-            display: flex;
-            align-items: center;
-        }
-
         .logo-container {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            border: 2px solid black;
+            text-align: center;
+            margin-bottom: 20px;
         }
-
+        
         .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 80px;
             border-radius: 50%;
+            border: 2px solid black;
         }
 
         .title {
